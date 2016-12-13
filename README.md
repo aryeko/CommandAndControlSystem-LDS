@@ -16,8 +16,6 @@ The G-Scan is a laser gun that has the abilities to identify hazardous substance
 
 <img src="https://github.com/aryeko/CommandAndControlSystem-LDS/blob/master/Documents/Pictures/LDS/G-scan.jpg" width="500" height="350" />
 
-## Please visit our [live application]() - Soon
-
 ## [Issue Board]()
 
 ## Disclaimer
