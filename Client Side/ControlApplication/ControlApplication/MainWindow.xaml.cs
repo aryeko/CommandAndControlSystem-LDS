@@ -23,6 +23,22 @@ namespace ControlApplication
         public MainWindow()
         {
             InitializeComponent();
+            Loaded += MainWindow_Loaded;
+        }
+
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            // Initialize map:
+            this.GMapControl.MapProvider = GMap.NET.MapProviders.GoogleMapProvider.Instance;
+            GMap.NET.GMaps.Instance.Mode = GMap.NET.AccessMode.ServerOnly;
+            this.GMapControl.SetPositionByKeywords("Israel, Jerusalem");
+        }
+
+        private void btnSearch_Click(object sender, RoutedEventArgs e)
+        {
+            string address = this.txtSearch.Text;
+            this.GMapControl.SetPositionByKeywords(address);
         }
     }
 }
+
