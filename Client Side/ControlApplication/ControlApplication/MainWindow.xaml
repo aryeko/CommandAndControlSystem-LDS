@@ -3,8 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ControlApplication"
-        xmlns:WindowsPresentation="clr-namespace:GMap.NET.WindowsPresentation;assembly=GMap.NET.WindowsPresentation" x:Class="ControlApplication.MainWindow"
+        xmlns:local="clr-namespace:ControlApplication.DesktopClient"
+        xmlns:WindowsPresentation="clr-namespace:GMap.NET.WindowsPresentation;assembly=GMap.NET.WindowsPresentation" x:Class="ControlApplication.DesktopClient.MainWindow"
         mc:Ignorable="d"
         Title="MainWindow" Height="700" Width="1000">
     <Grid>
@@ -14,8 +14,8 @@
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal">
 
-            <Button x:Name="btnSearch" Content="Search" HorizontalAlignment="Left" Width="70" Click="btnSearch_Click" Margin="10,0,10,0"/>
-            <TextBox x:Name="txtSearch" TextAlignment="Justify" Padding="0" Text="Enter Adress" Width="170" Margin="10,0,10,0"/>
+            <Button x:Name="BtnSearch" Content="Search" HorizontalAlignment="Left" Width="70" Click="BtnSearch_Click" Margin="10,0,10,0"/>
+            <TextBox x:Name="TxtSearch" TextAlignment="Justify" Padding="0" Text="Enter Adress" Width="170" Margin="10,0,10,0"/>
         </StackPanel>
 
         <WindowsPresentation:GMapControl Grid.Row="1" x:Name="GMapControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MaxZoom="18" Zoom="13"/>

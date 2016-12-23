@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ControlApplication
+namespace ControlApplication.DesktopClient
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -34,9 +34,9 @@ namespace ControlApplication
             this.GMapControl.SetPositionByKeywords("Israel, Jerusalem");
         }
 
-        private void btnSearch_Click(object sender, RoutedEventArgs e)
+        private void BtnSearch_Click(object sender, RoutedEventArgs e)
         {
-            string address = this.txtSearch.Text;
+            string address = this.TxtSearch.Text;
             this.GMapControl.SetPositionByKeywords(address);
         }
     }
