@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ControlApplication.DesktopClient.Controls"
              mc:Ignorable="d" 
-             Height="80" Width="400">
+             Height="80" Width="500">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
@@ -22,37 +22,25 @@
             </Grid.RowDefinitions>
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="15*"/>
-                <ColumnDefinition Width="15*"/>
-                <ColumnDefinition Width="15*"/>
-                <ColumnDefinition Width="15*"/>
-                <ColumnDefinition Width="15*"/>
-                <ColumnDefinition Width="15*"/>
+                <ColumnDefinition Width="21*"/>
+                <ColumnDefinition Width="21*"/>
+                <ColumnDefinition Width="21*"/>
+                <ColumnDefinition Width="21*"/>
+                <ColumnDefinition Width="21*"/>
+                <ColumnDefinition Width="32*"/>
             </Grid.ColumnDefinitions>
 
-            <Label Grid.Row="0" Grid.Column="0" x:Name="LblDate" Content="Date" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-            <Label Grid.Row="0" Grid.Column="1" x:Name="LblTime" Content="Time" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-            <Label Grid.Row="0" Grid.Column="2" x:Name="LblSuspectID" Content="Suspect ID" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-            <Label Grid.Row="0" Grid.Column="3" x:Name="LblPlateID" Content="Plate ID" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-            <Label Grid.Row="0" Grid.Column="4" x:Name="LblGunID" Content="G-Scan ID" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-            <Label Grid.Row="0" Grid.Column="5" x:Name="LblMaterial" Content="Material" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            <Label Grid.Row="0" Grid.Column="0" x:Name="LblDate" Content="Date" HorizontalAlignment="Center" VerticalAlignment="Stretch" FontWeight="Bold" />
+            <Label Grid.Row="0" Grid.Column="1" x:Name="LblTime" Content="Time" HorizontalAlignment="Center" VerticalAlignment="Stretch" FontWeight="Bold"/>
+            <Label Grid.Row="0" Grid.Column="2" x:Name="LblSuspectID" Content="Suspect ID" HorizontalAlignment="Center" VerticalAlignment="Stretch" FontWeight="Bold"/>
+            <Label Grid.Row="0" Grid.Column="3" x:Name="LblPlateID" Content="Plate ID" HorizontalAlignment="Center" VerticalAlignment="Stretch" FontWeight="Bold"/>
+            <Label Grid.Row="0" Grid.Column="4" x:Name="LblGunID" Content="G-Scan ID" HorizontalAlignment="Center" VerticalAlignment="Stretch" FontWeight="Bold"/>
+            <Label Grid.Row="0" Grid.Column="5" x:Name="LblMaterial" Content="Material" HorizontalAlignment="Center" VerticalAlignment="Stretch" FontWeight="Bold"/>
         </Grid>
         
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0,26.333,0,0" Grid.RowSpan="2">
-            <Grid Row="2" x:Name="DetectionData">
+            <Grid Row="2" x:Name="DetectionDataXmal">
 
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="9*"/>
-                </Grid.RowDefinitions>
-
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="15*"/>
-                    <ColumnDefinition Width="15*"/>
-                    <ColumnDefinition Width="15*"/>
-                    <ColumnDefinition Width="15*"/>
-                    <ColumnDefinition Width="15*"/>
-                    <ColumnDefinition Width="15*"/>
-                </Grid.ColumnDefinitions>
             </Grid>
         </ScrollViewer>
     </Grid>

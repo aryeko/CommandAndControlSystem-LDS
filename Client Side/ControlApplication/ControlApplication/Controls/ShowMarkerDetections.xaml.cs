@@ -1,7 +1,18 @@
-﻿using System.Windows;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
 using ControlApplication.Core;
-
 
 namespace ControlApplication.DesktopClient.Controls
 {
@@ -31,6 +42,17 @@ namespace ControlApplication.DesktopClient.Controls
                 Height = MAX_HEIGHT + INITIAL_HEIGHT;
                 NumOfDetections.Height = new GridLength(MAX_HEIGHT);
             }
+        
+            for (int j = 0; j < detectionData.Length; j++)
+            {
+                DetectionDataXmal.RowDefinitions.Insert(j, new RowDefinition());
+
+                SingleDetectionControl newControl = new SingleDetectionControl(detectionData[j]);
+
+                Grid.SetRow(newControl, j);
+                DetectionDataXmal.Children.Add(newControl);
+            }
+            
         }
     }
 }

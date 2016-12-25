@@ -7,6 +7,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.TextFormatting;
 using System.Windows.Shapes;
+using ControlApplication.Core;
 using ControlApplication.DesktopClient.Controls;
 using GMap.NET.WindowsPresentation;
 
@@ -41,7 +42,34 @@ namespace ControlApplication.DesktopClient
                 Title = "Add new detection",
                 Content = new AddDetectionControl(new Point(e.GetPosition(this).X, e.GetPosition(this).Y)),
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                SizeToContent = SizeToContent.WidthAndHeight
+                SizeToContent = SizeToContent.WidthAndHeight,
+                ResizeMode = ResizeMode.NoResize
+            }.ShowDialog();
+        }
+
+
+        private void PopShowMarkerDetections(object sender, MouseButtonEventArgs e)
+        {
+            Detection[] detections =
+            {
+                new Detection(DateTime.Now, new Material("Coca", MaterialType.Explosive), new PointLatLng(), "3027744552", "36-019-19","33"),
+                new Detection(DateTime.Now, new Material("Acitone", MaterialType.Explosive), new PointLatLng(), "11", "22","33"),
+                new Detection(DateTime.Now, new Material("Heroin", MaterialType.Explosive), new PointLatLng(), "11", "22","33"),
+                new Detection(DateTime.Now, new Material("Weed", MaterialType.Explosive), new PointLatLng(), "11", "22","33"),
+                new Detection(DateTime.Now, new Material("Brown", MaterialType.Explosive), new PointLatLng(), "11", "22","33"),
+                new Detection(DateTime.Now, new Material("MD", MaterialType.Explosive), new PointLatLng(), "11", "22","33"),
+                new Detection(DateTime.Now, new Material("Vodka", MaterialType.Explosive), new PointLatLng(), "11", "22","33"),
+                new Detection(DateTime.Now, new Material("Toxicankjgfjhgfjhgfjhgf", MaterialType.Explosive), new PointLatLng(), "11", "22","33"),
+                new Detection(DateTime.Now, new Material("Mashroom", MaterialType.Explosive), new PointLatLng(), "11", "22","33")
+            };
+
+            new Window
+            {
+                Title = "Show marker's detections",
+                Content = new ShowMarkerDetections(detections),
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                SizeToContent = SizeToContent.WidthAndHeight,
+                ResizeMode = ResizeMode.NoResize
             }.ShowDialog();
         }
 

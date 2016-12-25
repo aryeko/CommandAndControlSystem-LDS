@@ -72,6 +72,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\SingleDetectionControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -85,6 +89,9 @@
     </Compile>
     <Compile Include="Controls\ShowMarkerDetections.xaml.cs">
       <DependentUpon>ShowMarkerDetections.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SingleDetectionControl.xaml.cs">
+      <DependentUpon>SingleDetectionControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
