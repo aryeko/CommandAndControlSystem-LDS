@@ -1,17 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ControlApplication.DesktopClient.Controls
 {
@@ -20,10 +12,13 @@ namespace ControlApplication.DesktopClient.Controls
     /// </summary>
     public partial class AddDetectionControl : UserControl
     {
-        public AddDetectionControl()
+        private Point mClickPoint;
+
+        public AddDetectionControl(Point clickPoint)
         {
             InitializeComponent();
 
+            mClickPoint = clickPoint;
             TxtDate.Text = DateTime.Today.ToString("D");
             TxtTime.Text = DateTime.Now.ToString("T");
             //TODO: Set GunId & Location automaticlly too
@@ -38,7 +33,9 @@ namespace ControlApplication.DesktopClient.Controls
         {
             if (ValidateFields())
             {
-                //TODO: Add marker
+                //TODO: Add data to the DB (relative to MARKER_SIZE)
+                GetMainWindow().AddMarker(mClickPoint);
+                Window.GetWindow(this)?.Close();
             }
         }
 
@@ -74,6 +71,15 @@ namespace ControlApplication.DesktopClient.Controls
                 emptyBox.BorderBrush = cleanMark ? Brushes.DarkGray : Brushes.Red;
                 emptyBox.Background = cleanMark? Brushes.Transparent : new SolidColorBrush(Color.FromRgb(250,212,212));
             }
+        }
+
+        /// <summary>
+        /// Gets the MainWindow control
+        /// </summary>
+        /// <returns>The MainWindow or null on error</returns>
+        private MainWindow GetMainWindow()
+        {
+            return Application.Current.MainWindow as MainWindow;
         }
     }
 }

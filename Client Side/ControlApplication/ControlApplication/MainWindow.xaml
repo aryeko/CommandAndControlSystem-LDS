@@ -8,17 +8,9 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="700" Width="1000">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="5*" />
-            <RowDefinition Height="95*" />
-        </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Orientation="Horizontal">
+        
 
-            <Button x:Name="BtnSearch" Content="Search" HorizontalAlignment="Left" Width="70" Click="BtnSearch_Click" Margin="10,0,10,0"/>
-            <TextBox x:Name="TxtSearch" TextAlignment="Justify" Padding="0" Text="Enter Adress" Width="170" Margin="10,0,10,0"/>
-        </StackPanel>
-
-        <WindowsPresentation:GMapControl Grid.Row="1" x:Name="GMapControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MaxZoom="18" Zoom="13" PreviewMouseDoubleClick="PopAddDetectionWindow"/>
+        <WindowsPresentation:GMapControl  x:Name="GMapControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MaxZoom="18" Zoom="13" PreviewMouseDoubleClick="PopAddDetectionWindow"/>
 
 
     </Grid>
