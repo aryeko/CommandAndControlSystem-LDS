@@ -36,19 +36,23 @@ namespace ControlApplication.DesktopClient.Controls
 
         private void BtnSubmit_Click(object sender, RoutedEventArgs e)
         {
-            
             if (ValidateFields())
             {
                 //TODO: Add marker
             }
         }
 
+        /// <summary>
+        /// Validating the mandatory text boxes are field as requiered.
+        /// Marking the missing fields
+        /// </summary>
+        /// <returns>True if all the mandatory fields are field, false otherwise</returns>
         private bool ValidateFields()
         {
             TextBox[] txtFieldsToVerify = {TxtTime, TxtDate, TxtMaterial, TxtSuspectId, TxtSuspectPlateNo};
             MarkBoxes(txtFieldsToVerify, true);
 
-            IEnumerable<TextBox> emptyBoxes = txtFieldsToVerify.Where(txtBox => txtBox.Text.Equals(string.Empty));
+            List<TextBox> emptyBoxes = txtFieldsToVerify.Where(txtBox => txtBox.Text.Equals(string.Empty)).ToList();
 
             if (emptyBoxes.Any())
             {
@@ -58,9 +62,14 @@ namespace ControlApplication.DesktopClient.Controls
             return true;
         }
 
-        private void MarkBoxes(IEnumerable<TextBox> emptyBoxes, bool cleanMark = false)
+        /// <summary>
+        /// Marks the given boxes in red or removing the red marks
+        /// </summary>
+        /// <param name="boxesToMark">The boxes to mark</param>
+        /// <param name="cleanMark">Set to true to remove markers, false to mark. [Default: false]</param>
+        private void MarkBoxes(IEnumerable<TextBox> boxesToMark, bool cleanMark = false)
         {
-            foreach (var emptyBox in emptyBoxes)
+            foreach (var emptyBox in boxesToMark)
             {
                 emptyBox.BorderBrush = cleanMark ? Brushes.DarkGray : Brushes.Red;
                 emptyBox.Background = cleanMark? Brushes.Transparent : new SolidColorBrush(Color.FromRgb(250,212,212));

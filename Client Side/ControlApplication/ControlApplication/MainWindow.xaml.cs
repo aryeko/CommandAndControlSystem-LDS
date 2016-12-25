@@ -42,7 +42,7 @@ namespace ControlApplication.DesktopClient
             this.GMapControl.SetPositionByKeywords(address);
         }
 
-        private void AddDetectionMarker(object sender, MouseButtonEventArgs e)
+        private void PopAddDetectionWindow(object sender, MouseButtonEventArgs e)
         {
             new Window
             {
