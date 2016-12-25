@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
+using ControlApplication.Core;
 
 namespace ControlApplication.DesktopClient.Controls
 {
@@ -42,6 +42,17 @@ namespace ControlApplication.DesktopClient.Controls
                 Height = MAX_HEIGHT + INITIAL_HEIGHT;
                 NumOfDetections.Height = new GridLength(MAX_HEIGHT);
             }
+        
+            for (int j = 0; j < detectionData.Length; j++)
+            {
+                DetectionDataXmal.RowDefinitions.Insert(j, new RowDefinition());
+
+                SingleDetectionControl newControl = new SingleDetectionControl(detectionData[j]);
+
+                Grid.SetRow(newControl, j);
+                DetectionDataXmal.Children.Add(newControl);
+            }
+            
         }
     }
 }

@@ -12,7 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ControlApplication.Core;
 using ControlApplication.DesktopClient.Controls;
+using GMap.NET;
 
 namespace ControlApplication.DesktopClient
 {
@@ -49,7 +51,34 @@ namespace ControlApplication.DesktopClient
                 Title = "Add new detection",
                 Content = new AddDetectionControl(),
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                SizeToContent = SizeToContent.WidthAndHeight
+                SizeToContent = SizeToContent.WidthAndHeight,
+                ResizeMode = ResizeMode.NoResize
+            }.ShowDialog();
+        }
+
+
+        private void PopShowMarkerDetections(object sender, MouseButtonEventArgs e)
+        {
+            Detection[] detections =
+            {
+                new Detection(DateTime.Now, new Material("Coca", MaterialType.Explisive), new PointLatLng(), "3027744552", "36-019-19","33"),
+                new Detection(DateTime.Now, new Material("Acitone", MaterialType.Explisive), new PointLatLng(), "11", "22","33"),
+                new Detection(DateTime.Now, new Material("Heroin", MaterialType.Explisive), new PointLatLng(), "11", "22","33"),
+                new Detection(DateTime.Now, new Material("Weed", MaterialType.Explisive), new PointLatLng(), "11", "22","33"),
+                new Detection(DateTime.Now, new Material("Brown", MaterialType.Explisive), new PointLatLng(), "11", "22","33"),
+                new Detection(DateTime.Now, new Material("MD", MaterialType.Explisive), new PointLatLng(), "11", "22","33"),
+                new Detection(DateTime.Now, new Material("Vodka", MaterialType.Explisive), new PointLatLng(), "11", "22","33"),
+                new Detection(DateTime.Now, new Material("Toxicankjgfjhgfjhgfjhgf", MaterialType.Explisive), new PointLatLng(), "11", "22","33"),
+                new Detection(DateTime.Now, new Material("Mashroom", MaterialType.Explisive), new PointLatLng(), "11", "22","33")
+            };
+
+            new Window
+            {
+                Title = "Show marker's detections",
+                Content = new ShowMarkerDetections(detections),
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                SizeToContent = SizeToContent.WidthAndHeight,
+                ResizeMode = ResizeMode.NoResize
             }.ShowDialog();
         }
     }

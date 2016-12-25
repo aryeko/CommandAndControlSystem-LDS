@@ -72,6 +72,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\SingleDetectionControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -85,6 +89,9 @@
     </Compile>
     <Compile Include="Controls\ShowMarkerDetections.xaml.cs">
       <DependentUpon>ShowMarkerDetections.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SingleDetectionControl.xaml.cs">
+      <DependentUpon>SingleDetectionControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -117,6 +124,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ControlApplication.Core\ControlApplication.Core.csproj">
+      <Project>{50def84f-77e9-4494-a197-040e9dd3f0c3}</Project>
+      <Name>ControlApplication.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
