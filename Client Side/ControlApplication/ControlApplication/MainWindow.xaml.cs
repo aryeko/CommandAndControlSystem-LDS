@@ -9,6 +9,7 @@ using System.Windows.Media.TextFormatting;
 using System.Windows.Shapes;
 using ControlApplication.Core;
 using ControlApplication.DesktopClient.Controls;
+using GMap.NET;
 using GMap.NET.WindowsPresentation;
 
 namespace ControlApplication.DesktopClient

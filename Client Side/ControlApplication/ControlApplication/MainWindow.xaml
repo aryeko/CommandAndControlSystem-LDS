@@ -10,7 +10,7 @@
     <Grid>
         
 
-        <WindowsPresentation:GMapControl  x:Name="GMapControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MaxZoom="18" Zoom="13" PreviewMouseDoubleClick="PopAddDetectionWindow"/>
+        <WindowsPresentation:GMapControl  x:Name="GMapControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MaxZoom="18" Zoom="13" PreviewMouseDoubleClick="PopAddDetectionWindow" MouseRightButtonUp="PopShowMarkerDetections"/>
 
 
     </Grid>
