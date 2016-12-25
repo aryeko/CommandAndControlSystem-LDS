@@ -61,15 +61,15 @@ namespace ControlApplication.DesktopClient
         {
             Detection[] detections =
             {
-                new Detection(DateTime.Now, new Material("Coca", MaterialType.Explisive), new PointLatLng(), "3027744552", "36-019-19","33"),
-                new Detection(DateTime.Now, new Material("Acitone", MaterialType.Explisive), new PointLatLng(), "11", "22","33"),
-                new Detection(DateTime.Now, new Material("Heroin", MaterialType.Explisive), new PointLatLng(), "11", "22","33"),
-                new Detection(DateTime.Now, new Material("Weed", MaterialType.Explisive), new PointLatLng(), "11", "22","33"),
-                new Detection(DateTime.Now, new Material("Brown", MaterialType.Explisive), new PointLatLng(), "11", "22","33"),
-                new Detection(DateTime.Now, new Material("MD", MaterialType.Explisive), new PointLatLng(), "11", "22","33"),
-                new Detection(DateTime.Now, new Material("Vodka", MaterialType.Explisive), new PointLatLng(), "11", "22","33"),
-                new Detection(DateTime.Now, new Material("Toxicankjgfjhgfjhgfjhgf", MaterialType.Explisive), new PointLatLng(), "11", "22","33"),
-                new Detection(DateTime.Now, new Material("Mashroom", MaterialType.Explisive), new PointLatLng(), "11", "22","33")
+                new Detection(DateTime.Now, new Material("Coca", MaterialType.Explosive), new PointLatLng(), "3027744552", "36-019-19","33"),
+                new Detection(DateTime.Now, new Material("Acitone", MaterialType.Explosive), new PointLatLng(), "11", "22","33"),
+                new Detection(DateTime.Now, new Material("Heroin", MaterialType.Explosive), new PointLatLng(), "11", "22","33"),
+                new Detection(DateTime.Now, new Material("Weed", MaterialType.Explosive), new PointLatLng(), "11", "22","33"),
+                new Detection(DateTime.Now, new Material("Brown", MaterialType.Explosive), new PointLatLng(), "11", "22","33"),
+                new Detection(DateTime.Now, new Material("MD", MaterialType.Explosive), new PointLatLng(), "11", "22","33"),
+                new Detection(DateTime.Now, new Material("Vodka", MaterialType.Explosive), new PointLatLng(), "11", "22","33"),
+                new Detection(DateTime.Now, new Material("Toxicankjgfjhgfjhgfjhgf", MaterialType.Explosive), new PointLatLng(), "11", "22","33"),
+                new Detection(DateTime.Now, new Material("Mashroom", MaterialType.Explosive), new PointLatLng(), "11", "22","33")
             };
 
             new Window
