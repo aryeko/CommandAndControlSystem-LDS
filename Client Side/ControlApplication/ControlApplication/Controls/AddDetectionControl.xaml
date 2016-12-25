@@ -1,0 +1,62 @@
+﻿<UserControl x:Class="ControlApplication.DesktopClient.Controls.AddDetectionControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ControlApplication.DesktopClient.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="250" d:DesignWidth="300"
+             Height="250" Width="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="15*"/>
+            <RowDefinition Height="70*"/>
+            <RowDefinition Height="15*"/>
+        </Grid.RowDefinitions>
+
+        <Label Grid.Row="0" x:Name="LblTitle" Content="Add Detection Details" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Candara" FontWeight="ExtraBold" FontSize="16" Foreground="DarkBlue"/>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="10*" />
+                <RowDefinition Height="10*" />
+                <RowDefinition Height="10*" />
+                <RowDefinition Height="10*" />
+                <RowDefinition Height="10*" />
+                <RowDefinition Height="10*" />
+                <RowDefinition Height="10*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*" />
+                <ColumnDefinition Width="6*" />
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Row="0" Grid.Column="0" x:Name="LblMaterial" Content="Material:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            <Label Grid.Row="1" Grid.Column="0" x:Name="LblSuspectId" Content="Suspect's Id:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            <Label Grid.Row="2" Grid.Column="0" x:Name="LblSuspectPlateNo" Content="Suspect's Plate Id:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            <Label Grid.Row="3" Grid.Column="0" x:Name="LblGunId" Content="G-Scan Id:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            <Label Grid.Row="4" Grid.Column="0" x:Name="LblDate" Content="Date:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            <Label Grid.Row="5" Grid.Column="0" x:Name="LblTime" Content="Time:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            <Label Grid.Row="6" Grid.Column="0" x:Name="LblLocation" Content="Location:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+
+            <TextBox Grid.Row="0" x:Name="TxtMaterial" Grid.Column="1" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" />
+            <TextBox Grid.Row="1" x:Name="TxtSuspectId" Grid.Column="1" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" />
+            <TextBox Grid.Row="2" x:Name="TxtSuspectPlateNo" Grid.Column="1" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" />
+            <TextBox Grid.Row="3" x:Name="TxtGunId" Grid.Column="1" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" />
+            <TextBox Grid.Row="4" x:Name="TxtDate" Grid.Column="1" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" />
+            <TextBox Grid.Row="5" x:Name="TxtTime" Grid.Column="1" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" />
+            <TextBox Grid.Row="6" x:Name="TxtLocation" Grid.Column="1" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" />
+        </Grid>
+        
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition Width="5*"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0" x:Name="BtnCancel" Content="Cancel" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Margin="5,5,5,5" Click="BtnCancel_Click"/>
+            <Button Grid.Column="1" x:Name="BtnSubmit" Content="Submit" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Margin="5,5,5,5" Click="BtnSubmit_Click"/>
+        </Grid>
+    </Grid>
+    
+    
+</UserControl>

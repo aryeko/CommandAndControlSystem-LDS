@@ -18,7 +18,7 @@
             <TextBox x:Name="TxtSearch" TextAlignment="Justify" Padding="0" Text="Enter Adress" Width="170" Margin="10,0,10,0"/>
         </StackPanel>
 
-        <WindowsPresentation:GMapControl Grid.Row="1" x:Name="GMapControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MaxZoom="18" Zoom="13"/>
+        <WindowsPresentation:GMapControl Grid.Row="1" x:Name="GMapControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MaxZoom="18" Zoom="13" PreviewMouseDoubleClick="AddDetectionMarker"/>
 
 
     </Grid>

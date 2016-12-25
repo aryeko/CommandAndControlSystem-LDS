@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ControlApplication.DesktopClient.Controls;
 
 namespace ControlApplication.DesktopClient
 {
@@ -24,6 +25,7 @@ namespace ControlApplication.DesktopClient
         {
             InitializeComponent();
             Loaded += MainWindow_Loaded;
+            WindowStartupLocation = WindowStartupLocation.CenterScreen;
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -38,6 +40,17 @@ namespace ControlApplication.DesktopClient
         {
             string address = this.TxtSearch.Text;
             this.GMapControl.SetPositionByKeywords(address);
+        }
+
+        private void AddDetectionMarker(object sender, MouseButtonEventArgs e)
+        {
+            new Window
+            {
+                Title = "Add new detection",
+                Content = new AddDetectionControl(),
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                SizeToContent = SizeToContent.WidthAndHeight
+            }.ShowDialog();
         }
     }
 }
