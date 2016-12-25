@@ -38,13 +38,13 @@
             <Label Grid.Row="5" Grid.Column="0" x:Name="LblTime" Content="Time:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
             <Label Grid.Row="6" Grid.Column="0" x:Name="LblLocation" Content="Location:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 
-            <TextBox Grid.Row="0" x:Name="TxtMaterial" Grid.Column="1" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" />
-            <TextBox Grid.Row="1" x:Name="TxtSuspectId" Grid.Column="1" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" />
-            <TextBox Grid.Row="2" x:Name="TxtSuspectPlateNo" Grid.Column="1" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" />
-            <TextBox Grid.Row="3" x:Name="TxtGunId" Grid.Column="1" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" />
-            <TextBox Grid.Row="4" x:Name="TxtDate" Grid.Column="1" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" />
-            <TextBox Grid.Row="5" x:Name="TxtTime" Grid.Column="1" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" />
-            <TextBox Grid.Row="6" x:Name="TxtLocation" Grid.Column="1" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalAlignment="Stretch" />
+            <TextBox Grid.Row="0" x:Name="TxtMaterial" Grid.Column="1" HorizontalAlignment="Stretch" TextWrapping="Wrap" Margin="0,0,5,0" VerticalAlignment="Stretch" />
+            <TextBox Grid.Row="1" x:Name="TxtSuspectId" Grid.Column="1" HorizontalAlignment="Stretch" TextWrapping="Wrap" Margin="0,0,5,0" VerticalAlignment="Stretch" />
+            <TextBox Grid.Row="2" x:Name="TxtSuspectPlateNo" Grid.Column="1" HorizontalAlignment="Stretch" TextWrapping="Wrap" Margin="0,0,5,0" VerticalAlignment="Stretch" />
+            <TextBox Grid.Row="3" x:Name="TxtGunId" Grid.Column="1" HorizontalAlignment="Stretch" TextWrapping="Wrap" Margin="0,0,5,0" VerticalAlignment="Stretch" />
+            <TextBox Grid.Row="4" x:Name="TxtDate" Grid.Column="1" HorizontalAlignment="Stretch" TextWrapping="Wrap" Margin="0,0,5,0" VerticalAlignment="Stretch" />
+            <TextBox Grid.Row="5" x:Name="TxtTime" Grid.Column="1" HorizontalAlignment="Stretch" TextWrapping="Wrap" Margin="0,0,5,0" VerticalAlignment="Stretch" />
+            <TextBox Grid.Row="6" x:Name="TxtLocation" Grid.Column="1" HorizontalAlignment="Stretch" TextWrapping="Wrap" Margin="0,0,5,0" VerticalAlignment="Stretch" />
         </Grid>
         
         <Grid Grid.Row="2">
