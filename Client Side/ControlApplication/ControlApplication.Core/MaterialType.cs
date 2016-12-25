@@ -12,7 +12,7 @@ namespace ControlApplication.Core
     /// </summary>
     public enum MaterialType
     {
-        Explisive,
+        Explosive,
 
         Toxic
     }
