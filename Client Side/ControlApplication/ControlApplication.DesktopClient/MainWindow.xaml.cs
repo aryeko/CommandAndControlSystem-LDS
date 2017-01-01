@@ -85,9 +85,10 @@ namespace ControlApplication.DesktopClient
         internal void AddMarker(Point p)
         {
             GMapMarker marker =
-                new GMapMarker(GMapControl.FromLocalToLatLng((int) p.X - MARKER_SIZE/2, (int) p.Y - MARKER_SIZE));
-            
-            marker.Shape = GetImage(new Uri(@"\Drawable\MapMarker_Blue.png", UriKind.Relative));
+                new GMapMarker(GMapControl.FromLocalToLatLng((int) p.X - MARKER_SIZE / 2, (int) p.Y - MARKER_SIZE))
+                {
+                    Shape = GetImage(new Uri(@"\Drawable\MapMarker_Blue.png", UriKind.Relative))
+                };
 
             GMapControl.Markers.Add(marker);
         }
