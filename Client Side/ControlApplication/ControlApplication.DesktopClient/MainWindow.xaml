@@ -7,9 +7,48 @@
         xmlns:WindowsPresentation="clr-namespace:GMap.NET.WindowsPresentation;assembly=GMap.NET.WindowsPresentation" x:Class="ControlApplication.DesktopClient.MainWindow"
         mc:Ignorable="d"
         Title="MainWindow" Height="700" Width="1000">
-    <Grid>
 
-        <WindowsPresentation:GMapControl  x:Name="GMapControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MaxZoom="18" Zoom="13" PreviewMouseDoubleClick="PopAddDetectionWindow" MouseRightButtonUp="PopShowMarkerDetections"/>
+    <Grid ZIndex="0">
+        <WindowsPresentation:GMapControl x:Name="GMapControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MaxZoom="18" Zoom="13" PreviewMouseDoubleClick="PopAddDetectionWindow" MouseRightButtonUp="PopShowMarkerDetections"/>
 
+        <Grid ZIndex="1">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="124*"/>
+                <ColumnDefinition Width="156*"/>
+                <ColumnDefinition Width="135*"/>
+                <ColumnDefinition Width="329*"/>
+                <ColumnDefinition Width="249*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="10*"/>
+                <RowDefinition Height="10*"/>
+                <RowDefinition Height="10*"/>
+                <RowDefinition Height="10*"/>
+                <RowDefinition Height="10*"/>
+                <RowDefinition Height="10*"/>
+                <RowDefinition Height="10*"/>
+                <RowDefinition Height="10*"/>
+                <RowDefinition Height="10*"/>
+                <RowDefinition Height="10*"/>
+                <RowDefinition Height="10*"/>
+                <RowDefinition Height="10*"/>
+                <RowDefinition Height="10*"/>
+                <RowDefinition Height="10*"/>
+                <RowDefinition Height="10*"/>
+                <RowDefinition Height="3*"/>
+            </Grid.RowDefinitions>
+
+            <Button Grid.Row="7" Grid.Column="0" x:Name="OptionBtn" Content="Options" HorizontalAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" Background="CornflowerBlue" FontStyle="Oblique" Foreground="White" Width="90" Height="30" Margin="17,6"/>
+            <Button Grid.Row="9" Grid.Column="0" x:Name="AlertsBtn" Content="Alerts" HorizontalAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" Background="CornflowerBlue" FontStyle="Oblique" Foreground="White" Width="90" Height="30" Margin="17,6"/>
+            <Button Grid.Row="11" Grid.Column="0" x:Name="ReporsrBtn" Content="Reports" HorizontalAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" Background="CornflowerBlue" FontStyle="Oblique" Foreground="White" Width="90" Height="30" Margin="17,6,17,5.333"/>
+            <Button Grid.Row="7" Grid.Column="4" x:Name="AddPointBtn" Content="Add Point" HorizontalAlignment="Right" VerticalContentAlignment="Center" VerticalAlignment="Center" Background="CornflowerBlue" FontStyle="Oblique" Foreground="White" Width="90" Height="30" Margin="17,6"/>
+            <Button Grid.Row="9" Grid.Column="4" x:Name="AddCheckpointBtn" Content="Add Checkpoint" HorizontalAlignment="Right" VerticalContentAlignment="Center" VerticalAlignment="Center" Background="CornflowerBlue" FontStyle="Oblique" Foreground="White" Width="90" Height="30" Margin="17,6"/>
+            <Button Grid.Row="11" Grid.Column="4" x:Name="AddFactoryBtn" Content="Add Factory" HorizontalAlignment="Right" VerticalContentAlignment="Center" VerticalAlignment="Center" Background="CornflowerBlue" FontStyle="Oblique" Foreground="White" Width="90" Height="30" Margin="17,6,17,5.333"/>
+            <Button Grid.Row="13" Grid.Column="0" x:Name="DbBtn" Content="Database" HorizontalAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" Background="CornflowerBlue" FontStyle="Oblique" Foreground="White" Width="90" Height="30" Margin="17,5.667"/>
+            <Button Grid.Row="14" Grid.Column="1" x:Name="TraffickingBtn" Content="Trafficking" HorizontalAlignment="Right" VerticalContentAlignment="Center" VerticalAlignment="Center" Background="CornflowerBlue" FontStyle="Oblique" Foreground="White" Width="90" Height="30" Margin="17,5.667"/>
+            <Button Grid.Row="14" Grid.Column="2" x:Name="TrackingBtn" Content="Tracking" HorizontalAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" Background="CornflowerBlue" FontStyle="Oblique" Foreground="White" Width="90" Height="30" Margin="17,5.667"/>
+
+        </Grid>
     </Grid>
 </Window>
