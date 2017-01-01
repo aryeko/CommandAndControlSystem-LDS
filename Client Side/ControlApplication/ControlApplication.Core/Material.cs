@@ -26,11 +26,11 @@ namespace ControlApplication.Core
         /// Material class constructor
         /// </summary>
         /// <param name="name">The name of the material</param>
-        /// <param name="type">The type of the material</param>
-        public Material(string name, MaterialType type)
+        /// <param name="materialType">The type of the material</param>
+        public Material(string name, MaterialType materialType)
         {
             this.Name = name;
-            this.MaterialType = MaterialType;
+            this.MaterialType = materialType;
         }
     }
 }
