@@ -25,6 +25,7 @@ namespace ControlApplication.DesktopClient
         {
             InitializeComponent();
             Loaded += MainWindow_Loaded;
+            MouseWheel += MainWindow_MouseWheel;
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
         }
 
@@ -34,6 +35,13 @@ namespace ControlApplication.DesktopClient
             this.GMapControl.MapProvider = GMap.NET.MapProviders.GoogleMapProvider.Instance;
             GMap.NET.GMaps.Instance.Mode = GMap.NET.AccessMode.ServerOnly;
             this.GMapControl.SetPositionByKeywords("Israel, Jerusalem");
+
+            ZoomControl.UpdateControl();
+        }
+
+        private void MainWindow_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            ZoomControl.UpdateControl();
         }
 
         private void PopAddDetectionWindow(object sender, MouseButtonEventArgs e)

@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ControlApplication.DesktopClient"
+        xmlns:controls="clr-namespace:ControlApplication.DesktopClient.Controls"
         xmlns:WindowsPresentation="clr-namespace:GMap.NET.WindowsPresentation;assembly=GMap.NET.WindowsPresentation" x:Class="ControlApplication.DesktopClient.MainWindow"
         mc:Ignorable="d"
         Title="MainWindow" Height="700" Width="1000">
@@ -17,13 +18,11 @@
                 <ColumnDefinition Width="124*"/>
                 <ColumnDefinition Width="156*"/>
                 <ColumnDefinition Width="135*"/>
-                <ColumnDefinition Width="329*"/>
-                <ColumnDefinition Width="249*"/>
+                <ColumnDefinition Width="378*"/>
+                <ColumnDefinition Width="200*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="10*"/>
-                <RowDefinition Height="10*"/>
-                <RowDefinition Height="10*"/>
+                <RowDefinition Height="25*"/>
                 <RowDefinition Height="10*"/>
                 <RowDefinition Height="10*"/>
                 <RowDefinition Height="10*"/>
@@ -38,16 +37,16 @@
                 <RowDefinition Height="10*"/>
                 <RowDefinition Height="3*"/>
             </Grid.RowDefinitions>
-
-            <Button Grid.Row="7" Grid.Column="0" x:Name="OptionBtn" Content="Options" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" Background="CornflowerBlue" FontStyle="Oblique" Foreground="White" Width="90" Height="30" Margin="17,6"/>
-            <Button Grid.Row="9" Grid.Column="0" x:Name="AlertsBtn" Content="Alerts" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" Background="CornflowerBlue" FontStyle="Oblique" Foreground="White" Width="90" Height="30" Margin="17,6"/>
-            <Button Grid.Row="11" Grid.Column="0" x:Name="ReporsrBtn" Content="Reports" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" Background="CornflowerBlue" FontStyle="Oblique" Foreground="White" Width="90" Height="30" Margin="17,6,17,5.333"/>
-            <Button Grid.Row="7" Grid.Column="4" x:Name="AddPointBtn" Content="Add Point" HorizontalAlignment="Right" VerticalContentAlignment="Center" VerticalAlignment="Center" Background="CornflowerBlue" FontStyle="Oblique" Foreground="White" Width="90" Height="30" Margin="17,6"/>
-            <Button Grid.Row="9" Grid.Column="4" x:Name="AddCheckpointBtn" Content="Add Checkpoint" HorizontalAlignment="Right" VerticalContentAlignment="Center" VerticalAlignment="Center" Background="CornflowerBlue" FontStyle="Oblique" Foreground="White" Width="90" Height="30" Margin="17,6"/>
-            <Button Grid.Row="11" Grid.Column="4" x:Name="AddFactoryBtn" Content="Add Factory" HorizontalAlignment="Right" VerticalContentAlignment="Center" VerticalAlignment="Center" Background="CornflowerBlue" FontStyle="Oblique" Foreground="White" Width="90" Height="30" Margin="17,6,17,5.333"/>
-            <Button Grid.Row="13" Grid.Column="0" x:Name="DbBtn" Content="Database" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" Background="CornflowerBlue" FontStyle="Oblique" Foreground="White" Width="90" Height="30" Margin="17,5.667"/>
-            <Button Grid.Row="14" Grid.Column="1" x:Name="TraffickingBtn" Content="Trafficking" HorizontalAlignment="Right" VerticalContentAlignment="Center" VerticalAlignment="Center" Background="CornflowerBlue" FontStyle="Oblique" Foreground="White" Width="90" Height="30" Margin="17,5.667"/>
-            <Button Grid.Row="14" Grid.Column="2" x:Name="TrackingBtn" Content="Tracking" HorizontalAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" Background="CornflowerBlue" FontStyle="Oblique" Foreground="White" Width="90" Height="30" Margin="17,5.667"/>
+            <controls:ZoomControl x:Name="ZoomControl" Grid.Column="4" Grid.Row="0" Margin="17,5,17,5"/>
+            <Button Grid.Row="5" Grid.Column="0" x:Name="OptionBtn" Content="Options" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" Background="CornflowerBlue" FontStyle="Oblique" Foreground="White" Width="90" Height="30" Margin="17,6"/>
+            <Button Grid.Row="7" Grid.Column="0" x:Name="AlertsBtn" Content="Alerts" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" Background="CornflowerBlue" FontStyle="Oblique" Foreground="White" Width="90" Height="30" Margin="17,6"/>
+            <Button Grid.Row="9" Grid.Column="0" x:Name="ReporsrBtn" Content="Reports" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" Background="CornflowerBlue" FontStyle="Oblique" Foreground="White" Width="90" Height="30" Margin="17,6,17,5.333"/>
+            <Button Grid.Row="5" Grid.Column="4" x:Name="AddPointBtn" Content="Add Point" HorizontalAlignment="Right" VerticalContentAlignment="Center" VerticalAlignment="Center" Background="CornflowerBlue" FontStyle="Oblique" Foreground="White" Width="90" Height="30" Margin="17,6"/>
+            <Button Grid.Row="7" Grid.Column="4" x:Name="AddCheckpointBtn" Content="Add Checkpoint" HorizontalAlignment="Right" VerticalContentAlignment="Center" VerticalAlignment="Center" Background="CornflowerBlue" FontStyle="Oblique" Foreground="White" Width="90" Height="30" Margin="17,6"/>
+            <Button Grid.Row="9" Grid.Column="4" x:Name="AddFactoryBtn" Content="Add Factory" HorizontalAlignment="Right" VerticalContentAlignment="Center" VerticalAlignment="Center" Background="CornflowerBlue" FontStyle="Oblique" Foreground="White" Width="90" Height="30" Margin="17,6,17,5.333"/>
+            <Button Grid.Row="11" Grid.Column="0" x:Name="DbBtn" Content="Database" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" Background="CornflowerBlue" FontStyle="Oblique" Foreground="White" Width="90" Height="30" Margin="17,5.667"/>
+            <Button Grid.Row="12" Grid.Column="1" x:Name="TraffickingBtn" Content="Trafficking" HorizontalAlignment="Right" VerticalContentAlignment="Center" VerticalAlignment="Center" Background="CornflowerBlue" FontStyle="Oblique" Foreground="White" Width="90" Height="30" Margin="17,5.667"/>
+            <Button Grid.Row="12" Grid.Column="2" x:Name="TrackingBtn" Content="Tracking" HorizontalAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" Background="CornflowerBlue" FontStyle="Oblique" Foreground="White" Width="90" Height="30" Margin="17,5.667"/>
 
         </Grid>
     </Grid>
