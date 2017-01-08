@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">tinyDataServer</string>
+    <string name="info">For all data request ipaddress:8080/getall</string>
+    <string name="info2">For filtered data create post request to ipaddress:8080/getby with parametrs \"level\" and \"time\"</string>
+
+</resources>
