@@ -2,25 +2,20 @@ from socket import *
 import sys
 
 class Client:
-	host = ''
-	fileName = ''
-	port = -1
-	socket = socket(AF_INET, SOCK_STREAM)
-
-	def __init__(self, host, port, fileName):
+	
+	def __init__(self, host, port):
+		self.socket = socket(AF_INET, SOCK_STREAM)
 		self.port = port
 		self.host = host
-		self.fileName = fileName
 		self.connect()
 
 	def connect(self):
 		self.socket.connect((self.host, self.port))
-#		self.sendFileName()
-		self.sendFile()
 	
-#	def sendFileName(self):
-#        self.socket.send("name: " +self.file)
-		
+	def sendString(self, stringToSend):
+		self.socket.send(stringToSend)
+		print("String transmition ended naturally")
+
 	def sendFile(self):
 		readByte = open(self.fileName, "rb")
 		data = readByte.read()
@@ -29,10 +24,15 @@ class Client:
 		self.socket.send(data)
 		self.socket.shutdown(SHUT_WR)
 		self.socket.close()
-		print("File transfer ended naturally")
+		print("File transmition ended naturally")
 	
 if len(sys.argv) != 4:
 	print("usage: Client.py <host> <port> <file name>")
 	exit()
-	
-client= Client(sys.argv[1], int(sys.argv[2]), sys.argv[3])
+
+#the file name will contain a JSON object
+#fileNameJSON = sys.argv[3]
+stringJSON = "example: 5"
+client = Client(sys.argv[1], int(sys.argv[2]))
+client.sendString(stringJSON)
+#self.sendFile()
