@@ -16,21 +16,25 @@ class Server:
 		while True:
 			print("Listening for connections, PORT: ", self.port)
 			client, address = self.socket.accept()
-			print("Client sends data")
-			self.getData()
+			#self.getData(client)
+			self.receiveJsonAsString(client)
 
-	def getData(self):
+	def getData(self, client):
+		print("*********Client sends data*********")
 		self.receiveJsonAsString(client)
-		#self.receiveFile(client)
+		self.receiveFile(client)
 
 	def receiveJsonAsString(self, client):
+		print("*********Client sends data*********")
 		data = client.recv(1024)
+		stringJSON = ''
 		while data:
-			self.fileName += data
-			data = client.recv(1024)
+			stringJSON += data.decode()
+			data = client.recv(1024)	
 
-		print(data)
-		print("Recieving ended naturally")
+		print("Data Recieved: " + stringJSON)
+		print("*****Recieving ended naturally*****")
+		self.extacrtJsonObject(stringJSON)
 	
 	def receiveFile(self, client):
 		newFile = open("newFile.png", "wb")
@@ -39,9 +43,23 @@ class Server:
 			newFile.write(data)
 			data = client.recv(1024)
 	
-		print("Recieving ended naturally")
+		print("*****Recieving ended naturally*****")
 		newFile.close()
+
+	def extacrtJsonObject(self, stringJSON):
+		print("*******Creating JSON Object*******")
 		
+class JsonObject:
+
+	def __init__(self, dateOfDetection, material, position, suspectId, suspectPlateId, gunId, ramenGraph):
+		self.dateOfDetection = dateOfDetection
+		self.material = material
+		self.position = position
+		self.suspectId = suspectId
+		self.suspectPlateId = suspectPlateId
+		self.gunId = gunId
+		self.ramenGraph = ramenGraph
+
 if len(sys.argv) != 2:
 	print("usage: Server.py <port>")
 	exit()

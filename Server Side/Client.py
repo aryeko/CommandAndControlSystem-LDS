@@ -13,7 +13,7 @@ class Client:
 		self.socket.connect((self.host, self.port))
 	
 	def sendString(self, stringToSend):
-		self.socket.send(stringToSend)
+		self.socket.send(stringToSend.encode())
 		print("String transmition ended naturally")
 
 	def sendFile(self):
@@ -26,8 +26,9 @@ class Client:
 		self.socket.close()
 		print("File transmition ended naturally")
 	
-if len(sys.argv) != 4:
-	print("usage: Client.py <host> <port> <file name>")
+if len(sys.argv) != 3:
+	#TODO: return to 4 arguments when trying to load file name and add to usage <file name>
+	print("usage: Client.py <host> <port>")
 	exit()
 
 #the file name will contain a JSON object

@@ -7,6 +7,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlApplication.Core", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlApplication.DesktopClient", "ControlApplication.DesktopClient\ControlApplication.DesktopClient.csproj", "{E31CBDA9-82AD-440C-8037-2C49B5287433}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A4A3888D-D786-4313-8D8F-787144BCCCC8}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\Server Side\Client.py = ..\..\Server Side\Client.py
+		..\..\Server Side\Server.py = ..\..\Server Side\Server.py
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
