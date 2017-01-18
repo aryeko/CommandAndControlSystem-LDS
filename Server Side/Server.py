@@ -1,4 +1,5 @@
 from socket import *
+import json
 import sys
 
 class Server:
@@ -16,25 +17,33 @@ class Server:
 		while True:
 			print("Listening for connections, PORT: ", self.port)
 			client, address = self.socket.accept()
-			#self.getData(client)
-			self.receiveJsonAsString(client)
 
-	def getData(self, client):
-		print("*********Client sends data*********")
-		self.receiveJsonAsString(client)
-		self.receiveFile(client)
+			print("*********Client sends data*********")
+			print("Loading...")
+			data = self.getData(client, "JSON")
+			print("*****Recieving ended naturally*****")
+
+			self.updateDB(data)
+
+	def getData(self, client, type):
+
+		if type == "JSON":
+			stringJSON = self.receiveJsonAsString(client)
+			return self.extacrtJsonObject(stringJSON)
+		else:
+			print("File handling")
+			data = 0; #temp name
+			#return self.receiveFile(client)
+		return -1
 
 	def receiveJsonAsString(self, client):
-		print("*********Client sends data*********")
 		data = client.recv(1024)
 		stringJSON = ''
 		while data:
 			stringJSON += data.decode()
 			data = client.recv(1024)	
-
-		print("Data Recieved: " + stringJSON)
-		print("*****Recieving ended naturally*****")
-		self.extacrtJsonObject(stringJSON)
+		
+		return stringJSON
 	
 	def receiveFile(self, client):
 		newFile = open("newFile.png", "wb")
@@ -42,23 +51,27 @@ class Server:
 		while data:
 			newFile.write(data)
 			data = client.recv(1024)
-	
-		print("*****Recieving ended naturally*****")
+
 		newFile.close()
 
 	def extacrtJsonObject(self, stringJSON):
-		print("*******Creating JSON Object*******")
+		jsonArray = json.loads(stringJSON)
+		return JsonObject(jsonArray)
 		
+	def updateDB(self, dataToUpdate):
+		print("Updating DB...")
+
+			
 class JsonObject:
 
-	def __init__(self, dateOfDetection, material, position, suspectId, suspectPlateId, gunId, ramenGraph):
-		self.dateOfDetection = dateOfDetection
-		self.material = material
-		self.position = position
-		self.suspectId = suspectId
-		self.suspectPlateId = suspectPlateId
-		self.gunId = gunId
-		self.ramenGraph = ramenGraph
+	def __init__(self, jsonArray): #dateOfDetection, material, position, suspectId, suspectPlateId, gunId, ramenGraph):
+		self.dateOfDetection = jsonArray['dateOfDetection']
+		self.material = jsonArray['material']
+		self.position = jsonArray['position']
+		self.suspectId = jsonArray['suspectId']
+		self.suspectPlateId = jsonArray['suspectPlateId']
+		self.gunId = jsonArray['gunId']
+		self.ramenGraph = jsonArray['ramenGraph']
 
 if len(sys.argv) != 2:
 	print("usage: Server.py <port>")
