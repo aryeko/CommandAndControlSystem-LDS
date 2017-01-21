@@ -1,4 +1,6 @@
 from socket import *
+import mysql.connector as dbConnector
+import cgi
 import json
 import sys
 
@@ -60,8 +62,23 @@ class Server:
 		
 	def updateDB(self, dataToUpdate):
 		print("Updating DB...")
+		db, cursor = self.connectDB()
+		self.createDB(db, cursor)
+		#self.createEntity(db, cursor)
+		cursor.close()
 
-			
+	#Connect to mySQL DB
+	def connectDB(self):
+		db = dbConnector.connect(host='localhost', user='root', passwd='')
+		cursor = db.cursor()
+		return db, cursor
+
+	#Create new DB
+	def createDB(self, db, cursor):
+		sql = "create database if not exists LDS"
+		cursor.execute(sql)
+		db.commit()
+
 class JsonObject:
 
 	def __init__(self, jsonArray): #dateOfDetection, material, position, suspectId, suspectPlateId, gunId, ramenGraph):
