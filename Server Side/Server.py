@@ -64,7 +64,7 @@ class Server:
 		print("Updating DB...")
 		db, cursor = self.connectDB()
 		self.createDB(db, cursor)
-		#self.createEntity(db, cursor)
+		self.createEntities(db, cursor)
 		cursor.close()
 
 	#Connect to mySQL DB
@@ -76,6 +76,22 @@ class Server:
 	#Create new DB
 	def createDB(self, db, cursor):
 		sql = "create database if not exists LDS"
+		cursor.execute(sql)
+		db.commit()
+
+	#Create a new table into the DB
+	def createEntities(self, db, cursor):
+		cursor.execute("use LDS")
+		sql = '''create table if not exists material
+				(materialID int not null auto_increment,
+				material varchar(30) not null,
+				primary key(materialID))'''
+		cursor.execute(sql)
+		db.commit()
+		sql = '''create table if not exists person
+				(personID int not null auto_increment,
+				name varchar(30) not null,
+				primary key(personID))'''
 		cursor.execute(sql)
 		db.commit()
 
