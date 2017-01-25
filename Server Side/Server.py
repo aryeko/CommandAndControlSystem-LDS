@@ -65,6 +65,7 @@ class Server:
 		db, cursor = self.connectDB()
 		self.createDB(db, cursor)
 		self.createEntities(db, cursor)
+		self.insertIntoDB(db, cursor, dataToUpdate)
 		cursor.close()
 
 	#Connect to mySQL DB
@@ -89,11 +90,21 @@ class Server:
 		cursor.execute(sql)
 		db.commit()
 		sql = '''create table if not exists person
-				(personID int not null auto_increment,
+				(personID varchar(10) not null,
 				name varchar(30) not null,
 				primary key(personID))'''
 		cursor.execute(sql)
 		db.commit()
+	
+	#insert values into the DB
+	def insertIntoDB(self, db, cursor, data):
+		sql = "insert into material(material) values('{0}')".format(data.material)
+		cursor.execute(sql)
+		db.commit()
+		sql = "insert into person(personID, name) values('{0}', 'Tomer Achdut')".format(data.suspectId)
+		cursor.execute(sql)
+		db.commit()
+
 
 class JsonObject:
 
