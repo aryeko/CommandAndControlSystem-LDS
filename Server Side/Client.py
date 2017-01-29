@@ -26,7 +26,6 @@ class Client:
         self.socket.close()
         print("File transmition ended naturally")
 
-
 if len(sys.argv) != 3:
     # TODO: return to 4 arguments when trying to load file name and add to usage <file name>
     print("usage: Client.py <host> <port>")
@@ -34,7 +33,7 @@ if len(sys.argv) != 3:
 
 # the file name will contain a JSON object
 # fileNameJSON = sys.argv[3]
-stringJSON = '{"dateOfDetection":"1.1.17", "material":"Cocaine", "position":"Gaza", "suspectId":"123123", ' \
+stringJSON = '{"dateOfDetection":"1.1.17", "material":"Cocaine", "position":"Gaza", "suspectId":"123445", ' \
              '"suspectPlateId":"36-034-98", "gunId":"222", "ramenGraph":"none"} '
 client = Client(sys.argv[1], int(sys.argv[2]))
 client.send_string(stringJSON)
