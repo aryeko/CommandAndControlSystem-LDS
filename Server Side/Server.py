@@ -62,6 +62,9 @@ class Server:
 		self.dbHandler.insert_into_db(data_to_update)
 
 class DbHandler:
+	'''
+		A class that represent a data base, including methods of DB manipulations
+	'''
 	def __init__(self):
 		self.db = db_connector.connect(host='localhost', user='root', passwd='')
 		self.cursor = self.db.cursor()
@@ -113,6 +116,9 @@ class JsonDataParser:
 		return Detection(json_array)
 
 class Detection:
+	'''
+		A class that represent a detection by all its attributes
+	'''
 	def __init__(self, json_array):
 		self.dateOfDetection = json_array['dateOfDetection']
 		self.material = json_array['material']
