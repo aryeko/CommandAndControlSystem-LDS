@@ -12,8 +12,8 @@ class Client:
     def connect(self):
         self.socket.connect((self.host, self.port))
 
-    def send_string(self, stringToSend):
-        self.socket.send(stringToSend.encode())
+    def send_string(self, string_to_send):
+        self.socket.send(string_to_send.encode())
         print("String transmition ended naturally")
 
     def send_file(self):
