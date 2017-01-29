@@ -115,8 +115,7 @@ class Server:
 
 
 class JsonObject:
-    def __init__(self,
-                 json_array):  # dateOfDetection, material, position, suspectId, suspectPlateId, gunId, ramenGraph):
+    def __init__(self, json_array):
         self.dateOfDetection = json_array['dateOfDetection']
         self.material = json_array['material']
         self.position = json_array['position']
