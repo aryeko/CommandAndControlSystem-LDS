@@ -10,6 +10,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A4A3888D-D786-4313-8D8F-787144BCCCC8}"
 	ProjectSection(SolutionItems) = preProject
 		..\..\Server Side\Client.py = ..\..\Server Side\Client.py
+		..\..\Server Side\DbHandler.py = ..\..\Server Side\DbHandler.py
+		..\..\Server Side\Detection.py = ..\..\Server Side\Detection.py
+		..\..\Server Side\JsonDataParser.py = ..\..\Server Side\JsonDataParser.py
 		..\..\Server Side\Server.py = ..\..\Server Side\Server.py
 	EndProjectSection
 EndProject

@@ -3,7 +3,7 @@ import sys
 
 
 class Client:
-    def __init__(self, host, port):
+    def __init__(self, port, host="127.0.0.1"):
         self.socket = socket(AF_INET, SOCK_STREAM)
         self.port = port
         self.host = host
@@ -28,13 +28,13 @@ class Client:
 
 if len(sys.argv) != 3:
     # TODO: return to 4 arguments when trying to load file name and add to usage <file name>
-    print("usage: Client.py <host> <port>")
+    print("usage: Client.py <port> <host>")
     exit()
 
 # the file name will contain a JSON object
 # fileNameJSON = sys.argv[3]
 stringJSON = '{"dateOfDetection":"1.1.17", "material":"Cocaine", "position":"Gaza", "suspectId":"877654", ' \
              '"suspectPlateId":"36-034-98", "gunId":"222", "ramenGraph":"none"} '
-client = Client(sys.argv[1], int(sys.argv[2]))
+client = Client(int(sys.argv[1]), sys.argv[2])
 client.send_string(stringJSON)
 # self.sendFile()
