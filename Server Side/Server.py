@@ -27,7 +27,7 @@ class Server:
 			print("*****Recieving ended naturally*****")
 
 			self.update_db(data)
-		self.dbHandler.closeCursor()
+		#self.dbHandler.closeCursor()
 
 	def get_data(self, client, type_of_data="JSON"):
 		if type_of_data == "JSON":
@@ -99,7 +99,8 @@ class DbHandler:
 		self.cursor.execute(sql)
 		self.db.commit()
 
-	def closeCursor(self):
+	def __del__(self):
+		print("Closing DB cursor")
 		self.cursor.close()
 
 class JsonDataParser:
