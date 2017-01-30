@@ -3588,7 +3588,7 @@
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
-											"text": "-host",
+											"text": "-host = \"127.0.0.1\"",
 											"horizontalAlignment": 0,
 											"verticalAlignment": 5,
 											"wordWrap": false
@@ -7190,6 +7190,7 @@
 							"isReadOnly": false,
 							"isOrdered": false,
 							"isUnique": false,
+							"defaultValue": "\"127.0.0.1\"",
 							"isDerived": false,
 							"aggregation": "none",
 							"isID": false
