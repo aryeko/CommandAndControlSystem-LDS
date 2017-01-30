@@ -30,8 +30,7 @@ This project is developed as part of the requirements for our [Final SE Project]
 ## Project Documents
 - [Company Presentation](https://github.com/aryeko/CommandAndControlSystem-LDS/blob/master/Documents/Presentations/g-scan%20opening.pptx)
 - [Project Presentation](https://github.com/aryeko/CommandAndControlSystem-LDS/blob/613db2ebb254666b714ccff45ba8dc922abb3771/Documents/Presentations/MVP.pptx)
-- [Project Proposal](https://github.com/aryeko/CommandAndControlSystem-LDS/blob/master/Documents/propsal.pdf) 
-- [Project Inception](https://github.com/aryeko/CommandAndControlSystem-LDS/wiki/inception)
+- [Project Proposal](https://github.com/aryeko/CommandAndControlSystem-LDS/wiki/Proposal)
 - [Software Requirements Specification](https://github.com/aryeko/CommandAndControlSystem-LDS/wiki/srs)
 - [Software Design Specification](https://github.com/aryeko/CommandAndControlSystem-LDS/wiki/sds)
 - [Organization official website](http://laser-detect.com/)
