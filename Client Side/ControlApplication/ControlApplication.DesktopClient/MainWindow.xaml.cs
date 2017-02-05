@@ -9,6 +9,7 @@ using System.Windows.Media.TextFormatting;
 using System.Windows.Shapes;
 using ControlApplication.Core;
 using ControlApplication.Core.Contracts;
+using ControlApplication.Core.Networking;
 using ControlApplication.DesktopClient.Controls;
 using GMap.NET;
 using GMap.NET.WindowsPresentation;
@@ -22,8 +23,14 @@ namespace ControlApplication.DesktopClient
     {
         internal const int MARKER_SIZE = 50;
 
+        /// <summary>
+        /// HostedNetwork API
+        /// </summary>
+        private readonly HostedNetwork _hostedNetwork;
+
         public MainWindow()
         {
+            this._hostedNetwork = new HostedNetwork();
             InitializeComponent();
             Loaded += MainWindow_Loaded;
             MouseWheel += MainWindow_MouseWheel;
@@ -38,6 +45,8 @@ namespace ControlApplication.DesktopClient
             this.GMapControl.SetPositionByKeywords("Israel, Jerusalem");
 
             ZoomControl.UpdateControl();
+
+            _hostedNetwork.StartHostedNetwork();
         }
 
         private void MainWindow_MouseWheel(object sender, MouseWheelEventArgs e)
