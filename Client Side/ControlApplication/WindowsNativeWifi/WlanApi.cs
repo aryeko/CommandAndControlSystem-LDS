@@ -282,10 +282,16 @@ namespace WindowsNativeWifi
                         dot11Ssid = ssid,
                         dwMaxNumberOfPeers = maxNumberOfPeers
                     };
+                //StringBuilder key = new StringBuilder("12345670");
 
                 IntPtr hostedNetworkConnectionSettingsPtr = Marshal.AllocHGlobal(Marshal.SizeOf(hostedNetworkConnectionSettings));
                 Marshal.StructureToPtr(hostedNetworkConnectionSettings, hostedNetworkConnectionSettingsPtr, false);
+/*
+                byte[] key = Encoding.ASCII.GetBytes("12345677");
+                IntPtr pkey = Marshal.AllocHGlobal(key.Length);
 
+                Marshal.Copy(key, 0, pkey, key.Length);
+                */
                 Wlan.WlanHostedNetworkReason reason = 0;
                 try
                 {
@@ -297,6 +303,18 @@ namespace WindowsNativeWifi
                             hostedNetworkConnectionSettingsPtr,
                             out reason,
                             IntPtr.Zero));
+                    /*
+                     * TODO: figure out the correct parameters
+                    Wlan.ThrowIfError(
+                        Wlan.WlanHostedNetworkSetSecondaryKey(
+                            client.clientHandle,
+                            (uint) key.Length, 
+                            pkey, 
+                            false, 
+                            true,
+                            out reason, 
+                            IntPtr.Zero));
+                            */
                 }
                 finally
                 {
@@ -355,6 +373,46 @@ namespace WindowsNativeWifi
                 {
                     Console.WriteLine(reason.ToString());
                 }
+            }
+
+            public IEnumerable<PhysicalAddress> GetHostedNetworkConnectedDevices()
+            {
+                Wlan.WlanHostedNetworkStatus hostedNetworkConnectionStatus =
+                    new Wlan.WlanHostedNetworkStatus();
+
+                IntPtr hostedNetworkStatusPtr = Marshal.AllocHGlobal(Marshal.SizeOf(hostedNetworkConnectionStatus));
+                Marshal.StructureToPtr(hostedNetworkConnectionStatus, hostedNetworkStatusPtr, false);
+                
+                Wlan.WlanHostedNetworkReason reason = 0;
+                try
+                {
+                    Wlan.ThrowIfError(
+                        Wlan.WlanHostedNetworkQueryStatus(
+                            client.clientHandle,
+                            out hostedNetworkStatusPtr,
+                            IntPtr.Zero));
+
+                    Marshal.PtrToStructure(hostedNetworkStatusPtr, hostedNetworkConnectionStatus);
+                }
+                finally
+                {
+                    Console.WriteLine(reason.ToString());
+                    Marshal.FreeHGlobal(hostedNetworkStatusPtr);
+                }
+
+                List<PhysicalAddress> peersPhysicalAddresses = new List<PhysicalAddress>();
+
+                foreach (var peer in hostedNetworkConnectionStatus.PeerList)
+                {
+                    if (peer.PeerAuthState ==
+                        Wlan.WlanHostedNetworkPeerAuthState.WlanHostedNetworkPeerStateAuthenticated)
+                    {
+                        var peerMac = Encoding.ASCII.GetString(peer.PeerMacAddress);
+                        peersPhysicalAddresses.Add(PhysicalAddress.Parse(peerMac));
+                    }
+                }
+
+                return peersPhysicalAddresses;
             }
             #endregion
 
