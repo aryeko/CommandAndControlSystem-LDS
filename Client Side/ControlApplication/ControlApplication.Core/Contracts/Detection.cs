@@ -1,7 +1,7 @@
 ﻿using System;
 using GMap.NET;
 
-namespace ControlApplication.Core
+namespace ControlApplication.Core.Contracts
 {
     /// <summary>
     /// This calss represents a detection

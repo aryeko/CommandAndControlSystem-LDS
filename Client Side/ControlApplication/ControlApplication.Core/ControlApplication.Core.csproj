@@ -43,9 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Detection.cs" />
-    <Compile Include="Material.cs" />
-    <Compile Include="MaterialType.cs" />
+    <Compile Include="Contracts\Detection.cs" />
+    <Compile Include="Contracts\Material.cs" />
+    <Compile Include="Contracts\MaterialType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

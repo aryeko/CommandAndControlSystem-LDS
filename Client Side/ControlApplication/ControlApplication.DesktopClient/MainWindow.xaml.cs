@@ -8,6 +8,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media.TextFormatting;
 using System.Windows.Shapes;
 using ControlApplication.Core;
+using ControlApplication.Core.Contracts;
 using ControlApplication.DesktopClient.Controls;
 using GMap.NET;
 using GMap.NET.WindowsPresentation;
