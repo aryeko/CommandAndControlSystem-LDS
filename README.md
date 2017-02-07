@@ -35,16 +35,16 @@ This project is developed as part of the requirements for our [Final SE Project]
 - [Software Design Specification](https://github.com/aryeko/CommandAndControlSystem-LDS/wiki/sds)
 - [Organization official website](http://laser-detect.com/)
 
-## Iteration Pages
+## Sprints pages
+- [Sprint 1 - MVP](https://github.com/aryeko/CommandAndControlSystem-LDS/wiki/Sprint-1---MVP)
+- [Sprint 2 - Server Side Establishment](https://github.com/aryeko/CommandAndControlSystem-LDS/wiki/Sprint-2)
+- [Sprint 3 - Establish Wireless Infrastracture](https://github.com/aryeko/CommandAndControlSystem-LDS/wiki/Sprint-3)
+- [Sprint 4 - Map Feature](https://github.com/aryeko/CommandAndControlSystem-LDS/wiki/Sprint-4)
+- [Sprint 5 - Substances Combination Algorithm Research](https://github.com/aryeko/CommandAndControlSystem-LDS/wiki/Sprint-5)
+- [Sprint 6 - Prohibited Combination Feature](https://github.com/aryeko/CommandAndControlSystem-LDS/wiki/Sprint-6)
+- [Sprint 7 - Location Receivers Integration](https://github.com/aryeko/CommandAndControlSystem-LDS/wiki/Sprint-7)
+- [Sprint 8 - Trail & Track Source Substance](https://github.com/aryeko/CommandAndControlSystem-LDS/wiki/Sprint-8)
+- [Sprint 9 - Source Substance Feature](https://github.com/aryeko/CommandAndControlSystem-LDS/wiki/Sprint-9)
 
-- [Sprint 1 - MVP](https://github.com/aryeko/CommandAndControlSystem-LDS/wiki/Iter-1)
-- [Sprint 2 - Server Side Establishment](https://github.com/aryeko/CommandAndControlSystem-LDS/wiki/Iter-2)
-- [Sprint 3 - Establish Wireless Infrastracture](https://github.com/aryeko/CommandAndControlSystem-LDS/wiki/Iter-3)
-- [Sprint 4 - Map Feature](https://github.com/aryeko/CommandAndControlSystem-LDS/wiki/Iter-4)
-- [Sprint 5 - Substances Combination Algorithm Research](https://github.com/aryeko/CommandAndControlSystem-LDS/wiki/Iter-5)
-- [Sprint 6 - Prohibited Combination Feature](https://github.com/aryeko/CommandAndControlSystem-LDS/wiki/Iter-6)
-- [Sprint 7 - Location Receivers Integration](https://github.com/aryeko/CommandAndControlSystem-LDS/wiki/Iter-7)
-- [Sprint 8 - Trail & Track Source Substance](https://github.com/aryeko/CommandAndControlSystem-LDS/wiki/Iter-8)
-- [Sprint 9 - Source Substance Feature](https://github.com/aryeko/CommandAndControlSystem-LDS/wiki/Iter-9)
 
 ##Please visit our [Wiki](https://github.com/aryeko/CommandAndControlSystem-LDS/wiki) for further info
