@@ -202,6 +202,114 @@ namespace WindowsNativeWifi
             /// </summary>
             public uint dwMaxNumberOfPeers;
         }
+
+        /// <summary>
+        /// The WLAN_HOSTED_NETWORK_STATE enumerated type specifies the possible values 
+        /// for the network state of the wireless Hosted Network.
+        /// </summary>
+        public enum WlanHostedNetworkState
+        {
+            /// <summary>
+            /// The wireless Hosted Network is unavailable.
+            /// </summary>
+            WlanHostedNetworkUnavailable,
+
+            /// <summary>
+            /// The wireless Hosted Network is idle.
+            /// </summary>
+            WlanHostedNetworkIdle,
+
+            /// <summary>
+            /// The wireless Hosted Network is active.
+            /// </summary>
+            WlanHostedNetworkActive
+        }
+
+        /// <summary>
+        /// The WLAN_HOSTED_NETWORK_PEER_AUTH_STATE enumerated type specifies 
+        /// the possible values for the authentication state of a peer on the wireless Hosted Network.
+        /// </summary>
+        public enum WlanHostedNetworkPeerAuthState
+        {
+            /// <summary>
+            /// An invalid peer state.
+            /// </summary>
+            WlanHostedNetworkPeerStateInvalid,
+
+            /// <summary>
+            /// The peer is authenticated.
+            /// </summary>
+            WlanHostedNetworkPeerStateAuthenticated
+        }
+
+        /// <summary>
+        /// The WLAN_HOSTED_NETWORK_PEER_STATE structure contains information about the peer state for a peer on the wireless Hosted Network.
+        /// </summary>
+        [StructLayout(LayoutKind.Sequential)]
+        public struct WlanHostedNetworkPeerState
+        {
+            /// <summary>
+            /// The MAC address of the peer being described.
+            /// </summary>
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
+            public byte[] PeerMacAddress;
+
+            /// <summary>
+            /// The current authentication state of this peer.
+            /// </summary>
+            public WlanHostedNetworkPeerAuthState PeerAuthState;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct WlanHostedNetworkStatus
+        {
+            /// <summary>
+            /// The current state of the wireless Hosted Network.
+            /// If the value of this member is wlan_hosted_network_unavailable, 
+            /// then the values of the other fields in this structure should not be used.
+            /// </summary>
+            public WlanHostedNetworkState HostedNetworkState;
+
+            /// <summary>
+            /// The actual network Device ID used for the wireless Hosted Network.
+            /// This is member is the GUID of a virtual wireless device which would not be available through calls to the WlanEnumInterfaces function.
+            /// This GUID can be used for calling other higher layer networking functions that use the device GUID(IP Helper functions, for example).
+            /// </summary>
+            public Guid IPDeviceID;
+
+            /// <summary>
+            /// The BSSID used by the wireless Hosted Network in packets, beacons, and probe responses.
+            /// </summary>
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
+            public byte[] wlanHostedNetworkBSSID;
+
+            /// <summary>
+            /// The physical type of the network interface used by wireless Hosted Network.
+            /// This is one of the types reported by the related physical interface. 
+            /// This value is correct only if the HostedNetworkState member is wlan_hosted_network_active.
+            /// </summary>
+            public Dot11PhyType dot11PhyType;
+
+            /// <summary>
+            /// The channel frequency of the network interface used by wireless Hosted Network.
+            /// This value is correct only if HostedNetworkState is wlan_hosted_network_active.
+            /// </summary>
+            public ulong ulChannelFrequency;
+
+            /// <summary>
+            /// The current number of authenticated peers on the wireless Hosted Network.
+            /// This value is correct only if HostedNetworkState is wlan_hosted_network_active.
+            /// </summary>
+            public uint dwNumberOfPeers;
+
+            /// <summary>
+            /// An array of WLAN_HOSTED_NETWORK_PEER_STATE structures describing each of the current peers on the wireless Hosted Network. 
+            /// The number of elements in the array is given by dwNumberOfPeers member.
+            /// This value is correct only if HostedNetworkState is wlan_hosted_network_active.
+            /// </summary>
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 1)]
+            public WlanHostedNetworkPeerState[] PeerList;
+        }
         #endregion
 
         public const uint WLAN_CLIENT_VERSION_XP_SP2 = 1;
@@ -274,6 +382,22 @@ namespace WindowsNativeWifi
             [In] uint dataSize,
             [In] IntPtr pvData,
             [Out] out WlanHostedNetworkReason pFailReason,
+            [In, Out] IntPtr pReserved);
+
+        [DllImport("wlanapi.dll")]
+        public static extern int WlanHostedNetworkSetSecondaryKey(
+            [In] IntPtr clientHandle,
+            [In] uint keyLength,
+            [In] IntPtr pucKeyData,
+            [In] bool bIsPassPhrase,
+            [In] bool bPersistent,
+            [Out] out WlanHostedNetworkReason pFailReason,
+            [In, Out] IntPtr pReserved);
+
+        [DllImport("wlanapi.dll")]
+        public static extern int WlanHostedNetworkQueryStatus(
+            [In] IntPtr clientHandle,
+            [Out] out IntPtr ppWlanHostedNetworkStatus,
             [In, Out] IntPtr pReserved);
         #endregion
         /// <summary>
