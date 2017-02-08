@@ -25,7 +25,7 @@ namespace ControlApplication.DesktopClient.Controls
         private const int HEIGHT_ROW_CELL = 40;
         private const int INITIAL_HEIGHT = 80;
         private const int MAX_HEIGHT = 120;
-        public string numberOfDetections { get; set; }
+        public string NumberOfDetections { get; set; }
 
         public ShowMarkerDetections(Detection[] detectionData)
         {
