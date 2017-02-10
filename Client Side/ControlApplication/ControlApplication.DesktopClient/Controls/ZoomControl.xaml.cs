@@ -14,7 +14,7 @@ namespace ControlApplication.DesktopClient.Controls
         private int mMaxZoom;
         private int mMinZoom;
 
-        public GMapControl MapControl => (Application.Current.MainWindow as MainWindow)?.GMapControl;
+        private GMapControl MapControl => (Application.Current.MainWindow as MainWindow)?.GMapControl;
 
         public ZoomControl()
         {
