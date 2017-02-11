@@ -33,8 +33,8 @@ if len(sys.argv) != 3:
 
 # the file name will contain a JSON object
 # fileNameJSON = sys.argv[3]
-stringJSON = '{"dateOfDetection":"1.1.17", "material":"Cocaine", "position":"Gaza", "suspectId":"877654", ' \
-             '"suspectPlateId":"36-034-98", "gunId":"222", "ramenGraph":"none"} '
+stringJSON = '{"dateOfDetection":"1.1.17", "material":"Prototype Example", "position":"Gaza", "suspectId":"877789", ' \
+             '"suspectPlateId":"36-034-98", "gunId":"232", "ramenGraph":"none"} '
 client = Client(int(sys.argv[1]), sys.argv[2])
 client.send_string(stringJSON)
 # self.sendFile()
