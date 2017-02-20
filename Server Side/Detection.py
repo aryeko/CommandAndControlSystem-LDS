@@ -1,7 +1,7 @@
 class Detection:
-	'''
+	"""
 		A class that represent a detection by all its attributes
-	'''
+	"""
 	def __init__(self, json_array):
 		self.dateOfDetection = json_array['dateOfDetection']
 		self.material = json_array['material']

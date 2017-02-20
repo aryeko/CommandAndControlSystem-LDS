@@ -1,40 +1,27 @@
-from SqlQueries import SqlQueries
-import mysql.connector as db_connector
-import sys
+import json as jsonLib
+from pymongo import MongoClient
 
 class DbHandler:
-	'''
+	"""
 		A class that represent a data base, including methods of DB manipulations
-	'''
+	"""
 	def __init__(self):
-		self.db = db_connector.connect(host='localhost', user='root', passwd='')
-		self.cursor = self.db.cursor()
-		self.create_db()
-		self.cursor.execute(SqlQueries.USE_DB_LDS)
-		self.create_entities()
 
-	# Create new DB
-	def create_db(self):
-		self.cursor.execute(SqlQueries.CREATE_DB_LDS)
-		self.db.commit()
+		self.client = MongoClient('mongodb://buko:buko1234@ds149700.mlab.com:49700/bukoharam')
+		self.db = self.client.bukoharam
 
-	# Create a new table into the DB
-	def create_entities(self):
-		self.cursor.execute(SqlQueries.CREATE_TABLE_MATERIAL)
-		self.db.commit()
-		self.cursor.execute(SqlQueries.CREATE_TABLE_PERSON)
-		self.db.commit()
+	def add_user(self, fullname, username, password):
+		doc = {"fullname": fullname,
+			"username": username,
+			"password": password}
 
-	# insert values into the DB
-	def insert_into_db(self, data):
-		
-		sql = SqlQueries.INSERT_MATERIAL + " values('{0}')".format(data.material)
-		self.cursor.execute(sql)
-		self.db.commit()
-		sql = SqlQueries.INSERT_PERSON + " values('{0}', 'Tomer Achdut')".format(data.suspectId)
-		self.cursor.execute(sql)
-		self.db.commit()
+		self.db.Users.update(doc, doc, upsert=True)
+
+	def get_users(self, json_filter=""):
+		return self.db.Users.find()
+
+	def delete_user(self, json_filter):
+		return self.db.Users.delete_many(json_filter)
 
 	def __del__(self):
 		print("Closing DB cursor")
-		self.cursor.close()

@@ -1,7 +1,6 @@
 from JsonDataParser import JsonDataParser
 from DbHandler import DbHandler
 from socket import *
-import cgi
 import sys
 
 class Server:
@@ -60,9 +59,31 @@ class Server:
 		print("Updating DB...")
 		self.dbHandler.insert_into_db(data_to_update)
 
-
+'''
 if len(sys.argv) != 3:
     print("usage: Server.py <port> <host>")
     exit()
+'''
+#server = Server(int(sys.argv[1]), sys.argv[2])
 
-server = Server(int(sys.argv[1]), sys.argv[2])
+
+dbHandler = DbHandler()
+'''
+print("delete all users")
+dbHandler.delete_user({"username":"aryeko"})
+dbHandler.delete_user({"username":"tomerac"})
+users = dbHandler.get_user()
+for user in users:
+	print(str(user))
+'''
+print("Adding Arye")
+dbHandler.add_user("Arye Kogan", "aryeko", "1234")
+users = dbHandler.get_users()
+for user in users:
+	print(str(user))
+
+print("Adding Tomer")
+dbHandler.add_user("Tomer Achdut", "tomerac", "1234")
+users = dbHandler.get_users()
+for user in users:
+	print(str(user))
