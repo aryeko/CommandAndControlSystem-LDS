@@ -66,24 +66,78 @@ if len(sys.argv) != 3:
 '''
 #server = Server(int(sys.argv[1]), sys.argv[2])
 
+def print_iterator(iterator):
+	print("count: " + str(iterator.count()))
+	for item in iterator:
+		print(str(item))
 
 dbHandler = DbHandler()
+
 '''
 print("delete all users")
 dbHandler.delete_user({"username":"aryeko"})
 dbHandler.delete_user({"username":"tomerac"})
-users = dbHandler.get_user()
-for user in users:
-	print(str(user))
 '''
+
+
+print("current units")
+print_iterator(dbHandler.get_units())
+
+print("Adding Super Unit")
+unit_id = dbHandler.add_unit("Super Unit")
+
+print("current units")
+print_iterator(dbHandler.get_units())
+
+
+print("current users")
+print_iterator(dbHandler.get_users())
+
+
 print("Adding Arye")
-dbHandler.add_user("Arye Kogan", "aryeko", "1234")
-users = dbHandler.get_users()
-for user in users:
-	print(str(user))
+dbHandler.add_user("Arye Kogan", "aryeko", "1234", unit_id)
 
 print("Adding Tomer")
-dbHandler.add_user("Tomer Achdut", "tomerac", "1234")
-users = dbHandler.get_users()
-for user in users:
-	print(str(user))
+dbHandler.add_user("Tomer Achdut", "tomerac", "1234", unit_id)
+
+print("current users")
+print_iterator(dbHandler.get_users())
+
+
+
+print("current materials")
+print_iterator(dbHandler.get_materials())
+
+
+print("Adding Cocaine")
+dbHandler.add_material("Cocaine", "narcotic", 12)
+
+print("Adding XTZ")
+dbHandler.add_material("XTZ", "narcotic", 55)
+
+print("current materials")
+print_iterator(dbHandler.get_materials())
+
+
+
+print("current G-Scans")
+print_iterator(dbHandler.get_gscans())
+
+
+print("Adding G-Scan 1")
+dbHandler.add_gscan("1111", unit_id)
+
+
+print("current G-Scans")
+print_iterator(dbHandler.get_gscans())
+
+
+print("current areas")
+print_iterator(dbHandler.get_areas())
+
+
+print("Adding area")
+dbHandler.add_area("Road block", (1122, 3344), 100)
+
+print("current areas")
+print_iterator(dbHandler.get_areas())
