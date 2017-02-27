@@ -30,11 +30,15 @@ namespace ControlApplication.DesktopClient
 
         public MainWindow()
         {
+            Login fLogin = new Login();
+            fLogin.ShowDialog();
+
             this._hostedNetwork = new HostedNetwork();
             InitializeComponent();
             Loaded += MainWindow_Loaded;
             MouseWheel += MainWindow_MouseWheel;
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
+           
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -46,7 +50,8 @@ namespace ControlApplication.DesktopClient
 
             ZoomControl.UpdateControl();
 
-            _hostedNetwork.StartHostedNetwork();
+            //TO-DO: Start Hosted network with a button (handle the case when a client don't support Hosted network 
+          //  _hostedNetwork.StartHostedNetwork();
         }
 
         private void MainWindow_MouseWheel(object sender, MouseWheelEventArgs e)
@@ -128,6 +133,11 @@ namespace ControlApplication.DesktopClient
             myImage.Source = myBitmapImage;
 
             return myImage;
+        }
+
+        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Application.Current.Shutdown();
         }
     }
 }

@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:ControlApplication.DesktopClient"
         xmlns:controls="clr-namespace:ControlApplication.DesktopClient.Controls"
         xmlns:WindowsPresentation="clr-namespace:GMap.NET.WindowsPresentation;assembly=GMap.NET.WindowsPresentation" x:Class="ControlApplication.DesktopClient.MainWindow"
+        Closing="MainWindow_Closing" 
         mc:Ignorable="d"
         Title="MainWindow" Height="700" Width="1000">
 
