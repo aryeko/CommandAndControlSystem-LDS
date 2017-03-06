@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -138,6 +140,25 @@ namespace ControlApplication.DesktopClient
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Application.Current.Shutdown();
+        }
+
+        private void DetectionBtn_Click(object sender, RoutedEventArgs routedEventArgs)
+        {
+            ListBox.UnselectAll();
+            ListBox.Items.Clear();
+            foreach (var material in Enum.GetValues(typeof(MaterialType)))
+            {
+                ListBox.Items.Add(material);
+            }
+
+            ListBox.Visibility = ListBox.Visibility == Visibility.Hidden ? Visibility.Visible : Visibility.Hidden;
+            
+        }
+
+        private void ListBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //Console.WriteLine(ListBox.SelectedItems[0]?.ToString());
+            Console.WriteLine("Number of items: " + ListBox.SelectedItems.Count.ToString());
         }
     }
 }
