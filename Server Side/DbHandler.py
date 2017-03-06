@@ -18,8 +18,10 @@ class DbHandler:
 
 		return affected_doc_id['_id']
 
-	def get_units(self):
-		return self.db.Units.find()
+	def get_units(self, json_filter = None):
+		if json_filter is None:
+			return self.db.Units.find()
+		return self.db.Units.find(json_filter)
 
 	def delete_unit(self, json_filter):
 		return self.db.Units.delete_many(json_filter)
@@ -48,8 +50,10 @@ class DbHandler:
 															upsert=True, return_document=ReturnDocument.AFTER)
 		return ObjectId(affected_doc_id['_id'])
 
-	def get_users(self):
-		return self.db.Users.find()
+	def get_users(self, json_filter=None):
+		if json_filter is None:
+			return self.db.Users.find()
+		return self.db.Users.find(json_filter)
 
 	def delete_user(self, json_filter):
 		return self.db.Users.delete_many(json_filter)
