@@ -26,15 +26,15 @@ def make_session_permanent():
     session.permanent = True
     app.permanent_session_lifetime = timedelta(minutes=5)
 
-
 @app.route("/")
 def hello():
-	return "Hello World!"
+	if session.get('logged_in'):
+		return "User is logged in!"
+	return "User is NOT logged in!"
 
 @app.route('/user', methods=['POST'])
 def add_user():
 	#TODO: verificate the users
-
 
 	unitId = dbHandler.get_units()[0]['_id']
 	print(unitId)
