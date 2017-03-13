@@ -46,6 +46,9 @@
     <Compile Include="Contracts\Detection.cs" />
     <Compile Include="Contracts\Material.cs" />
     <Compile Include="Contracts\MaterialType.cs" />
+    <Compile Include="Networking\CookieAwareWebClient.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Networking\HostedNetwork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
