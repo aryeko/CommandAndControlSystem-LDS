@@ -50,6 +50,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Networking\HostedNetwork.cs" />
+    <Compile Include="Networking\ServerConnectionManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
