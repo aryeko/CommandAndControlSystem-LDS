@@ -52,7 +52,7 @@ def login():
 				print("user is authorized")
 				session['logged_in'] = True
 				flash('You were logged in')
-				return "SUCESS"
+				return "SUCCESS"
 
 		return "AUTH_FAILED"
 	else:

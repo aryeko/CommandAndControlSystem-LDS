@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using ControlApplication.Core.Networking;
 
 namespace ControlApplication.DesktopClient
 {
@@ -39,7 +40,8 @@ namespace ControlApplication.DesktopClient
 
         private void loginBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (usernameBox.Text.Equals("user") && passwordBox.Password.Equals("user"))
+            var loginSuccess = ServerConnectionManager.GetInstance().Login(usernameBox.Text, passwordBox.Password);
+            if (loginSuccess)
             {
                 MessageBox.Show("Login sucess! Welcome to LDS Command Application");
                 this.Hide();
