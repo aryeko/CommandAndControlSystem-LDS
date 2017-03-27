@@ -6,6 +6,9 @@ import sys
 
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
 
+SUCCESS = "SUCCESS"
+AUTH_FAILED = "AUTH_FAILED"
+
 
 dbHandler = DbHandler()
 
@@ -21,44 +24,92 @@ app.config.update(dict(
 ))
 app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 
+def verify_user_session():
+	print(str({'logged_in': session.get('logged_in') is True, 'user_id': session.get('user_id')}))
+	if not session.get('logged_in'):
+		abort(401, "You are not logged in or your session has expired, please login")
+
+
 @app.before_request
 def make_session_permanent():
-    session.permanent = True
-    app.permanent_session_lifetime = timedelta(minutes=5)
+	session.permanent = True
+	app.permanent_session_lifetime = timedelta(seconds=10)
 
-@app.route("/")
-def hello():
-	if session.get('logged_in'):
-		return "User is logged in!"
-	return "User is NOT logged in!"
-
-@app.route('/user', methods=['POST'])
+@app.route('/user', methods=['GET', 'POST', 'DELETE'])
 def add_user():
-	#TODO: verificate the users
+	verify_user_session()
+	if request.method == 'GET':
+		# here we want to get the value of user (i.e. ?user=some-value)
+		username = request.args.get('username')
+		print("username is: ", username)
+		if username is not None:
+			users = dbHandler.get_users({'username': username})
+		else:
+			users = dbHandler.get_users()
+		return str([u for u in users])
 
-	unitId = dbHandler.get_units()[0]['_id']
-	print(unitId)
-	return str(dbHandler.add_user(request.form.get('fullname'), request.form.get('username'), request.form.get('password'), unitId))
+	elif request.method == 'POST':
+		# TODO: verificate the users
+
+		unitId = dbHandler.get_units()[0]['_id']
+		new_object_id = dbHandler.add_user(request.form.get('fullname'), request.form.get('username'), request.form.get('password'), unitId)
+		if new_object_id is None:
+			abort(500)
+		return str(new_object_id)
+
+	elif request.method == 'DELETE':
+		username = request.form.get('username')
+		print("delete username is: ", username)
+
+		deleted_user_id = dbHandler.delete_user({'username': username})
+
+		return "Deleted " + str(deleted_user_id.deleted_count) + " users"
+
+	abort(400)
 
 @app.route('/login', methods=['GET', 'POST'])
-def login():
+def handle_login_request():
 	if request.method == 'POST':
 		username = request.form['username']
 		print("authenticating username: " + username)
-		users = dbHandler.get_users({'username':username})
+		users = dbHandler.get_users({'username': username})
 		print("found {} users".format(users.count()))
 		if users.count() == 1:
 			if users[0]['password'] == request.form['password']:
 				print("user is authorized")
 				session['logged_in'] = True
+				session['user_id'] = str(users[0]['_id'])
 				flash('You were logged in')
-				return "SUCCESS"
+				return SUCCESS
 
-		return "AUTH_FAILED"
+		abort(401, "Authentication failed")
 	else:
-		return "GET is not supported yet"
+		return str({'logged_in': session.get('logged_in') is True, 'user_id': session.get('user_id')})
 
+@app.route('/detection', methods=['GET', 'POST'])
+def handle_detection_request():
+	verify_user_session()
+	if request.method == 'GET':
+		# here we want to get the value of user (i.e. ?user=some-value)
+		material_id = request.args.get('material_id')
+		print("material_id is: ", material_id)
+		if material_id is not None:
+			detections = dbHandler.get_detections({'material_id': material_id})
+		else:
+			detections = dbHandler.get_detections()
+		return str([d for d in detections])
 
+	elif request.method == 'POST':
+		# TODO: verificate the incomming data
+
+# user_id, gscan_id, area_id, material_id, raman_output, date_time, plate_number, suspect_id, location
+		new_object_id = dbHandler.add_detection(request.form.get('fullname'), request.form.get('username'),
+										   request.form.get('password'))
+		if new_object_id is None:
+			abort(500)
+		return str(new_object_id)
+
+	abort(400)
 
 
 

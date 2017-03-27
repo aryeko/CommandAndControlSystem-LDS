@@ -108,8 +108,10 @@ class DbHandler:
 															upsert=True, return_document=ReturnDocument.AFTER)
 		return ObjectId(affected_doc_id['_id'])
 
-	def get_detections(self):
-		return self.db.Detections.find()
+	def get_detections(self, json_filter = None):
+		if json_filter is None:
+			return self.db.Detections.find()
+		return self.db.Detections.find(json_filter)
 
 	def delete_detection(self, json_filter):
 		return self.db.Detections.delete_many(json_filter)
@@ -129,3 +131,4 @@ class DbHandler:
 
 	def __del__(self):
 		print("Closing DB cursor")
+		del self.db
