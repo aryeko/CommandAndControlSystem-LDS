@@ -26,8 +26,8 @@ namespace ControlApplication.DesktopClient.Controls
         {
             InitializeComponent();
 
-            dataDate.Content = detection.DateOfDetection.ToString("d");
-            dataTime.Content = detection.DateOfDetection.ToString("T");
+            dataDate.Content = detection.DateTimeOfDetection.ToString("d");
+            dataTime.Content = detection.DateTimeOfDetection.ToString("T");
             dataSuspectedID.Content = detection.SuspectId;
             dataPlateID.Content = detection.SuspectPlateId;
             dataGunID.Content = detection.GunId;

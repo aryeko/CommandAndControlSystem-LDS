@@ -12,7 +12,7 @@ namespace ControlApplication.Core.Contracts
         /// <summary>
         /// The date of the detection
         /// </summary>
-        public DateTime DateOfDetection { get; }
+        public DateTime DateTimeOfDetection { get; }
 
         /// <summary>
         /// The material detected
@@ -51,7 +51,7 @@ namespace ControlApplication.Core.Contracts
         public Detection(DateTime dateTime, Material material, PointLatLng position, string suspectId,
             string suspectPlateId, string gunId)
         {
-            DateOfDetection = dateTime;
+            DateTimeOfDetection = dateTime;
             Material = material;
             Position = position;
             SuspectId = suspectId;

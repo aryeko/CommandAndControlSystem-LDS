@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ControlApplication.Core.Contracts;
+using GMap.NET;
+using Newtonsoft.Json;
 
 namespace ControlApplication.Core.Networking
 {
@@ -54,11 +57,59 @@ namespace ControlApplication.Core.Networking
         /// <returns>Returns whether the user is authorizes or not</returns>
         public bool Login(string username, string password)
         {
-            var postData = new NameValueCollection { { "username", username }, { "password", password } };
-
+            var postData = new NameValueCollection
+            {
+                { "username", username },
+                { "password", password }
+            };
+            //try-catch
             var response = WebClient.UploadValues(new Uri(RemoteServerPath, "login") , postData);
-
+            //webException
             return Encoding.Default.GetString(response).Contains("SUCCESS");
+        }
+
+        public List<Detection> GetDetections(string jsonFilter)
+        {
+            var postData = new NameValueCollection{{ "json_filter", jsonFilter }};
+            //try-catch
+            var response = WebClient.UploadValues(new Uri(RemoteServerPath, "login"), postData);
+            //webException
+
+            List<Detection> detectionsList = new List<Detection>();
+            dynamic arr = JsonConvert.DeserializeObject(response.ToString());
+
+            foreach (dynamic obj in arr)
+            {
+                DateTime dateTime = DateTime.ParseExact(obj.DateTimeOfDetection, "G", CultureInfo.CreateSpecificCulture("en-us"));
+                PointLatLng position = new PointLatLng(Double.Parse(obj.Latitude) , Double.Parse(obj.Longitude));
+                Material material = new Material(name, materialType);
+                Detection detection = new Detection(dateTime, material, position, obj.SuspectId, obj.SuspectPlateId, obj.GunId);
+
+                detectionsList.Add(detection);                
+            }
+
+            return detectionsList.Count.Equals(0) ? null : detectionsList;
+        }
+
+        public void AddDetection(Detection detection)
+        {
+            var postData = new NameValueCollection
+            {
+                
+              //  { "material_name", detection.Material.Name },
+              //  { "material_type", detection.Material.MaterialType.ToString() },
+                //TODO: change to material_ID
+                { "SuspectId", detection.SuspectId },
+                { "SuspectPlateId", detection.SuspectPlateId },
+                { "GunId", detection.GunId },
+                { "Latitude", detection.Position.Lat.ToString()},
+                { "Longitude", detection.Position.Lng.ToString()},
+                { "DateTimeOfDetection", detection.DateTimeOfDetection.ToString("G", CultureInfo.CreateSpecificCulture("en-us")) }
+                //TODO: post raman binary file
+            };
+
+            //try-catch
+            WebClient.UploadValues(new Uri(RemoteServerPath, "detection"), postData);
         }
 
         /// <summary>
