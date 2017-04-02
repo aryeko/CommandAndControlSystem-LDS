@@ -2,6 +2,8 @@ from JsonDataParser import JsonDataParser
 from datetime import timedelta
 from DbHandler import DbHandler
 from socket import *
+import os
+import ssl
 import sys
 
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
@@ -9,9 +11,12 @@ from flask import Flask, request, session, g, redirect, url_for, abort, render_t
 SUCCESS = "SUCCESS"
 AUTH_FAILED = "AUTH_FAILED"
 
-
 dbHandler = DbHandler()
 
+working_dir = os.path.dirname(os.path.abspath(__file__))
+ctx = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
+ctx.load_cert_chain(os.path.join(working_dir, 'resources\lds.dev.crt'),
+					os.path.join(working_dir, 'resources\lds.dev.key'))
 
 app = Flask(__name__)
 
@@ -20,7 +25,8 @@ app.config.update(dict(
     DEBUG=True,
     SECRET_KEY='development key',
     USERNAME='admin',
-    PASSWORD='default'
+    PASSWORD='default',
+	ssl_context=ctx
 ))
 app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 
@@ -115,6 +121,7 @@ def handle_detection_request():
 
 if __name__ == '__main__':
 	app.run()
+	#app.run()
 	#To serve multiple clients:
 	#app.run(threaded=True)
 	#Alternately
