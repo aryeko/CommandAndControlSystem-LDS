@@ -120,7 +120,7 @@ def handle_detection_request():
 
 
 if __name__ == '__main__':
-	app.run()
+	app.run(ssl_context=ctx)
 	#app.run()
 	#To serve multiple clients:
 	#app.run(threaded=True)
