@@ -20,7 +20,7 @@ namespace ControlApplication.Core.Networking
         /// <summary>
         /// The Remote Server Path
         /// </summary>
-        private readonly Uri RemoteServerPath = new Uri("http://localhost:5000");
+        private readonly Uri RemoteServerPath = new Uri("https://localhost:5000");
 
         /// <summary>
         /// WebClient for raw network communication
@@ -82,7 +82,7 @@ namespace ControlApplication.Core.Networking
             {
                 DateTime dateTime = DateTime.ParseExact(obj.DateTimeOfDetection, "G", CultureInfo.CreateSpecificCulture("en-us"));
                 PointLatLng position = new PointLatLng(Double.Parse(obj.Latitude) , Double.Parse(obj.Longitude));
-                Material material = new Material(name, materialType);
+                Material material = null;//new Material(name, materialType);
                 Detection detection = new Detection(dateTime, material, position, obj.SuspectId, obj.SuspectPlateId, obj.GunId);
 
                 detectionsList.Add(detection);                

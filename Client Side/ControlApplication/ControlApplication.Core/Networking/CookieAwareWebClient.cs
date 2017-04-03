@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Net;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 
 namespace ControlApplication.Core.Networking
 {
@@ -26,8 +28,18 @@ namespace ControlApplication.Core.Networking
             if (webRequest != null)
             {
                 webRequest.CookieContainer = mContainer;
+                webRequest.ServerCertificateValidationCallback += ValidatePrivateCertificate;
             }
             return request;
+        }
+
+        private bool ValidatePrivateCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors)
+        {
+            X509Certificate cert = new X509Certificate();
+            cert.Import("lds.dev.crt");
+
+            var eq = certificate.Equals(cert);
+            return eq;
         }
     }
 }
