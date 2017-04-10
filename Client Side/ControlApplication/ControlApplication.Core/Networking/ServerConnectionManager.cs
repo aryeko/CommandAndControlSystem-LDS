@@ -113,6 +113,25 @@ namespace ControlApplication.Core.Networking
         }
 
         /// <summary>
+        /// Adds a user to the database useing server's RESTful API
+        /// </summary>
+        /// <param name="fullName">user's full name</param>
+        /// <param name="userName">the requested username to add</param>
+        /// <param name="password">the plain password</param>
+        public void AddUser(string fullName, string userName, string password)
+        {
+            var postData = new NameValueCollection
+            {
+                { "fullname", fullName },
+                { "username", userName },
+                { "password", password },
+            };
+
+            //try-catch
+            WebClient.UploadValues(new Uri(RemoteServerPath, "user"), postData);
+        }
+
+        /// <summary>
         /// Implement <see cref="IDisposable"/> interface to free unmanaged resources. i.e. open sockets.
         /// </summary>
         public void Dispose()
