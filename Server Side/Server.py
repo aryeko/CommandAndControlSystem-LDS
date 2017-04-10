@@ -157,6 +157,39 @@ def handle_area_request():
 
 		return "Deleted " + str(deleted_area_id.deleted_count) + " areas"
 
+@app.route('/material', methods=['GET', 'POST', 'DELETE'])
+def handle_material_request():
+	verify_user_session()
+	if request.method == 'GET':
+		# here we want to get the value of user (i.e. ?user=some-value)
+		material_name = request.args.get('material_name')
+		material_type = request.form.get('material_type')
+		if material_name is not None:
+			print("retrieving material by name: ", material_name)
+			materials = dbHandler.get_materials({'name': material_name})
+		elif material_type is not None:
+			print("retrieving material by type: ", material_type)
+			materials = dbHandler.get_materials({'type': material_type})
+		else:
+			print("retrieving all materials")
+			materials = dbHandler.get_materials()
+		return str([m for m in materials])
+
+	elif request.method == 'POST':
+		print("adding material")
+		new_object_id = dbHandler.add_material(request.form.get('material_name'), request.form.get('material_type') , request.form.get('cas'))
+		if new_object_id is None:
+			abort(500)
+		return str(new_object_id)
+
+	elif request.method == 'DELETE':
+		material_name = request.form.get('material_name')
+		print("delete material by name: ", material_name)
+
+		deleted_material_id = dbHandler.delete_material({'name': material_name})
+
+		return "Deleted " + str(deleted_material_id.deleted_count) + " materials"
+
 @app.route('/detection', methods=['GET', 'POST'])
 def handle_detection_request():
 	verify_user_session()

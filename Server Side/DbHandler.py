@@ -86,8 +86,10 @@ class DbHandler:
 															upsert=True, return_document=ReturnDocument.AFTER)
 		return ObjectId(affected_doc_id['_id'])
 
-	def get_materials(self):
-		return self.db.Materials.find()
+	def get_materials(self, json_filter=None):
+		if json_filter is None:
+			return self.db.Materials.find()
+		return self.db.Materials.find(json_filter)
 
 	def delete_material(self, json_filter):
 		return self.db.Materials.delete_many(json_filter)
