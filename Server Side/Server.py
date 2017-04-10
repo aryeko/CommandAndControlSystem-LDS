@@ -1,6 +1,7 @@
 from JsonDataParser import JsonDataParser
 from datetime import timedelta
 from DbHandler import DbHandler
+from passlib.apps import custom_app_context as pwd_context
 from socket import *
 import os
 import ssl
@@ -42,8 +43,9 @@ def make_session_permanent():
 	app.permanent_session_lifetime = timedelta(seconds=10)
 
 @app.route('/user', methods=['GET', 'POST', 'DELETE'])
-def add_user():
+def handle_user_request():
 	verify_user_session()
+
 	if request.method == 'GET':
 		# here we want to get the value of user (i.e. ?user=some-value)
 		username = request.args.get('username')
@@ -58,7 +60,9 @@ def add_user():
 		# TODO: verificate the users
 
 		unitId = dbHandler.get_units()[0]['_id']
-		new_object_id = dbHandler.add_user(request.form.get('fullname'), request.form.get('username'), request.form.get('password'), unitId)
+		password = request.form.get('password')
+		hashed_password = pwd_context.encrypt(password)
+		new_object_id = dbHandler.add_user(request.form.get('fullname'), request.form.get('username') , hashed_password , unitId)
 		if new_object_id is None:
 			abort(500)
 		return str(new_object_id)
@@ -81,7 +85,8 @@ def handle_login_request():
 		users = dbHandler.get_users({'username': username})
 		print("found {} users".format(users.count()))
 		if users.count() == 1:
-			if users[0]['password'] == request.form['password']:
+			password = request.form['password']
+			if pwd_context.verify(password, users[0]['password']):
 				print("user is authorized")
 				session['logged_in'] = True
 				session['user_id'] = str(users[0]['_id'])
@@ -121,6 +126,10 @@ def handle_detection_request():
 
 if __name__ == '__main__':
 	app.run(ssl_context=ctx)
+
+	#unitId = dbHandler.get_units()[0]['_id']
+	#print("Adding Arye")
+	#dbHandler.add_user("Arye Kogan", "aryeko", "1234", unit_id)
 	#app.run()
 	#To serve multiple clients:
 	#app.run(threaded=True)
