@@ -97,6 +97,34 @@ def handle_login_request():
 	else:
 		return str({'logged_in': session.get('logged_in') is True, 'user_id': session.get('user_id')})
 
+@app.route('/gscan', methods=['GET', 'POST', 'DELETE'])
+def handle_gscan_request():
+	verify_user_session()
+	if request.method == 'GET':
+		# here we want to get the value of user (i.e. ?user=some-value)
+		unit_id = request.args.get('owned_unit_id')
+		print("retrieving gscans by unit: ", unit_id)
+		if unit_id is not None:
+			gscans = dbHandler.get_gscans({'owned_unit_id': unit_id})
+		else:
+			gscans = dbHandler.get_gscans()
+		return str([g for g in gscans])
+
+	elif request.method == 'POST':
+		new_object_id = dbHandler.add_gscan(request.form.get('gscan_sn'), request.form.get('owned_unit_id'))
+		if new_object_id is None:
+			abort(500)
+		return str(new_object_id)
+
+	elif request.method == 'DELETE':
+		gscan_sn = request.form.get('gscan_sn')
+		print("delete gscan by sn: ", gscan_sn)
+
+		deleted_gscan_id = dbHandler.delete_gscan({'gscan_sn': gscan_sn})
+
+		return "Deleted " + str(deleted_gscan_id.deleted_count) + " gscans"
+
+
 @app.route('/detection', methods=['GET', 'POST'])
 def handle_detection_request():
 	verify_user_session()

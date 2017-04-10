@@ -34,8 +34,10 @@ class DbHandler:
 															upsert=True, return_document=ReturnDocument.AFTER)
 		return ObjectId(affected_doc_id['_id'])
 
-	def get_gscans(self):
-		return self.db.Gscans.find()
+	def get_gscans(self, json_filter = None):
+		if json_filter is None:
+			return self.db.Gscans.find()
+		return self.db.Gscans.find(json_filter)
 
 	def delete_gscan(self, json_filter):
 		return self.db.Gscans.delete_many(json_filter)
