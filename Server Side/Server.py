@@ -124,6 +124,38 @@ def handle_gscan_request():
 
 		return "Deleted " + str(deleted_gscan_id.deleted_count) + " gscans"
 
+@app.route('/area', methods=['GET', 'POST', 'DELETE'])
+def handle_area_request():
+	verify_user_session()
+	if request.method == 'GET':
+		# here we want to get the value of user (i.e. ?user=some-value)
+		area_type = request.args.get('area_type')
+		area_root_location = request.form.get('root_location')
+		if area_root_location is not None:
+			print("retrieving area by root location: ", area_root_location)
+			areas = dbHandler.get_areas({'root_location': area_root_location})
+		elif area_type is not None:
+			print("retrieving area by type: ", area_type)
+			areas = dbHandler.get_areas({'area_type': area_type})
+		else:
+			print("retrieving all areas")
+			areas = dbHandler.get_areas()
+		return str([a for a in areas])
+
+	elif request.method == 'POST':
+		print("adding area ")
+		new_object_id = dbHandler.add_area(request.form.get('area_type'), request.form.get('root_location') , request.form.get('radius'))
+		if new_object_id is None:
+			abort(500)
+		return str(new_object_id)
+
+	elif request.method == 'DELETE':
+		area_root_location = request.form.get('root_location')
+		print("delete area by root location: ", area_root_location)
+
+		deleted_area_id = dbHandler.delete_area({'root_location': area_root_location})
+
+		return "Deleted " + str(deleted_area_id.deleted_count) + " areas"
 
 @app.route('/detection', methods=['GET', 'POST'])
 def handle_detection_request():

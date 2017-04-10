@@ -69,8 +69,10 @@ class DbHandler:
 															upsert=True, return_document=ReturnDocument.AFTER)
 		return ObjectId(affected_doc_id['_id'])
 
-	def get_areas(self):
-		return self.db.Areas.find()
+	def get_areas(self, json_filter = None):
+		if json_filter is None:
+			return self.db.Areas.find()
+		return self.db.Areas.find(json_filter)
 
 	def delete_area(self, json_filter):
 		return self.db.Areas.delete_many(json_filter)
