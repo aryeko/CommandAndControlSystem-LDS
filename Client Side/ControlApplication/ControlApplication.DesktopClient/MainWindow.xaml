@@ -8,7 +8,7 @@
         xmlns:WindowsPresentation="clr-namespace:GMap.NET.WindowsPresentation;assembly=GMap.NET.WindowsPresentation" x:Class="ControlApplication.DesktopClient.MainWindow"
         Closing="MainWindow_Closing" 
         mc:Ignorable="d"
-        Title="MainWindow" Height="700" Width="1000" Icon="logo.png">
+        Title="MainWindow" Height="700" Width="1000" Icon="Drawable/anti_logo.png">
 
     <Grid ZIndex="0">
         <WindowsPresentation:GMapControl x:Name="GMapControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MaxZoom="18" Zoom="13" PreviewMouseDoubleClick="PopAddDetectionWindow" MouseRightButtonUp="PopShowMarkerDetections"/>
@@ -49,8 +49,9 @@
             <Button Grid.Row="11" Grid.Column="0" x:Name="DbBtn" Content="Database" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" Background="CornflowerBlue" FontStyle="Oblique" Foreground="White" Width="97" Height="30" Margin="17,7.6,0,8"/>
             <Button Grid.Row="12" Grid.Column="1" x:Name="TraffickingBtn" Content="Trafficking" HorizontalAlignment="Right" VerticalContentAlignment="Center" VerticalAlignment="Center" Background="CornflowerBlue" FontStyle="Oblique" Foreground="White" Width="90" Height="30" Margin="17,5.667"/>
             <Button Grid.Row="12" Grid.Column="2" x:Name="TrackingBtn" Content="Tracking" HorizontalAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" Background="CornflowerBlue" FontStyle="Oblique" Foreground="White" Width="90" Height="30" Margin="17,5.667"/>
-            <ListBox x:Name="ListBox" Grid.Column="1" HorizontalAlignment="Left" Margin="20,8.2,0,37" Grid.Row="3" Grid.RowSpan="6" VerticalContentAlignment="Center" Width="119" Background="LightCyan" BorderBrush="Transparent" Foreground="CornflowerBlue" FontSize="17px" FontStyle="Oblique" Visibility="Hidden" SelectionMode="Multiple" SelectionChanged="ListBox_OnSelectionChanged"/>
+            <ListBox x:Name="ListBox" Grid.Column="0" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Grid.Row="0" Grid.RowSpan="3" VerticalContentAlignment="Center" Width="119" Background="LightCyan" BorderBrush="Black" Foreground="CornflowerBlue" FontSize="17px" FontStyle="Oblique" Visibility="Hidden" SelectionMode="Multiple" SelectionChanged="ListBox_OnSelectionChanged" Margin="5,5,5,5"/>
 
         </Grid>
+        <Image x:Name="NT_image" Source="Drawable/anti_logo.png" HorizontalAlignment="Right" Height="77" Margin="0,0,9.6,10.4" VerticalAlignment="Bottom" Width="86"/>
     </Grid>
 </Window>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -16,6 +17,7 @@ using ControlApplication.DesktopClient.Controls;
 using GMap.NET;
 using GMap.NET.WindowsPresentation;
 
+
 namespace ControlApplication.DesktopClient
 {
     /// <summary>
@@ -23,7 +25,7 @@ namespace ControlApplication.DesktopClient
     /// </summary>
     public partial class MainWindow : Window
     {
-        internal const int MARKER_SIZE = 50;
+        internal const int MARKER_SIZE = 25;
 
         /// <summary>
         /// HostedNetwork API
@@ -78,15 +80,15 @@ namespace ControlApplication.DesktopClient
         {
             Detection[] detections =
             {
-                new Detection(DateTime.Now, new Material("Coca", MaterialType.Explosive), new PointLatLng(), "3027744552", "36-019-19","33"),
-                new Detection(DateTime.Now, new Material("Acitone", MaterialType.Explosive), new PointLatLng(), "11", "22","33"),
-                new Detection(DateTime.Now, new Material("Heroin", MaterialType.Explosive), new PointLatLng(), "11", "22","33"),
-                new Detection(DateTime.Now, new Material("Weed", MaterialType.Explosive), new PointLatLng(), "11", "22","33"),
-                new Detection(DateTime.Now, new Material("Brown", MaterialType.Explosive), new PointLatLng(), "11", "22","33"),
-                new Detection(DateTime.Now, new Material("MD", MaterialType.Explosive), new PointLatLng(), "11", "22","33"),
-                new Detection(DateTime.Now, new Material("Vodka", MaterialType.Explosive), new PointLatLng(), "11", "22","33"),
-                new Detection(DateTime.Now, new Material("Toxicankjgfjhgfjhgfjhgf", MaterialType.Explosive), new PointLatLng(), "11", "22","33"),
-                new Detection(DateTime.Now, new Material("Mashroom", MaterialType.Explosive), new PointLatLng(), "11", "22","33")
+                new Detection(DateTime.Now, new Material("Cocaine", MaterialType.Narcotics,""), new PointLatLng(1122,3344), "3027744552", "36-019-19","33"),
+                new Detection(DateTime.Now, new Material("Acitone", MaterialType.Explosive,""), new PointLatLng(), "11", "22","33"),
+                new Detection(DateTime.Now, new Material("Heroin", MaterialType.Explosive,""), new PointLatLng(), "11", "22","33"),
+                new Detection(DateTime.Now, new Material("Weed", MaterialType.Explosive,""), new PointLatLng(), "11", "22","33"),
+                new Detection(DateTime.Now, new Material("Brown", MaterialType.Explosive,""), new PointLatLng(), "11", "22","33"),
+                new Detection(DateTime.Now, new Material("MD", MaterialType.Explosive,""), new PointLatLng(), "11", "22","33"),
+                new Detection(DateTime.Now, new Material("Vodka", MaterialType.Explosive,""), new PointLatLng(), "11", "22","33"),
+                new Detection(DateTime.Now, new Material("Toxicankjgfjhgfjhgfjhgf", MaterialType.Explosive,""), new PointLatLng(), "11", "22","33"),
+                new Detection(DateTime.Now, new Material("Mashroom", MaterialType.Explosive,""), new PointLatLng(), "11", "22","33")
             };
 
             new Window
@@ -102,7 +104,7 @@ namespace ControlApplication.DesktopClient
         internal void AddMarker(Point p)
         {
             GMapMarker marker =
-                new GMapMarker(GMapControl.FromLocalToLatLng((int) p.X - MARKER_SIZE / 2, (int) p.Y - MARKER_SIZE))
+                new GMapMarker(GMapControl.FromLocalToLatLng((int) p.X, (int) p.Y))
                 {
                     Shape = GetImage(new Uri(@"\Drawable\MapMarker_Blue.png", UriKind.Relative))
                 };
@@ -159,6 +161,15 @@ namespace ControlApplication.DesktopClient
         {
             //Console.WriteLine(ListBox.SelectedItems[0]?.ToString());
             Console.WriteLine("Number of items: " + ListBox.SelectedItems.Count.ToString());
+            //ShowSelectedDetections(ListBox.SelectedItems);
+        }
+
+        private void ShowSelectedDetections(IList listBoxSelectedItems)
+        {
+            //TODO: Implement using listBoxSelectedItems
+
+            var detectionsToShow = ServerConnectionManager.GetInstance().GetDetections("{}");
+            throw new NotImplementedException();
         }
     }
 }
