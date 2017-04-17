@@ -1,4 +1,5 @@
 from JsonDataParser import JsonDataParser
+from bson.json_util import dumps
 from datetime import timedelta
 from DbHandler import DbHandler
 from passlib.apps import custom_app_context as pwd_context
@@ -162,8 +163,9 @@ def handle_material_request():
 	verify_user_session()
 	if request.method == 'GET':
 		# here we want to get the value of user (i.e. ?user=some-value)
+		print("incoming materials request")
 		material_name = request.args.get('material_name')
-		material_type = request.form.get('material_type')
+		material_type = request.args.get('material_type')
 		if material_name is not None:
 			print("retrieving material by name: ", material_name)
 			materials = dbHandler.get_materials({'name': material_name})
@@ -173,11 +175,18 @@ def handle_material_request():
 		else:
 			print("retrieving all materials")
 			materials = dbHandler.get_materials()
-		return str([m for m in materials])
+		print("found", materials.count(), "materials")
+
+		return dumps(materials)
+		for m in materials:
+			m['_id'] = str(m['_id'])
+
+		returnValue = str([m for m in materials])
+		return returnValue#'[1:len(returnValue)-1]
 
 	elif request.method == 'POST':
 		print("adding material")
-		new_object_id = dbHandler.add_material(request.form.get('material_name'), request.form.get('material_type') , request.form.get('cas'))
+		new_object_id = dbHandler.add_material(request.form.get('material_name'), request.form.get('material_type'), request.form.get('cas'))
 		if new_object_id is None:
 			abort(500)
 		return str(new_object_id)

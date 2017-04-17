@@ -129,9 +129,6 @@ class DbHandler:
 															upsert=True, return_document=ReturnDocument.AFTER)
 		return ObjectId(affected_doc_id['_id'])
 
-	def get_materials(self):
-		return self.db.ForbiddenCombinations.find()
-
 	def delete_material(self, json_filter):
 		return self.db.ForbiddenCombinations.delete_many(json_filter)
 
