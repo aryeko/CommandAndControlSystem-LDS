@@ -22,12 +22,13 @@
             </Grid.RowDefinitions>
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="21*"/>
-                <ColumnDefinition Width="21*"/>
-                <ColumnDefinition Width="21*"/>
-                <ColumnDefinition Width="21*"/>
-                <ColumnDefinition Width="21*"/>
-                <ColumnDefinition Width="32*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
 
             <Label Grid.Row="0" Grid.Column="0" x:Name="LblDate" Content="Date" HorizontalAlignment="Center" VerticalAlignment="Stretch" FontWeight="Bold" />
@@ -36,6 +37,7 @@
             <Label Grid.Row="0" Grid.Column="3" x:Name="LblPlateID" Content="Plate ID" HorizontalAlignment="Center" VerticalAlignment="Stretch" FontWeight="Bold"/>
             <Label Grid.Row="0" Grid.Column="4" x:Name="LblGunID" Content="G-Scan ID" HorizontalAlignment="Center" VerticalAlignment="Stretch" FontWeight="Bold"/>
             <Label Grid.Row="0" Grid.Column="5" x:Name="LblMaterial" Content="Material" HorizontalAlignment="Center" VerticalAlignment="Stretch" FontWeight="Bold"/>
+            <Label Grid.Row="0" Grid.Column="6" x:Name="LblRaman" Content="Raman" HorizontalAlignment="Center" VerticalAlignment="Stretch" FontWeight="Bold"/>
         </Grid>
         
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0,26.333,0,0" Grid.RowSpan="2">

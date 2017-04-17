@@ -33,5 +33,10 @@ namespace ControlApplication.DesktopClient.Controls
             dataGunID.Content = detection.GunId;
             dataMaterial.Content = detection.Material.Name;
         }
+
+        private void OpenRaman_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
