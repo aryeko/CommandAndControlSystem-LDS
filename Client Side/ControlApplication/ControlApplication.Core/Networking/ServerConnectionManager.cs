@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using ControlApplication.Core.Contracts;
@@ -20,7 +21,7 @@ namespace ControlApplication.Core.Networking
         /// <summary>
         /// The Remote Server Path
         /// </summary>
-        private readonly Uri RemoteServerPath = new Uri("https://localhost:5000");
+        private readonly Uri RemoteServerPath = new Uri("https://127.0.0.1:5000/");
 
         /// <summary>
         /// WebClient for raw network communication
@@ -63,29 +64,73 @@ namespace ControlApplication.Core.Networking
                 { "password", password }
             };
             //try-catch
-            var response = WebClient.UploadValues(new Uri(RemoteServerPath, "login") , postData);
-            //webException
-            return Encoding.Default.GetString(response).Contains("SUCCESS");
+            try
+            {
+                var response = WebClient.UploadValues(new Uri(RemoteServerPath, "login"), postData);
+                //GetAllDbIds(new Detection(DateTime.Now, new Material("Cocaine", MaterialType.Narcotics, ""),new PointLatLng(1122, 3344), "3027744552", "36-019-19", "33"));
+                return Encoding.Default.GetString(response).Contains("SUCCESS");
+            }
+            catch (WebException)
+            {
+                return false;
+            }
         }
+        
+        public Material GetMaterial(string materialId)
+        {
+            WebClient.QueryString = new NameValueCollection
+            {
+                {"_id", materialId}
+            };
+
+            var response = WebClient.DownloadString(new Uri(RemoteServerPath, "material"));
+            dynamic arr = JsonConvert.DeserializeObject(response);
+
+            var materialType = (MaterialType)System.Enum.Parse(typeof(MaterialType), arr[0].type.ToString());
+            return new Material(arr[0].name.ToString(), materialType, arr[0].cas.ToString());
+        }
+
+        //public int GetGscan(string jsonFilter)
+        //{
+        //    var postData = new NameValueCollection { { "json_filter", jsonFilter } };
+        //    //try-catch
+        //    var response = WebClient.UploadValues(new Uri(RemoteServerPath, "gscan"), postData);
+        //    //webException
+
+        //    dynamic arr = JsonConvert.DeserializeObject(response.ToString());
+        //    return arr.gscan_sn;
+        //}
+
+        //public int GetArea(string jsonFilter)
+        //{
+        //    var postData = new NameValueCollection { { "json_filter", jsonFilter } };
+        //    //try-catch
+        //    var response = WebClient.UploadValues(new Uri(RemoteServerPath, "area"), postData);
+        //    //webException
+
+        //    dynamic arr = JsonConvert.DeserializeObject(response.ToString());
+        //    return arr.gscan_sn;
+        //}
 
         public List<Detection> GetDetections(string jsonFilter)
         {
-            var postData = new NameValueCollection{{ "json_filter", jsonFilter }};
+            var postData = new NameValueCollection { { "json_filter", jsonFilter } };
             //try-catch
-            var response = WebClient.UploadValues(new Uri(RemoteServerPath, "login"), postData);
+            var response = WebClient.UploadValues(new Uri(RemoteServerPath, "detection"), postData);
             //webException
 
-            List<Detection> detectionsList = new List<Detection>();
+            var detectionsList = new List<Detection>();
             dynamic arr = JsonConvert.DeserializeObject(response.ToString());
 
             foreach (dynamic obj in arr)
             {
+                //TODO: fix all json values according to the server 
                 DateTime dateTime = DateTime.ParseExact(obj.DateTimeOfDetection, "G", CultureInfo.CreateSpecificCulture("en-us"));
-                PointLatLng position = new PointLatLng(Double.Parse(obj.Latitude) , Double.Parse(obj.Longitude));
-                Material material = null;//new Material(name, materialType);
-                Detection detection = new Detection(dateTime, material, position, obj.SuspectId, obj.SuspectPlateId, obj.GunId);
-
-                detectionsList.Add(detection);                
+                var position = new PointLatLng(double.Parse(obj.Latitude), double.Parse(obj.Longitude));
+                Material material = GetMaterial(obj.MaterialId);
+                var detection = new Detection(dateTime, material, position, obj.SuspectId, obj.SuspectPlateId, obj.GunId);
+                
+                detectionsList.Add(detection);
             }
 
             return detectionsList.Count.Equals(0) ? null : detectionsList;
@@ -93,23 +138,66 @@ namespace ControlApplication.Core.Networking
 
         public void AddDetection(Detection detection)
         {
+            var ids = GetAllDbIds(detection);
             var postData = new NameValueCollection
             {
-                
-              //  { "material_name", detection.Material.Name },
-              //  { "material_type", detection.Material.MaterialType.ToString() },
-                //TODO: change to material_ID
+                //TODO: fix all post data values according to the server
+                { "MaterialId", ids["MaterialId"] },
                 { "SuspectId", detection.SuspectId },
                 { "SuspectPlateId", detection.SuspectPlateId },
-                { "GunId", detection.GunId },
-                { "Latitude", detection.Position.Lat.ToString()},
-                { "Longitude", detection.Position.Lng.ToString()},
+                { "GunId", ids["GunId"] },
+                { "Latitude", detection.Position.Lat.ToString(CultureInfo.InvariantCulture)},
+                { "Longitude", detection.Position.Lng.ToString(CultureInfo.InvariantCulture)},
                 { "DateTimeOfDetection", detection.DateTimeOfDetection.ToString("G", CultureInfo.CreateSpecificCulture("en-us")) }
                 //TODO: post raman binary file
             };
 
             //try-catch
             WebClient.UploadValues(new Uri(RemoteServerPath, "detection"), postData);
+        }
+
+        private Dictionary<string, string> GetAllDbIds(Detection detection)
+        {
+            var ids = new Dictionary<string, string>();
+
+            WebClient.QueryString = new NameValueCollection
+            {
+                {"material_name", detection.Material.Name}
+            };
+            var response = WebClient.DownloadString(new Uri(RemoteServerPath, "material"));
+            dynamic arr = JsonConvert.DeserializeObject(response);
+            ids.Add("MaterialId", arr[0]._id.ToString());
+
+            //WebClient.QueryString = new NameValueCollection
+            //{
+            //    {"username", "lds"}
+            //};
+            //response = WebClient.DownloadString(new Uri(RemoteServerPath, "user"));
+            //arr = JsonConvert.DeserializeObject(response);
+            //ids.Add("UserId", arr[0]._id.ToString());
+            //Console.WriteLine("lds user ID: " + arr[0]._id);
+
+            //WebClient.QueryString = new NameValueCollection
+            //{
+            //    {"root_location", $"[{detection.Position.Lat},{detection.Position.Lng}]"}
+            //};
+            //response = WebClient.DownloadString(new Uri(RemoteServerPath, "area"));
+            //arr = JsonConvert.DeserializeObject(response);
+            //ids.Add("AreaId", arr[0]._id);
+            //Console.WriteLine("area ID: " + arr[0]._id);
+
+            //TODO: Complete all IDs
+            //WebClient.QueryString = new NameValueCollection
+            //{
+            //  //  {"gscan_sn" }
+            //};
+            //response = WebClient.DownloadString(new Uri(RemoteServerPath, "gscan"));
+            //arr = JsonConvert.DeserializeObject(response);
+            //ids.Add("AreaId", arr[0]._id);
+            //Console.WriteLine("gscan ID: " + arr[0]._id);
+            
+
+            return ids;
         }
 
         /// <summary>

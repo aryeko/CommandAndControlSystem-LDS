@@ -6,13 +6,13 @@ namespace ControlApplication.Core.Contracts
     /// </summary>
     public enum MaterialType
     {
-        Explosive,
-        Alcohol,
-        Toxics,
         Supervision,
         Forbidden,
         Narcotics,
         Flameable,
+        Explosive,
+        Alcohol,
+        Toxics,
         Safe
     }
 }

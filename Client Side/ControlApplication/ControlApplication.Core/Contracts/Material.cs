@@ -7,7 +7,6 @@
     {
         /// <summary>
         /// The name of the material
-        /// TODO: set the name acording to the DB
         /// </summary>
         public string Name { get; }
 
@@ -17,14 +16,21 @@
         public MaterialType MaterialType { get; }
 
         /// <summary>
+        /// The uniqe material ID
+        /// </summary>
+        public string Cas { get; }
+
+        /// <summary>
         /// Material class constructor
         /// </summary>
         /// <param name="name">The name of the material</param>
         /// <param name="materialType">The type of the material</param>
-        public Material(string name, MaterialType materialType)
+        /// <param name="cas">The uniqe material ID</param>
+        public Material(string name, MaterialType materialType, string cas)
         {
-            this.Name = name;
-            this.MaterialType = materialType;
+            Name = name;
+            MaterialType = materialType;
+            Cas = cas;
         }
     }
 }
