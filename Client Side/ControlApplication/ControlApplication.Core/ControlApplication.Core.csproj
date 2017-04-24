@@ -47,6 +47,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Contracts\Area.cs" />
+    <Compile Include="Contracts\AreaType.cs" />
     <Compile Include="Contracts\Detection.cs" />
     <Compile Include="Contracts\Material.cs" />
     <Compile Include="Contracts\MaterialType.cs" />

@@ -55,7 +55,8 @@ def handle_user_request():
 			users = dbHandler.get_users({'username': username})
 		else:
 			users = dbHandler.get_users()
-		return str([u for u in users])
+		return dumps(users)
+		#return str([u for u in users])
 
 	elif request.method == 'POST':
 		# TODO: verificate the users
@@ -109,7 +110,9 @@ def handle_gscan_request():
 			gscans = dbHandler.get_gscans({'owned_unit_id': unit_id})
 		else:
 			gscans = dbHandler.get_gscans()
-		return str([g for g in gscans])
+
+		return dumps(gscans)
+		#return str([g for g in gscans])
 
 	elif request.method == 'POST':
 		new_object_id = dbHandler.add_gscan(request.form.get('gscan_sn'), request.form.get('owned_unit_id'))
@@ -141,7 +144,9 @@ def handle_area_request():
 		else:
 			print("retrieving all areas")
 			areas = dbHandler.get_areas()
-		return str([a for a in areas])
+
+		return dumps(areas)
+		#return str([a for a in areas])
 
 	elif request.method == 'POST':
 		print("adding area ")

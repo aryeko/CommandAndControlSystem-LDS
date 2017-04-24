@@ -67,7 +67,7 @@ namespace ControlApplication.Core.Networking
             try
             {
                 var response = WebClient.UploadValues(new Uri(RemoteServerPath, "login"), postData);
-                //GetAllDbIds(new Detection(DateTime.Now, new Material("Cocaine", MaterialType.Narcotics, ""),new PointLatLng(1122, 3344), "3027744552", "36-019-19", "33"));
+                GetAllDbIds(new Detection(DateTime.Now, new Material("Cocaine", MaterialType.Narcotics, ""),new PointLatLng(1122, 3344), "3027744552", "36-019-19", "1111"));
                 return Encoding.Default.GetString(response).Contains("SUCCESS");
             }
             catch (WebException)
@@ -90,28 +90,35 @@ namespace ControlApplication.Core.Networking
             return new Material(arr[0].name.ToString(), materialType, arr[0].cas.ToString());
         }
 
-        //public int GetGscan(string jsonFilter)
-        //{
-        //    var postData = new NameValueCollection { { "json_filter", jsonFilter } };
-        //    //try-catch
-        //    var response = WebClient.UploadValues(new Uri(RemoteServerPath, "gscan"), postData);
-        //    //webException
+        public string GetGscan(string gscanId)
+        {
+            WebClient.QueryString = new NameValueCollection
+            {
+                {"_id", gscanId}
+            };
 
-        //    dynamic arr = JsonConvert.DeserializeObject(response.ToString());
-        //    return arr.gscan_sn;
-        //}
+            var response = WebClient.DownloadString(new Uri(RemoteServerPath, "gscan"));
+            dynamic arr = JsonConvert.DeserializeObject(response);
 
-        //public int GetArea(string jsonFilter)
-        //{
-        //    var postData = new NameValueCollection { { "json_filter", jsonFilter } };
-        //    //try-catch
-        //    var response = WebClient.UploadValues(new Uri(RemoteServerPath, "area"), postData);
-        //    //webException
+            return arr[0].gscan_sn.ToString();
+        }
 
-        //    dynamic arr = JsonConvert.DeserializeObject(response.ToString());
-        //    return arr.gscan_sn;
-        //}
+        public Area GetArea(string areaId)
+        { 
+        
+         WebClient.QueryString = new NameValueCollection
+            {
+                {"_id", areaId}
+            };
 
+            var response = WebClient.DownloadString(new Uri(RemoteServerPath, "area"));
+            dynamic arr = JsonConvert.DeserializeObject(response);
+
+            var areaType = (AreaType)System.Enum.Parse(typeof(AreaType), arr[0].area_type.ToString());
+            return new Area(new PointLatLng(double.Parse(arr[0].root_location[0].ToString()), double.Parse(arr[0].root_location[1].ToString())), areaType, double.Parse(arr[0].radius.ToString()));
+        }
+
+        //TODO: FINISH w/ server side
         public List<Detection> GetDetections(string jsonFilter)
         {
             var postData = new NameValueCollection { { "json_filter", jsonFilter } };
@@ -122,13 +129,14 @@ namespace ControlApplication.Core.Networking
             var detectionsList = new List<Detection>();
             dynamic arr = JsonConvert.DeserializeObject(response.ToString());
 
-            foreach (dynamic obj in arr)
+            foreach (dynamic obj in arr[0])
             {
-                //TODO: fix all json values according to the server 
                 DateTime dateTime = DateTime.ParseExact(obj.DateTimeOfDetection, "G", CultureInfo.CreateSpecificCulture("en-us"));
                 var position = new PointLatLng(double.Parse(obj.Latitude), double.Parse(obj.Longitude));
+                string gscanSn = GetGscan(obj.GunId.ToString());
+                Area area = GetArea(obj.AreaId); //TODO: should we use Area?
                 Material material = GetMaterial(obj.MaterialId);
-                var detection = new Detection(dateTime, material, position, obj.SuspectId, obj.SuspectPlateId, obj.GunId);
+                var detection = new Detection(dateTime, material, position, obj.SuspectId, obj.SuspectPlateId, gscanSn);
                 
                 detectionsList.Add(detection);
             }
@@ -136,16 +144,18 @@ namespace ControlApplication.Core.Networking
             return detectionsList.Count.Equals(0) ? null : detectionsList;
         }
 
+        //TODO: fix all post data values according to the server
         public void AddDetection(Detection detection)
         {
             var ids = GetAllDbIds(detection);
             var postData = new NameValueCollection
             {
-                //TODO: fix all post data values according to the server
-                { "MaterialId", ids["MaterialId"] },
-                { "SuspectId", detection.SuspectId },
-                { "SuspectPlateId", detection.SuspectPlateId },
-                { "GunId", ids["GunId"] },
+                { "user_id", ids["UserId"] },
+                { "material_id", ids["MaterialId"] },
+                { "area_id", ids["AreaId"] },
+                { "gscan_id", ids["GscanId"] },               
+                { "suspect_id", detection.SuspectId },
+                { "suspect_plate_id", detection.SuspectPlateId },
                 { "Latitude", detection.Position.Lat.ToString(CultureInfo.InvariantCulture)},
                 { "Longitude", detection.Position.Lng.ToString(CultureInfo.InvariantCulture)},
                 { "DateTimeOfDetection", detection.DateTimeOfDetection.ToString("G", CultureInfo.CreateSpecificCulture("en-us")) }
@@ -168,34 +178,29 @@ namespace ControlApplication.Core.Networking
             dynamic arr = JsonConvert.DeserializeObject(response);
             ids.Add("MaterialId", arr[0]._id.ToString());
 
-            //WebClient.QueryString = new NameValueCollection
-            //{
-            //    {"username", "lds"}
-            //};
-            //response = WebClient.DownloadString(new Uri(RemoteServerPath, "user"));
-            //arr = JsonConvert.DeserializeObject(response);
-            //ids.Add("UserId", arr[0]._id.ToString());
-            //Console.WriteLine("lds user ID: " + arr[0]._id);
+            WebClient.QueryString = new NameValueCollection
+            {
+                {"root_location", $"[{detection.Position.Lat},{detection.Position.Lng}]"}
+            };
+            response = WebClient.DownloadString(new Uri(RemoteServerPath, "area"));
+            arr = JsonConvert.DeserializeObject(response);
+            ids.Add("AreaId", arr[0]._id.ToString());
 
-            //WebClient.QueryString = new NameValueCollection
-            //{
-            //    {"root_location", $"[{detection.Position.Lat},{detection.Position.Lng}]"}
-            //};
-            //response = WebClient.DownloadString(new Uri(RemoteServerPath, "area"));
-            //arr = JsonConvert.DeserializeObject(response);
-            //ids.Add("AreaId", arr[0]._id);
-            //Console.WriteLine("area ID: " + arr[0]._id);
+            WebClient.QueryString = new NameValueCollection
+            {
+                {"gscan_sn", detection.GunId}
+            };
+            response = WebClient.DownloadString(new Uri(RemoteServerPath, "gscan"));
+            arr = JsonConvert.DeserializeObject(response);
+            ids.Add("GscanId", arr[0]._id.ToString());
 
-            //TODO: Complete all IDs
-            //WebClient.QueryString = new NameValueCollection
-            //{
-            //  //  {"gscan_sn" }
-            //};
-            //response = WebClient.DownloadString(new Uri(RemoteServerPath, "gscan"));
-            //arr = JsonConvert.DeserializeObject(response);
-            //ids.Add("AreaId", arr[0]._id);
-            //Console.WriteLine("gscan ID: " + arr[0]._id);
-            
+            WebClient.QueryString = new NameValueCollection
+            {
+                {"username", "lds"}
+            };
+            response = WebClient.DownloadString(new Uri(RemoteServerPath, "user"));
+            arr = JsonConvert.DeserializeObject(response);
+            ids.Add("UserId", arr[0]._id.ToString());
 
             return ids;
         }
