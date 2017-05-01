@@ -63,11 +63,11 @@ namespace ControlApplication.Core.Networking
                 { "username", username },
                 { "password", password }
             };
-            //try-catch
+
             try
             {
                 var response = WebClient.UploadValues(new Uri(RemoteServerPath, "login"), postData);
-                GetAllDbIds(new Detection(DateTime.Now, new Material("Cocaine", MaterialType.Narcotics, ""),new PointLatLng(1122, 3344), "3027744552", "36-019-19", "1111"));
+                //GetAllDbIds(new Detection(DateTime.Now, new Material("Cocaine", MaterialType.Narcotics, ""),new PointLatLng(1122, 3344), "3027744552", "36-019-19", "1111"));
                 return Encoding.Default.GetString(response).Contains("SUCCESS");
             }
             catch (WebException)

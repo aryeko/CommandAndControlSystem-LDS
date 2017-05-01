@@ -54,10 +54,10 @@ namespace ControlApplication.DesktopClient
 
             ZoomControl.UpdateControl();
 
-            //TO-DO: Start Hosted network with a button (handle the case when a client don't support Hosted network 
+            //TODO: Start Hosted network with a button (handle the case when a client don't support Hosted network 
           //  _hostedNetwork.StartHostedNetwork();
         }
-
+        
         private void MainWindow_MouseWheel(object sender, MouseWheelEventArgs e)
         {
             ZoomControl.UpdateControl();
@@ -80,7 +80,7 @@ namespace ControlApplication.DesktopClient
         {
             Detection[] detections =
             {
-                new Detection(DateTime.Now, new Material("Cocaine", MaterialType.Narcotics,""), new PointLatLng(1122,3344), "3027744552", "36-019-19","33"),
+                new Detection(DateTime.Now, new Material("Cocaine", MaterialType.Narcotics,"12"), new PointLatLng(1122,3344), "3027744552", "36-019-19","33"),
                 new Detection(DateTime.Now, new Material("Acitone", MaterialType.Explosive,""), new PointLatLng(), "11", "22","33"),
                 new Detection(DateTime.Now, new Material("Heroin", MaterialType.Explosive,""), new PointLatLng(), "11", "22","33"),
                 new Detection(DateTime.Now, new Material("Weed", MaterialType.Explosive,""), new PointLatLng(), "11", "22","33"),
@@ -146,30 +146,30 @@ namespace ControlApplication.DesktopClient
 
         private void DetectionBtn_Click(object sender, RoutedEventArgs routedEventArgs)
         {
-            ListBox.UnselectAll();
-            ListBox.Items.Clear();
-            foreach (var material in Enum.GetValues(typeof(MaterialType)))
+            new Window
             {
-                ListBox.Items.Add(material);
+                Title = "Choose detections",
+                Content = new ChooseDetectionType(),
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                SizeToContent = SizeToContent.WidthAndHeight,
+                ResizeMode = ResizeMode.NoResize
+            }.ShowDialog();
+        }
+
+        private void AddPointBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (Equals(AddPointBtn.Background, Brushes.CornflowerBlue))
+            {
+                //GMapControl.PreviewMouseDoubleClick += PopAddDetectionWindow;
+                AddPointBtn.Background = Brushes.DarkBlue;
+            }
+            else
+            {
+                AddPointBtn.Background = Brushes.CornflowerBlue;
             }
 
-            ListBox.Visibility = ListBox.Visibility == Visibility.Hidden ? Visibility.Visible : Visibility.Hidden;
-            
-        }
 
-        private void ListBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            //Console.WriteLine(ListBox.SelectedItems[0]?.ToString());
-            Console.WriteLine("Number of items: " + ListBox.SelectedItems.Count.ToString());
-            //ShowSelectedDetections(ListBox.SelectedItems);
-        }
 
-        private void ShowSelectedDetections(IList listBoxSelectedItems)
-        {
-            //TODO: Implement using listBoxSelectedItems
-
-            var detectionsToShow = ServerConnectionManager.GetInstance().GetDetections("{}");
-            throw new NotImplementedException();
         }
     }
 }

@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ControlApplication.DesktopClient"
         Closing="LoginWindow_Closing"
+        WindowStartupLocation ="CenterScreen"
         ResizeMode="NoResize"
         mc:Ignorable="d"
         Title="NT Login" Height="229.6" Width="554.4">
