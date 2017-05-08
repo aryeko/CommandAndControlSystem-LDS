@@ -1,5 +1,6 @@
 from JsonDataParser import JsonDataParser
 from bson.json_util import dumps
+from bson import ObjectId
 from datetime import timedelta
 from DbHandler import DbHandler
 from passlib.apps import custom_app_context as pwd_context
@@ -222,12 +223,12 @@ def handle_detection_request():
 		# TODO: verificate the incomming data
 
 		new_object_id = dbHandler.add_detection(
-			request.form.get('user_id'),
-			request.form.get('material_id'),
-			request.form.get('area_id'),
-			request.form.get('gscan_id'),
+			ObjectId(request.form.get('user_id')),
+			ObjectId(request.form.get('material_id')),
+			ObjectId(request.form.get('area_id')),
+			ObjectId(request.form.get('gscan_id')),
+			ObjectId(request.form.get('raman_id')),
 			request.form.get('suspect_id'),
-			request.form.get('raman_id'),
 			request.form.get('plate_number'),
 			request.form.get('location'),
 			request.form.get('date_time'))
