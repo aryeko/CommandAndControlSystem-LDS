@@ -41,7 +41,7 @@ def verify_user_session():
 @app.before_request
 def make_session_permanent():
 	session.permanent = True
-	app.permanent_session_lifetime = timedelta(seconds=10)
+	app.permanent_session_lifetime = timedelta(minutes=30)
 
 @app.route('/user', methods=['GET', 'POST', 'DELETE'])
 def handle_user_request():
@@ -183,11 +183,6 @@ def handle_material_request():
 		print("found", materials.count(), "materials")
 
 		return dumps(materials)
-		for m in materials:
-			m['_id'] = str(m['_id'])
-
-		returnValue = str([m for m in materials])
-		return returnValue#'[1:len(returnValue)-1]
 
 	elif request.method == 'POST':
 		print("adding material")
