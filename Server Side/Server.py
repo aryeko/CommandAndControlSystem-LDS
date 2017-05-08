@@ -215,14 +215,23 @@ def handle_detection_request():
 			detections = dbHandler.get_detections({'material_id': material_id})
 		else:
 			detections = dbHandler.get_detections()
-		return str([d for d in detections])
+
+		return dumps(detections)
 
 	elif request.method == 'POST':
 		# TODO: verificate the incomming data
 
-# user_id, gscan_id, area_id, material_id, raman_output, date_time, plate_number, suspect_id, location
-		new_object_id = dbHandler.add_detection(request.form.get('fullname'), request.form.get('username'),
-										   request.form.get('password'))
+		new_object_id = dbHandler.add_detection(
+			request.form.get('user_id'),
+			request.form.get('material_id'),
+			request.form.get('area_id'),
+			request.form.get('gscan_id'),
+			request.form.get('suspect_id'),
+			request.form.get('raman_id'),
+			request.form.get('plate_number'),
+			request.form.get('location'),
+			request.form.get('date_time'))
+
 		if new_object_id is None:
 			abort(500)
 		return str(new_object_id)
@@ -233,6 +242,7 @@ def handle_detection_request():
 
 if __name__ == '__main__':
 	app.run(ssl_context=ctx)
+	#app.run(ssl_context=ctx, host="192.168.43.81")
 
 	#unitId = dbHandler.get_units()[0]['_id']
 	#print("Adding Arye")
