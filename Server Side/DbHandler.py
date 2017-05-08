@@ -94,12 +94,12 @@ class DbHandler:
 	def delete_material(self, json_filter):
 		return self.db.Materials.delete_many(json_filter)
 
-	def add_detection(self, user_id, gscan_id, area_id, material_id, raman_output, date_time, plate_number, suspect_id, location):
+	def add_detection(self, user_id, material_id, area_id, gscan_id, raman_output_id, suspect_id, plate_number, location, date_time):
 		doc = {"user_id": user_id,
 			   "gscan_id": gscan_id,
 			   "area_id": area_id,
 			   "material_id": material_id,
-			   "raman_output": raman_output,
+			   "raman_output_id": raman_output_id,
 			   "date_time": date_time,
 			   "plate_number": plate_number,
 			   "suspect_id": suspect_id,
