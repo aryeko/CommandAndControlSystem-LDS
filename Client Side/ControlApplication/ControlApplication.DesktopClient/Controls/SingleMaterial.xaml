@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="ControlApplication.DesktopClient.Controls.SingleMaterial"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ControlApplication.DesktopClient.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="50" d:DesignWidth="NaN">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+
+
+        <Label Grid.Row="0" Grid.Column="0" x:Name="dataName" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
+        <Label Grid.Row="0" Grid.Column="1" x:Name="dataType" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
+        <Label Grid.Row="0" Grid.Column="2" x:Name="dataCas" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
+
+    </Grid>
+</UserControl>

@@ -32,6 +32,8 @@ namespace ControlApplication.DesktopClient
         /// </summary>
         private readonly HostedNetwork _hostedNetwork;
 
+        private List<Material> materials { get; set; }
+
         public MainWindow()
         {
             Login fLogin = new Login();
@@ -114,8 +116,7 @@ namespace ControlApplication.DesktopClient
 
         private Image GetImage(Uri uri)
         {
-            Image myImage = new Image();
-            myImage.Width = MARKER_SIZE;
+            Image myImage = new Image {Width = MARKER_SIZE};
 
             // Create source
             BitmapImage myBitmapImage = new BitmapImage();
@@ -160,16 +161,32 @@ namespace ControlApplication.DesktopClient
         {
             if (Equals(AddPointBtn.Background, Brushes.CornflowerBlue))
             {
-                //GMapControl.PreviewMouseDoubleClick += PopAddDetectionWindow;
+                GMapControl.PreviewMouseDoubleClick += PopAddDetectionWindow;
                 AddPointBtn.Background = Brushes.DarkBlue;
+                AddPointBtn.ToolTip = "Press twice on the map to add a manual detection";
             }
             else
             {
+                GMapControl.PreviewMouseDoubleClick -= PopAddDetectionWindow;
                 AddPointBtn.Background = Brushes.CornflowerBlue;
+                AddPointBtn.ToolTip = "Press the button to add a manual detection";
             }
+        }
 
+        private void DbBtn_Click(object sender, RoutedEventArgs e)
+        {
+            var tmpMaterials = ServerConnectionManager.GetInstance().GetMaterial();
+            if (tmpMaterials != null)
+                materials = tmpMaterials;
 
-
+            new Window
+            {
+                Title = "Show Materials",
+                Content = new MaterialsList(materials),
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                SizeToContent = SizeToContent.WidthAndHeight,
+                ResizeMode = ResizeMode.NoResize
+            }.ShowDialog();
         }
     }
 }

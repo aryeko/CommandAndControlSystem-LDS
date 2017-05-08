@@ -75,7 +75,30 @@ namespace ControlApplication.Core.Networking
                 return false;
             }
         }
-        
+
+        public List<Material> GetMaterial()
+        {
+            var materials = new List<Material>();
+
+            try
+            {
+                var response = WebClient.DownloadString(new Uri(RemoteServerPath, "material"));
+                dynamic arr = JsonConvert.DeserializeObject(response);
+
+                foreach (dynamic obj in arr)
+                {
+                    var materialType = (MaterialType) System.Enum.Parse(typeof(MaterialType), obj.type.ToString());
+                    materials.Add(new Material(obj.name.ToString(), materialType, obj.cas.ToString()));
+                }
+            }
+            catch (WebException)
+            {
+                return null;
+            }
+
+            return materials;
+        }
+
         public Material GetMaterial(string materialId)
         {
             WebClient.QueryString = new NameValueCollection

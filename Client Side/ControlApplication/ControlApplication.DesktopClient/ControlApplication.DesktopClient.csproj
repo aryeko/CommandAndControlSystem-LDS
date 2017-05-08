@@ -76,11 +76,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\MaterialsList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ShowMarkerDetections.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\SingleDetectionControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SingleMaterial.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -106,11 +114,17 @@
     <Compile Include="Controls\ChooseDetectionType.xaml.cs">
       <DependentUpon>ChooseDetectionType.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\MaterialsList.xaml.cs">
+      <DependentUpon>MaterialsList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ShowMarkerDetections.xaml.cs">
       <DependentUpon>ShowMarkerDetections.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\SingleDetectionControl.xaml.cs">
       <DependentUpon>SingleDetectionControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SingleMaterial.xaml.cs">
+      <DependentUpon>SingleMaterial.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ZoomControl.xaml.cs">
       <DependentUpon>ZoomControl.xaml</DependentUpon>

@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ControlApplication.DesktopClient.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="50" d:DesignWidth="500">
+             d:DesignHeight="50" d:DesignWidth="NaN">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3.5*"/>

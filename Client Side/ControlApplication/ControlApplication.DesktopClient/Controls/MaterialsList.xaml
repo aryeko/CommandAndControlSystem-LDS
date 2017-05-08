@@ -1,0 +1,43 @@
+﻿<UserControl x:Class="ControlApplication.DesktopClient.Controls.MaterialsList"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ControlApplication.DesktopClient.Controls"
+             mc:Ignorable="d" 
+             Height="NaN" Width="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition x:Name="NumOfMaterials" Height="1*"/>
+        </Grid.RowDefinitions>
+
+        <Label Grid.Row="0" x:Name="LblTitle" Content="Materials List" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Candara" FontWeight="ExtraBold" FontSize="16" Foreground="DarkBlue"/>
+
+        <Grid Grid.Row="1">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Row="0" Grid.Column="0" x:Name="LblMatName" Content="Name" HorizontalAlignment="Center" VerticalAlignment="Stretch" FontWeight="Bold" />
+            <Label Grid.Row="0" Grid.Column="1" x:Name="LblMatType" Content="Material Type" HorizontalAlignment="Center" VerticalAlignment="Stretch" FontWeight="Bold"/>
+            <Label Grid.Row="0" Grid.Column="2" x:Name="LblMatCas" Content="CAS" HorizontalAlignment="Center" VerticalAlignment="Stretch" FontWeight="Bold"/>
+            
+        </Grid>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden" Margin="0,26.333,0,0" Grid.RowSpan="2">
+            <Grid Row="2" x:Name="MaterialDataXmal">
+
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+
+</UserControl>
