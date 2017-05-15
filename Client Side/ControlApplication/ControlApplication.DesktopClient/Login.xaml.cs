@@ -44,7 +44,7 @@ namespace ControlApplication.DesktopClient
             if (loginSuccess)
             {
                 MessageBox.Show("Login sucess! Welcome to LDS Command Application");
-                this.Hide();
+                Hide();
             }
             else
             {

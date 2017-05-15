@@ -15,7 +15,8 @@ using ControlApplication.Core.Contracts;
 using ControlApplication.Core.Networking;
 using ControlApplication.DesktopClient.Controls;
 using GMap.NET;
-using GMap.NET.WindowsPresentation;
+using GMap.NET.WindowsForms;
+using GMapMarker = GMap.NET.WindowsPresentation.GMapMarker;
 
 
 namespace ControlApplication.DesktopClient
@@ -32,8 +33,6 @@ namespace ControlApplication.DesktopClient
         /// </summary>
         private readonly HostedNetwork _hostedNetwork;
 
-        private List<Material> materials { get; set; }
-
         public MainWindow()
         {
             Login fLogin = new Login();
@@ -42,9 +41,19 @@ namespace ControlApplication.DesktopClient
             this._hostedNetwork = new HostedNetwork();
             InitializeComponent();
             Loaded += MainWindow_Loaded;
+            Loaded += LoadDetections;
             MouseWheel += MainWindow_MouseWheel;
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
-           
+        }
+        
+        private void LoadDetections(object sender, RoutedEventArgs e)
+        {
+            var detections = ServerConnectionManager.GetInstance().GetDetections();
+
+            foreach (var detection in detections)
+            {
+                AddMarker(detection.Position);
+            }
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -80,27 +89,27 @@ namespace ControlApplication.DesktopClient
 
         private void PopShowMarkerDetections(object sender, MouseButtonEventArgs e)
         {
-            Detection[] detections =
-            {
-                new Detection(DateTime.Now, new Material("Cocaine", MaterialType.Narcotics,"12"), new PointLatLng(1122,3344), "3027744552", "36-019-19","33"),
-                new Detection(DateTime.Now, new Material("Acitone", MaterialType.Explosive,""), new PointLatLng(), "11", "22","33"),
-                new Detection(DateTime.Now, new Material("Heroin", MaterialType.Explosive,""), new PointLatLng(), "11", "22","33"),
-                new Detection(DateTime.Now, new Material("Weed", MaterialType.Explosive,""), new PointLatLng(), "11", "22","33"),
-                new Detection(DateTime.Now, new Material("Brown", MaterialType.Explosive,""), new PointLatLng(), "11", "22","33"),
-                new Detection(DateTime.Now, new Material("MD", MaterialType.Explosive,""), new PointLatLng(), "11", "22","33"),
-                new Detection(DateTime.Now, new Material("Vodka", MaterialType.Explosive,""), new PointLatLng(), "11", "22","33"),
-                new Detection(DateTime.Now, new Material("Toxicankjgfjhgfjhgfjhgf", MaterialType.Explosive,""), new PointLatLng(), "11", "22","33"),
-                new Detection(DateTime.Now, new Material("Mashroom", MaterialType.Explosive,""), new PointLatLng(), "11", "22","33")
-            };
+            //Detection[] detections =
+            //{
+            //    new Detection(DateTime.Now, new Material("Cocaine", MaterialType.Narcotics,"12"), new PointLatLng(1122,3344), "3027744552", "36-019-19","33"),
+            //    new Detection(DateTime.Now, new Material("Acitone", MaterialType.Explosive,""), new PointLatLng(), "11", "22","33"),
+            //    new Detection(DateTime.Now, new Material("Heroin", MaterialType.Explosive,""), new PointLatLng(), "11", "22","33"),
+            //    new Detection(DateTime.Now, new Material("Weed", MaterialType.Explosive,""), new PointLatLng(), "11", "22","33"),
+            //    new Detection(DateTime.Now, new Material("Brown", MaterialType.Explosive,""), new PointLatLng(), "11", "22","33"),
+            //    new Detection(DateTime.Now, new Material("MD", MaterialType.Explosive,""), new PointLatLng(), "11", "22","33"),
+            //    new Detection(DateTime.Now, new Material("Vodka", MaterialType.Explosive,""), new PointLatLng(), "11", "22","33"),
+            //    new Detection(DateTime.Now, new Material("Toxicankjgfjhgfjhgfjhgf", MaterialType.Explosive,""), new PointLatLng(), "11", "22","33"),
+            //    new Detection(DateTime.Now, new Material("Mashroom", MaterialType.Explosive,""), new PointLatLng(), "11", "22","33")
+            //};
 
-            new Window
-            {
-                Title = "Show marker's detections",
-                Content = new ShowMarkerDetections(detections),
-                WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                SizeToContent = SizeToContent.WidthAndHeight,
-                ResizeMode = ResizeMode.NoResize
-            }.ShowDialog();
+            //new Window
+            //{
+            //    Title = "Show marker's detections",
+            //    Content = new ShowMarkerDetections(detections),
+            //    WindowStartupLocation = WindowStartupLocation.CenterScreen,
+            //    SizeToContent = SizeToContent.WidthAndHeight,
+            //    ResizeMode = ResizeMode.NoResize
+            //}.ShowDialog();
         }
 
         internal void AddMarker(Point p)
@@ -111,6 +120,17 @@ namespace ControlApplication.DesktopClient
                     Shape = GetImage(new Uri(@"\Drawable\MapMarker_Blue.png", UriKind.Relative))
                 };
 
+            GMapControl.Markers.Add(marker);
+        }
+
+        internal void AddMarker(PointLatLng p)
+        {
+            GMapMarker marker =
+                new GMapMarker(p)
+                {
+                    Shape = GetImage(new Uri(@"\Drawable\MapMarker_Blue.png", UriKind.Relative))
+                };
+            
             GMapControl.Markers.Add(marker);
         }
 
@@ -175,18 +195,22 @@ namespace ControlApplication.DesktopClient
 
         private void DbBtn_Click(object sender, RoutedEventArgs e)
         {
-            var tmpMaterials = ServerConnectionManager.GetInstance().GetMaterial();
-            if (tmpMaterials != null)
-                materials = tmpMaterials;
+            var materials = ServerConnectionManager.GetInstance().GetMaterial();
 
-            new Window
+            if (materials != null)
             {
-                Title = "Show Materials",
-                Content = new MaterialsList(materials),
-                WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                SizeToContent = SizeToContent.WidthAndHeight,
-                ResizeMode = ResizeMode.NoResize
-            }.ShowDialog();
+                new Window
+                {
+                    Title = "Show Materials",
+                    Content = new MaterialsList(materials),
+                    WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                    SizeToContent = SizeToContent.WidthAndHeight,
+                    ResizeMode = ResizeMode.NoResize
+                }.ShowDialog();
+            }
+
+            else
+                MessageBox.Show("Your session expired, please restart NT.");
         }
     }
 }
