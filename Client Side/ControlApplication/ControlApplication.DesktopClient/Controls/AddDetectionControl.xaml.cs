@@ -4,6 +4,11 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using ControlApplication.Core.Contracts;
+using ControlApplication.Core.Networking;
+using GMap.NET;
+using GMap.NET.WindowsForms;
+using GMapControl = GMap.NET.WindowsPresentation.GMapControl;
 
 namespace ControlApplication.DesktopClient.Controls
 {
@@ -13,14 +18,18 @@ namespace ControlApplication.DesktopClient.Controls
     public partial class AddDetectionControl : UserControl
     {
         private Point mClickPoint;
+        private DateTime mCurrentDateTime;
 
         public AddDetectionControl(Point clickPoint)
         {
             InitializeComponent();
 
             mClickPoint = clickPoint;
-            TxtDate.Text = DateTime.Today.ToString("D");
-            TxtTime.Text = DateTime.Now.ToString("T");
+            mCurrentDateTime = DateTime.Now;
+            TxtDate.Text = mCurrentDateTime.ToString("D");
+            TxtTime.Text = mCurrentDateTime.ToString("T");
+            
+
             //TODO: Set GunId & Location automaticlly too
         }
 
@@ -36,6 +45,11 @@ namespace ControlApplication.DesktopClient.Controls
                 //TODO: Add data to the DB (relative to MARKER_SIZE)
                 GetMainWindow().AddMarker(mClickPoint);
                 Window.GetWindow(this)?.Close();
+                var material = ServerConnectionManager.GetInstance().GetMaterial(name:TxtMaterial.Text).First();
+                var pointLatLng = GetMainWindow().GMapControl.FromLocalToLatLng((int) mClickPoint.X, (int) mClickPoint.Y);
+                var area = ServerConnectionManager.GetInstance().GetArea();
+                var detection = new Detection(mCurrentDateTime, material, pointLatLng, area[0], TxtSuspectId.Text, TxtSuspectPlateNo.Text);
+                ServerConnectionManager.GetInstance().AddDetection(detection);
             }
         }
 

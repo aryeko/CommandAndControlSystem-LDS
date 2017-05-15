@@ -72,8 +72,8 @@ namespace ControlApplication.DesktopClient.Controls
         {
             //TODO: Show detections from DB
 
-            var detectionsToShow = ServerConnectionManager.GetInstance().GetDetections("{}");
-            throw new NotImplementedException();
+            var detectionsToShow = ServerConnectionManager.GetInstance().GetDetections();
+
         }
     }
 }
