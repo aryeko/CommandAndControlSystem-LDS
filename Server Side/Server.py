@@ -1,5 +1,5 @@
 from JsonDataParser import JsonDataParser
-from bson.json_util import dumps
+from bson.json_util import dumps, loads
 from bson import ObjectId
 from datetime import timedelta
 from DbHandler import DbHandler
@@ -106,9 +106,14 @@ def handle_gscan_request():
 	if request.method == 'GET':
 		# here we want to get the value of user (i.e. ?user=some-value)
 		unit_id = request.args.get('owned_unit_id')
-		print("retrieving gscans by unit: ", unit_id)
+		gscan_sn = request.args.get('gscan_sn')
+
 		if unit_id is not None:
+			print("retrieving gscans by unit: ", unit_id)
 			gscans = dbHandler.get_gscans({'owned_unit_id': unit_id})
+		elif gscan_sn is not None:
+			print("retrieving gscans by gscan_sn: ", gscan_sn)
+			gscans = dbHandler.get_gscans({'gscan_sn': gscan_sn})
 		else:
 			gscans = dbHandler.get_gscans()
 
@@ -170,9 +175,13 @@ def handle_material_request():
 	if request.method == 'GET':
 		# here we want to get the value of user (i.e. ?user=some-value)
 		print("incoming materials request")
+		material_id = request.args.get('_id')
 		material_name = request.args.get('material_name')
 		material_type = request.args.get('material_type')
-		if material_name is not None:
+		if material_id is not None:
+			print("retrieving material by material_id: ", material_id)
+			materials = dbHandler.get_materials({'_id': loads(material_id)})
+		elif material_name is not None:
 			print("retrieving material by name: ", material_name)
 			materials = dbHandler.get_materials({'name': material_name})
 		elif material_type is not None:
@@ -216,13 +225,27 @@ def handle_detection_request():
 
 	elif request.method == 'POST':
 		# TODO: verificate the incomming data
+		print("adding detection: ", request.form.get('location'))
+		param1 = loads(request.form.get('user_id'))
+		param2 = loads(request.form.get('material_id'))
+		param3 = loads(request.form.get('area_id'))
+		gscan_id = "no gscan"
+		if request.form.get('gscan_id') != "":
+			gscan_id = loads(request.form.get('gscan_id'))
 
+		raman_id = "no raman"
+		if request.form.get('raman_id') != "":
+			raman_id = loads(request.form.get('raman_id'))
+		param6 = request.form.get('suspect_id')
+		param7 = request.form.get('plate_number')
+		param8 = request.form.get('location')
+		param9 = request.form.get('date_time')
 		new_object_id = dbHandler.add_detection(
-			ObjectId(request.form.get('user_id')),
-			ObjectId(request.form.get('material_id')),
-			ObjectId(request.form.get('area_id')),
-			ObjectId(request.form.get('gscan_id')),
-			ObjectId(request.form.get('raman_id')),
+			loads(request.form.get('user_id')),
+			loads(request.form.get('material_id')),
+			loads(request.form.get('area_id')),
+			gscan_id,
+			raman_id,
 			request.form.get('suspect_id'),
 			request.form.get('plate_number'),
 			request.form.get('location'),

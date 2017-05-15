@@ -105,13 +105,7 @@ class DbHandler:
 			   "suspect_id": suspect_id,
 			   "location": location}
 
-		filter_by = {"user_id": user_id,
-			   "gscan_id": gscan_id,
-			   "area_id": area_id,
-			   "material_id": material_id}
-
-		affected_doc_id = self.db.Detections.find_one_and_update(filter_by, {'$set': doc}, projection={'_id': True},
-															upsert=True, return_document=ReturnDocument.AFTER)
+		affected_doc_id = self.db.Detections.insert_one(doc)
 		return ObjectId(affected_doc_id['_id'])
 
 	def get_detections(self, json_filter = None):
