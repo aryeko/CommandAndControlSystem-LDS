@@ -25,6 +25,11 @@ namespace ControlApplication.Core.Contracts
         public PointLatLng Position { get; }
 
         /// <summary>
+        /// The area of the detection
+        /// </summary>
+        public Area Area { get; }
+
+        /// <summary>
         /// Suspect's ID number
         /// </summary>
         public string SuspectId { get; }
@@ -40,23 +45,32 @@ namespace ControlApplication.Core.Contracts
         public string GunId { get; }
 
         /// <summary>
+        /// Raman graph ID
+        /// </summary>
+        public string RamanId { get; }
+
+        /// <summary>
         /// Detection class constructor
         /// </summary>
         /// <param name="dateTime">The date of the detection</param>
         /// <param name="material">The material detected</param>
         /// <param name="position">The position of detection</param>
+        /// <param name="area">The area of the detection</param>
         /// <param name="suspectId">Suspect's ID number</param>
         /// <param name="suspectPlateId">Suspect's plate ID number</param>
         /// <param name="gunId">G-Scan ID number</param>
-        public Detection(DateTime dateTime, Material material, PointLatLng position, string suspectId,
-            string suspectPlateId, string gunId)
+        /// <param name="ramanId">Raman graph ID</param>
+        public Detection(DateTime dateTime, Material material, PointLatLng position, Area area, string suspectId,
+            string suspectPlateId, string gunId = "", string ramanId = "")
         {
             DateTimeOfDetection = dateTime;
             Material = material;
             Position = position;
+            Area = area;
             SuspectId = suspectId;
             SuspectPlateId = suspectPlateId;
             GunId = gunId;
+            RamanId = ramanId;
         }
     }
 }
