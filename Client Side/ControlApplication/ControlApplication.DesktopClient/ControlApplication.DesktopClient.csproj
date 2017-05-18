@@ -76,6 +76,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\CustomMarker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\MaterialsList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -113,6 +117,9 @@
     </Compile>
     <Compile Include="Controls\ChooseDetectionType.xaml.cs">
       <DependentUpon>ChooseDetectionType.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CustomMarker.xaml.cs">
+      <DependentUpon>CustomMarker.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\MaterialsList.xaml.cs">
       <DependentUpon>MaterialsList.xaml</DependentUpon>
