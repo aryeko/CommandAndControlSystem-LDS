@@ -40,7 +40,7 @@ namespace ControlApplication.DesktopClient
 
         private void loginBtn_Click(object sender, RoutedEventArgs e)
         {
-            var loginSuccess = ServerConnectionManager.GetInstance().Login(usernameBox.Text, passwordBox.Password);
+            var loginSuccess = ServerConnectionManager.Instance.Login(usernameBox.Text, passwordBox.Password);
             if (loginSuccess)
             {
                 MessageBox.Show("Login sucess! Welcome to LDS Command Application");

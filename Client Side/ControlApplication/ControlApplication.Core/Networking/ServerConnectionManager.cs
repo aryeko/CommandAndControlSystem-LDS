@@ -30,9 +30,10 @@ namespace ControlApplication.Core.Networking
         private CookieAwareWebClient WebClient { get; }
 
         /// <summary>
-        /// A single instance of <see cref="ServerConnectionManager"/> (Singelton)
+        /// Creates an instance of <see cref="ServerConnectionManager"/> or returns the existing instance
         /// </summary>
-        private static ServerConnectionManager _instance;
+        /// <returns>Returns single instance of <see cref="ServerConnectionManager"/> as long as the app is running</returns>
+        public static ServerConnectionManager Instance { get; } = new ServerConnectionManager();
 
         /// <summary>
         /// Private constructor which will avoid from an external class to create another instance of <see cref="ServerConnectionManager"/>
@@ -40,15 +41,6 @@ namespace ControlApplication.Core.Networking
         private ServerConnectionManager()
         {
             WebClient = new CookieAwareWebClient();
-        }
-
-        /// <summary>
-        /// Creates an instance of <see cref="ServerConnectionManager"/> or returns the existing instance
-        /// </summary>
-        /// <returns>Returns single instance of <see cref="ServerConnectionManager"/> as long as the app is running</returns>
-        public static ServerConnectionManager GetInstance()
-        {
-            return _instance ?? (_instance = new ServerConnectionManager());
         }
 
         /// <summary>
@@ -193,7 +185,7 @@ namespace ControlApplication.Core.Networking
             
             foreach (dynamic obj in arr)
             {
-                DateTime dateTime = DateTime.ParseExact(obj.date_time.ToString(), "G", CultureInfo.CreateSpecificCulture("en-us"));
+                DateTime dateTime = DateTime.ParseExact(obj.date_time.ToString(), "G", CultureInfo.InvariantCulture);
                 var position = ParseLocation(obj.location.ToString()); //new PointLatLng(double.Parse(obj.Latitude), double.Parse(obj.Longitude));
                 string gscanSn = GetGscan(obj.gscan_id.ToString());
                 Area area = GetArea(obj.area_id.ToString());
@@ -203,7 +195,7 @@ namespace ControlApplication.Core.Networking
                 detectionsList.Add(detection);
             }
 
-            return detectionsList.Count.Equals(0) ? null : detectionsList;
+            return detectionsList;
         }
 
         private PointLatLng ParseLocation(string location)
@@ -229,7 +221,7 @@ namespace ControlApplication.Core.Networking
                 { "raman_id", detection.RamanId },
                 { "plate_number", detection.SuspectPlateId },
                 { "location", detection.Position.ToString() },
-                { "date_time", detection.DateTimeOfDetection.ToString("G", CultureInfo.CreateSpecificCulture("en-us")) }
+                { "date_time", detection.DateTimeOfDetection.ToString("G", CultureInfo.InvariantCulture) }
             };
 
             try
