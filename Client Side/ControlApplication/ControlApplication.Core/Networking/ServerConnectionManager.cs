@@ -68,6 +68,12 @@ namespace ControlApplication.Core.Networking
             }
         }
 
+        /// <summary>
+        /// gets materials from the database using server's RESTful API
+        /// </summary>
+        /// <param name="materialId">Optional: filter by material ID</param>
+        /// <param name="name">Optional: filter by material name</param>
+        /// <returns></returns>
         public List<Material> GetMaterial(string materialId = "", string name = "")
         {
             var materials = new List<Material>();
@@ -85,7 +91,9 @@ namespace ControlApplication.Core.Networking
                     {"_id", materialId}
                 };
             }
-
+            else
+                WebClient.QueryString = new NameValueCollection();
+            
             try
             {
                 var response = WebClient.DownloadString(new Uri(RemoteServerPath, "material"));
@@ -109,6 +117,10 @@ namespace ControlApplication.Core.Networking
             return materials;
         }
 
+        /// <summary>
+        /// gets all areas from the database using server's RESTful API
+        /// </summary>
+        /// <returns></returns>
         public List<Area> GetArea()
         {
             var areas = new List<Area>();
@@ -131,21 +143,12 @@ namespace ControlApplication.Core.Networking
 
             return areas;
         }
-        /*
-        public Material GetMaterial(string materialId)
-        {
-            WebClient.QueryString = new NameValueCollection
-            {
-                {"_id", materialId}
-            };
 
-            var response = WebClient.DownloadString(new Uri(RemoteServerPath, "material"));
-            dynamic arr = JsonConvert.DeserializeObject(response);
-
-            var materialType = (MaterialType)System.Enum.Parse(typeof(MaterialType), arr[0].type.ToString());
-            return new Material(arr[0].name.ToString(), materialType, arr[0].cas.ToString());
-        }
-        */
+        /// <summary>
+        /// gets a G-Scan from the database using server's RESTful API
+        /// </summary>
+        /// <param name="gscanId">Filter the search by G-Scan uniqe ID</param>
+        /// <returns></returns>
         public string GetGscan(string gscanId)
         {
             WebClient.QueryString = new NameValueCollection
@@ -159,6 +162,11 @@ namespace ControlApplication.Core.Networking
             return arr[0].gscan_sn.ToString();
         }
 
+        /// <summary>
+        /// gets an Area from the database using server's RESTful API
+        /// </summary>
+        /// <param name="areaId">Filter the search by area uniqe ID</param>
+        /// <returns></returns>
         public Area GetArea(string areaId)
         { 
         
@@ -174,7 +182,10 @@ namespace ControlApplication.Core.Networking
             return new Area(new PointLatLng(double.Parse(arr[0].root_location[0].ToString()), double.Parse(arr[0].root_location[1].ToString())), areaType, double.Parse(arr[0].radius.ToString()));
         }
 
-        //TODO: FINISH w/ server side
+        /// <summary>
+        /// gets all detections from the database using server's RESTful API
+        /// </summary>
+        /// <returns></returns>
         public List<Detection> GetDetections()
         {
             var detectionsList = new List<Detection>();
@@ -198,9 +209,13 @@ namespace ControlApplication.Core.Networking
             return detectionsList;
         }
 
+        /// <summary>
+        /// Parse a location string from a JSON string
+        /// </summary>
+        /// <param name="location">The location </param>
+        /// <returns>New PointLatLng using the parsed Lat and Lng</returns>
         private PointLatLng ParseLocation(string location)
         {
-            Console.WriteLine("Location from DB is: " + location);
             var pointPattern = @"{Lat=(?<lat>\d+\.*\d*?),\sLng=(?<lng>\d+\.*\d*?)}";
 
             var locationResult = Regex.Match(location, pointPattern);
@@ -208,6 +223,10 @@ namespace ControlApplication.Core.Networking
             return new PointLatLng(double.Parse(locationResult.Groups["lat"].Value), double.Parse(locationResult.Groups["lng"].Value));
         }
 
+        /// <summary>
+        /// Adds a detection to the database using server's RESTful API
+        /// </summary>
+        /// <param name="detection">A detection to add</param>
         public void AddDetection(Detection detection)
         {
             var ids = GetAllDbIds(detection);
@@ -234,6 +253,11 @@ namespace ControlApplication.Core.Networking
             }
         }
 
+        /// <summary>
+        /// Gets all the IDs from a detection in order to add a detection to DB using forein keys
+        /// </summary>
+        /// <param name="detection">The detection to add</param>
+        /// <returns></returns>
         private Dictionary<string, string> GetAllDbIds(Detection detection)
         {
             var ids = new Dictionary<string, string>();
@@ -279,7 +303,7 @@ namespace ControlApplication.Core.Networking
         }
 
         /// <summary>
-        /// Adds a user to the database useing server's RESTful API
+        /// Adds a user to the database using server's RESTful API
         /// </summary>
         /// <param name="fullName">user's full name</param>
         /// <param name="userName">the requested username to add</param>

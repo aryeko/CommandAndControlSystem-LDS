@@ -1,5 +1,4 @@
-﻿//TODO: Complete all the materials with documentation
-namespace ControlApplication.Core.Contracts
+﻿namespace ControlApplication.Core.Contracts
 {
     /// <summary>
     /// Enum that represents type of material
