@@ -106,7 +106,7 @@ class DbHandler:
 			   "location": location}
 
 		affected_doc_id = self.db.Detections.insert_one(doc)
-		return ObjectId(affected_doc_id['_id'])
+		return affected_doc_id.inserted_id
 
 	def get_detections(self, json_filter = None):
 		if json_filter is None:
