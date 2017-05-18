@@ -17,10 +17,16 @@ namespace ControlApplication.DesktopClient.Controls
     /// </summary>
     public partial class AddDetectionControl : UserControl
     {
-        private Point mClickPoint;
+        private PointLatLng mClickPoint;
         private DateTime mCurrentDateTime;
+        private IList<Detection> mDetectionData;
 
-        public AddDetectionControl(Point clickPoint)
+        public AddDetectionControl(Point clickPoint, IEnumerable<Detection> detectionData = null) 
+            : this(GetMainWindow().GMapControl.FromLocalToLatLng((int)clickPoint.X, (int)clickPoint.Y), detectionData)
+        {
+        }
+
+        public AddDetectionControl(PointLatLng clickPoint, IEnumerable<Detection> detectionData = null)
         {
             InitializeComponent();
 
@@ -28,7 +34,7 @@ namespace ControlApplication.DesktopClient.Controls
             mCurrentDateTime = DateTime.Now;
             TxtDate.Text = mCurrentDateTime.ToString("D");
             TxtTime.Text = mCurrentDateTime.ToString("T");
-            
+            mDetectionData = detectionData?.ToList() ?? new List<Detection>();
 
             //TODO: Set GunId & Location automaticlly too
         }
@@ -43,13 +49,12 @@ namespace ControlApplication.DesktopClient.Controls
             if (ValidateFields())
             {
                 //TODO: Add data to the DB (relative to MARKER_SIZE)
-                GetMainWindow().AddMarker(mClickPoint);
                 Window.GetWindow(this)?.Close();
-                var material = ServerConnectionManager.GetInstance().GetMaterial(name:TxtMaterial.Text).First();
-                var pointLatLng = GetMainWindow().GMapControl.FromLocalToLatLng((int) mClickPoint.X, (int) mClickPoint.Y);
-                var area = ServerConnectionManager.GetInstance().GetArea();
-                var detection = new Detection(mCurrentDateTime, material, pointLatLng, area[0], TxtSuspectId.Text, TxtSuspectPlateNo.Text);
-                ServerConnectionManager.GetInstance().AddDetection(detection);
+                var material = ServerConnectionManager.Instance.GetMaterial(name:TxtMaterial.Text).First();
+                var area = ServerConnectionManager.Instance.GetArea();
+                var detection = new Detection(mCurrentDateTime, material, mClickPoint, area[0], TxtSuspectId.Text, TxtSuspectPlateNo.Text);
+                ServerConnectionManager.Instance.AddDetection(detection);
+                GetMainWindow().AddMarker(mClickPoint, new []{detection});
             }
         }
 
@@ -91,7 +96,7 @@ namespace ControlApplication.DesktopClient.Controls
         /// Gets the MainWindow control
         /// </summary>
         /// <returns>The MainWindow or null on error</returns>
-        private MainWindow GetMainWindow()
+        private static MainWindow GetMainWindow()
         {
             return Application.Current.MainWindow as MainWindow;
         }

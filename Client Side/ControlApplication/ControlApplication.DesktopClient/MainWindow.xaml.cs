@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -48,11 +49,11 @@ namespace ControlApplication.DesktopClient
         
         private void LoadDetections(object sender, RoutedEventArgs e)
         {
-            var detections = ServerConnectionManager.GetInstance().GetDetections();
+            var detections = ServerConnectionManager.Instance.GetDetections().GroupBy(d => d.Position);
 
             foreach (var detection in detections)
             {
-                AddMarker(detection.Position);
+                AddMarker(detection.Key, detection.ToList());
             }
         }
 
@@ -62,7 +63,6 @@ namespace ControlApplication.DesktopClient
             this.GMapControl.MapProvider = GMap.NET.MapProviders.GoogleMapProvider.Instance;
             GMap.NET.GMaps.Instance.Mode = GMap.NET.AccessMode.ServerOnly;
             this.GMapControl.SetPositionByKeywords("Israel, Jerusalem");
-
             ZoomControl.UpdateControl();
 
             //TODO: Start Hosted network with a button (handle the case when a client don't support Hosted network 
@@ -112,26 +112,27 @@ namespace ControlApplication.DesktopClient
             //}.ShowDialog();
         }
 
-        internal void AddMarker(Point p)
+        internal void AddMarker(Point p, IEnumerable<Detection> detections)
         {
-            GMapMarker marker =
-                new GMapMarker(GMapControl.FromLocalToLatLng((int) p.X, (int) p.Y))
-                {
-                    Shape = GetImage(new Uri(@"\Drawable\MapMarker_Blue.png", UriKind.Relative))
-                };
-
-            GMapControl.Markers.Add(marker);
+            AddMarker(GMapControl.FromLocalToLatLng((int) p.X, (int) p.Y), detections);
         }
 
-        internal void AddMarker(PointLatLng p)
+        internal void AddMarker(PointLatLng p, IEnumerable<Detection> detections)
         {
-            GMapMarker marker =
-                new GMapMarker(p)
+            var exsistingMarker = GMapControl.Markers.SingleOrDefault(m => m.Position.Equals(p));
+            if (exsistingMarker != null)
+            {
+                ((CustomMarker)exsistingMarker.Shape).AddDetections(detections);
+            }
+            else
+            {
+                var marker = new GMapMarker(p);
                 {
-                    Shape = GetImage(new Uri(@"\Drawable\MapMarker_Blue.png", UriKind.Relative))
-                };
-            
-            GMapControl.Markers.Add(marker);
+                    var s = new CustomMarker(this, marker, detections);
+                    marker.Shape = s;
+                }
+                GMapControl.Markers.Add(marker);
+            }
         }
 
         private Image GetImage(Uri uri)
@@ -181,13 +182,13 @@ namespace ControlApplication.DesktopClient
         {
             if (Equals(AddPointBtn.Background, Brushes.CornflowerBlue))
             {
-                GMapControl.PreviewMouseDoubleClick += PopAddDetectionWindow;
+                GMapControl.MouseDoubleClick += PopAddDetectionWindow;
                 AddPointBtn.Background = Brushes.DarkBlue;
                 AddPointBtn.ToolTip = "Press twice on the map to add a manual detection";
             }
             else
             {
-                GMapControl.PreviewMouseDoubleClick -= PopAddDetectionWindow;
+                GMapControl.MouseDoubleClick -= PopAddDetectionWindow;
                 AddPointBtn.Background = Brushes.CornflowerBlue;
                 AddPointBtn.ToolTip = "Press the button to add a manual detection";
             }
@@ -195,7 +196,7 @@ namespace ControlApplication.DesktopClient
 
         private void DbBtn_Click(object sender, RoutedEventArgs e)
         {
-            var materials = ServerConnectionManager.GetInstance().GetMaterial();
+            var materials = ServerConnectionManager.Instance.GetMaterial();
 
             if (materials != null)
             {

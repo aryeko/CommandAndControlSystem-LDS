@@ -23,15 +23,15 @@ namespace ControlApplication.DesktopClient.Controls
     public partial class ShowMarkerDetections : UserControl
     {
         private const int HEIGHT_ROW_CELL = 40;
-        private const int INITIAL_HEIGHT = 80;
+        private const int INITIAL_HEIGHT = 50;
         private const int MAX_HEIGHT = 120;
         public string NumberOfDetections { get; set; }
 
-        public ShowMarkerDetections(Detection[] detectionData)
+        public ShowMarkerDetections(IEnumerable<Detection> detectionData)
         {
             InitializeComponent();
 
-            int newHeight = detectionData.Length * HEIGHT_ROW_CELL;
+            int newHeight = detectionData.Count() * HEIGHT_ROW_CELL;
 
             if (newHeight <= MAX_HEIGHT)
             {
@@ -44,13 +44,14 @@ namespace ControlApplication.DesktopClient.Controls
                 NumOfDetections.Height = new GridLength(MAX_HEIGHT);
             }
         
-            for (int j = 0; j < detectionData.Length; j++)
+            foreach (var detection in detectionData)
             {
-                DetectionDataXmal.RowDefinitions.Insert(j, new RowDefinition());
+                var newRowIndex = DetectionDataXmal.RowDefinitions.Count;
+                DetectionDataXmal.RowDefinitions.Insert(newRowIndex, new RowDefinition());
 
-                SingleDetectionControl newControl = new SingleDetectionControl(detectionData[j]);
+                SingleDetectionControl newControl = new SingleDetectionControl(detection);
 
-                Grid.SetRow(newControl, j);
+                Grid.SetRow(newControl, newRowIndex);
                 DetectionDataXmal.Children.Add(newControl);
             }
             
