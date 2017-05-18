@@ -70,7 +70,7 @@ namespace ControlApplication.DesktopClient.Controls
 
         private void ShowSelectedDetections(List<string> cbValues)
         {
-            //TODO: Show detections from DB
+            //TODO: Show selected detections by type from DB
 
             var detectionsToShow = ServerConnectionManager.GetInstance().GetDetections();
 

@@ -10,7 +10,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="15*"/>
             <RowDefinition Height="70*"/>
-            <RowDefinition Height="15*"/>
+            <RowDefinition Height="20*"/>
         </Grid.RowDefinitions>
         
         <Label Grid.Row="0" x:Name="LblDetectionToShow" Content="Choose detections" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Candara" FontWeight="ExtraBold" FontSize="16" Foreground="DarkBlue"/>

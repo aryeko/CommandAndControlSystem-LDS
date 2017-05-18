@@ -27,6 +27,10 @@ namespace ControlApplication.DesktopClient.Controls
         private const int MAX_HEIGHT = 120;
         public string NumberOfDetections { get; set; }
 
+        /// <summary>
+        /// Shows all the detections that refered to a marker
+        /// </summary>
+        /// <param name="detectionData"></param>
         public ShowMarkerDetections(Detection[] detectionData)
         {
             InitializeComponent();
