@@ -9,11 +9,14 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using ControlApplication.Core.Networking;
+using Application = System.Windows.Application;
+using MessageBox = System.Windows.MessageBox;
 
 namespace ControlApplication.DesktopClient
 {
@@ -43,12 +46,12 @@ namespace ControlApplication.DesktopClient
             var loginSuccess = ServerConnectionManager.Instance.Login(usernameBox.Text, passwordBox.Password);
             if (loginSuccess)
             {
-                MessageBox.Show("Login sucess! Welcome to LDS Command Application");
+                MessageBox.Show("Login sucess! Welcome to NT Command Application", "Welcome to NT", MessageBoxButton.OK, MessageBoxImage.Asterisk);
                 Hide();
             }
             else
             {
-                MessageBox.Show("Invalid Login, please provide a valid username and password");
+                MessageBox.Show("Invalid Login, please provide a valid username and password", "Authentication failed", MessageBoxButton.OK, MessageBoxImage.Error);
                 usernameBox.Text = "";
                 usernameBox.Focus();
                 passwordBox.Password = "";
