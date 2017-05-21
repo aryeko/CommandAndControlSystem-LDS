@@ -1,4 +1,7 @@
-﻿namespace ControlApplication.Core.Contracts
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace ControlApplication.Core.Contracts
 {
     /// <summary>
     /// This class represents abstract material
@@ -31,6 +34,11 @@
             Name = name;
             MaterialType = materialType;
             Cas = cas;
+        }
+
+        public bool IsContainsMaterialType(List<string> materialTypeList)
+        {
+            return materialTypeList.Any(materialType => MaterialType.ToString().Equals(materialType));
         }
     }
 }

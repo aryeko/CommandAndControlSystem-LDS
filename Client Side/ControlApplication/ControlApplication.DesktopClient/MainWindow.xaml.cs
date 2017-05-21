@@ -93,32 +93,6 @@ namespace ControlApplication.DesktopClient
             }.ShowDialog();
         }
 
-
-        private void PopShowMarkerDetections(object sender, MouseButtonEventArgs e)
-        {
-            //Detection[] detections =
-            //{
-            //    new Detection(DateTime.Now, new Material("Cocaine", MaterialType.Narcotics,"12"), new PointLatLng(1122,3344), "3027744552", "36-019-19","33"),
-            //    new Detection(DateTime.Now, new Material("Acitone", MaterialType.Explosive,""), new PointLatLng(), "11", "22","33"),
-            //    new Detection(DateTime.Now, new Material("Heroin", MaterialType.Explosive,""), new PointLatLng(), "11", "22","33"),
-            //    new Detection(DateTime.Now, new Material("Weed", MaterialType.Explosive,""), new PointLatLng(), "11", "22","33"),
-            //    new Detection(DateTime.Now, new Material("Brown", MaterialType.Explosive,""), new PointLatLng(), "11", "22","33"),
-            //    new Detection(DateTime.Now, new Material("MD", MaterialType.Explosive,""), new PointLatLng(), "11", "22","33"),
-            //    new Detection(DateTime.Now, new Material("Vodka", MaterialType.Explosive,""), new PointLatLng(), "11", "22","33"),
-            //    new Detection(DateTime.Now, new Material("Toxicankjgfjhgfjhgfjhgf", MaterialType.Explosive,""), new PointLatLng(), "11", "22","33"),
-            //    new Detection(DateTime.Now, new Material("Mashroom", MaterialType.Explosive,""), new PointLatLng(), "11", "22","33")
-            //};
-
-            //new Window
-            //{
-            //    Title = "Show marker's detections",
-            //    Content = new ShowMarkerDetections(detections),
-            //    WindowStartupLocation = WindowStartupLocation.CenterScreen,
-            //    SizeToContent = SizeToContent.WidthAndHeight,
-            //    ResizeMode = ResizeMode.NoResize
-            //}.ShowDialog();
-        }
-
         internal void AddMarker(Point p, IEnumerable<Detection> detections)
         {
             AddMarker(GMapControl.FromLocalToLatLng((int) p.X, (int) p.Y), detections);
@@ -140,6 +114,11 @@ namespace ControlApplication.DesktopClient
                 }
                 GMapControl.Markers.Add(marker);
             }
+        }
+
+        internal void DeleteMarkers()
+        {
+            GMapControl.Markers.Clear();
         }
 
         private Image GetImage(Uri uri)
@@ -191,7 +170,7 @@ namespace ControlApplication.DesktopClient
             {
                 GMapControl.MouseDoubleClick += PopAddDetectionWindow;
                 AddPointBtn.Background = Brushes.DarkBlue;
-                AddPointBtn.ToolTip = "Press twice on the map to add a manual detection";
+                AddPointBtn.ToolTip = "Double click on the map to add a manual detection";
             }
             else
             {
@@ -205,20 +184,14 @@ namespace ControlApplication.DesktopClient
         {
             var materials = ServerConnectionManager.Instance.GetMaterial();
 
-            if (materials != null)
+            new Window
             {
-                new Window
-                {
-                    Title = "Show Materials",
-                    Content = new MaterialsList(materials),
-                    WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                    SizeToContent = SizeToContent.WidthAndHeight,
-                    ResizeMode = ResizeMode.NoResize
-                }.ShowDialog();
-            }
-
-            else
-                MessageBox.Show("Your session expired, please restart NT.");
+                Title = "Show Materials",
+                Content = new MaterialsList(materials),
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                SizeToContent = SizeToContent.WidthAndHeight,
+                ResizeMode = ResizeMode.NoResize
+            }.ShowDialog();
         }
     }
 }

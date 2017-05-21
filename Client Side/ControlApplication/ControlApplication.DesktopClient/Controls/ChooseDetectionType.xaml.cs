@@ -47,6 +47,15 @@ namespace ControlApplication.DesktopClient.Controls
             }
         }
 
+        /// <summary>
+        /// Gets the MainWindow control
+        /// </summary>
+        /// <returns>The MainWindow or null on error</returns>
+        private static MainWindow GetMainWindow()
+        {
+            return Application.Current.MainWindow as MainWindow;
+        }
+
         private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
             Window.GetWindow(this)?.Close();
@@ -54,26 +63,30 @@ namespace ControlApplication.DesktopClient.Controls
 
         private void BtnSubmit_Click(object sender, RoutedEventArgs e)
         {
-            var cbValues = new List<string>();
-
-            foreach (CheckBox cb in DetectionDataXmal.Children)
-            {
-                if (cb.IsChecked != null && cb.IsChecked.Value)
-                {
-                    cbValues.Add(cb.Name);
-                    Console.WriteLine(cb.Name);
-                }
-            }
-            //ShowSelectedDetections(cbValues);
             Window.GetWindow(this)?.Close();
+            var cbValues = (from CheckBox cb in DetectionDataXmal.Children where cb.IsChecked != null && cb.IsChecked.Value select cb.Name).ToList();
+
+            if (cbValues.Count == 0)
+                return;
+            
+            GetMainWindow().DeleteMarkers();
+            ShowSelectedDetections(cbValues);
         }
 
         private void ShowSelectedDetections(List<string> cbValues)
-        {
-            //TODO: Show selected detections by type from DB
+        { 
+            var mainWindow = GetMainWindow();
+            Task.Run(() =>
+            {
+                mainWindow.Dispatcher.Invoke(() => mainWindow.CircularProgressBar.Visibility = Visibility.Visible);
+                var detectionsToShow = ServerConnectionManager.Instance.GetDetections().Where(d => d.Material.IsContainsMaterialType(cbValues));
 
-            var detectionsToShow = ServerConnectionManager.Instance.GetDetections();
+                foreach (var detection in detectionsToShow)
+                    mainWindow.Dispatcher.Invoke(()=> mainWindow.AddMarker(detection.Position, new List<Detection> { detection }));
 
+                mainWindow.Dispatcher.Invoke(() => mainWindow.CircularProgressBar.Visibility = Visibility.Hidden);
+            });
         }
+           
     }
 }
