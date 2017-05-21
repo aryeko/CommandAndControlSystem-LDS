@@ -11,7 +11,7 @@
         Title="MainWindow" Height="700" Width="1000" Icon="Drawable/anti_logo.png">
 
     <Grid ZIndex="0">
-        <WindowsPresentation:GMapControl x:Name="GMapControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MaxZoom="18" Zoom="13" MouseRightButtonUp="PopShowMarkerDetections"/>
+        <WindowsPresentation:GMapControl x:Name="GMapControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MaxZoom="18" Zoom="13"/>
 
         <Grid ZIndex="1">
 
