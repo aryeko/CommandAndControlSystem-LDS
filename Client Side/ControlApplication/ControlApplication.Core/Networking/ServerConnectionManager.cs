@@ -7,6 +7,7 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using ControlApplication.Core.Contracts;
 using GMap.NET;
 using Newtonsoft.Json;
@@ -57,15 +58,8 @@ namespace ControlApplication.Core.Networking
                 { "password", password }
             };
 
-            try
-            {
-                var response = WebClient.UploadValues(new Uri(RemoteServerPath, "login"), postData);
-                return Encoding.Default.GetString(response).Contains("SUCCESS");
-            }
-            catch (WebException)
-            {
-                return false;
-            }
+            var response = PostToDb("login", postData);
+            return response.Contains("SUCCESS");
         }
 
         /// <summary>
@@ -77,68 +71,44 @@ namespace ControlApplication.Core.Networking
         public List<Material> GetMaterial(string materialId = "", string name = "")
         {
             var materials = new List<Material>();
+            string response;
             if (!string.IsNullOrEmpty(name))
             {
-                WebClient.QueryString = new NameValueCollection
-                {
-                    {"material_name", name}
-                };
+                response = GetFromDb("material", "material_name", name);
             }
             else if(!string.IsNullOrEmpty(materialId))
             {
-                WebClient.QueryString = new NameValueCollection
-                {
-                    {"_id", materialId}
-                };
+                response = GetFromDb("material", "_id", materialId);
             }
             else
-                WebClient.QueryString = new NameValueCollection();
-            
-            try
-            {
-                var response = WebClient.DownloadString(new Uri(RemoteServerPath, "material"));
-                dynamic arr = JsonConvert.DeserializeObject(response);
+                response = GetFromDb("material");
 
-                foreach (dynamic obj in arr)
-                {
-                    var materialType = (MaterialType) System.Enum.Parse(typeof(MaterialType), obj.type.ToString());
-                    materials.Add(new Material(obj.name.ToString(), materialType, obj.cas.ToString()));
-                }
-            }
-            catch (WebException)
-            {
-                return null;
-            }
-            finally
-            {
-                WebClient.QueryString = new NameValueCollection();
-            }
+            dynamic arr = JsonConvert.DeserializeObject(response);
 
+            foreach (dynamic obj in arr)
+            {
+                var materialType = (MaterialType) System.Enum.Parse(typeof(MaterialType), obj.type.ToString());
+                materials.Add(new Material(obj.name.ToString(), materialType, obj.cas.ToString()));
+            }
+           
             return materials;
         }
 
         /// <summary>
-        /// gets all areas from the database using server's RESTful API
+        /// gets all areas or a specific area from the database using server's RESTful API
         /// </summary>
         /// <returns></returns>
-        public List<Area> GetArea()
+        public List<Area> GetArea(string areaId = "")
         {
             var areas = new List<Area>();
+            var response = !string.IsNullOrEmpty(areaId) ? GetFromDb("area", "_id", areaId) : GetFromDb("area");
 
-            try
-            {
-                var response = WebClient.DownloadString(new Uri(RemoteServerPath, "area"));
-                dynamic arr = JsonConvert.DeserializeObject(response);
+            dynamic arr = JsonConvert.DeserializeObject(response);
 
-                foreach (dynamic obj in arr)
-                {
-                    var areaType = (AreaType)System.Enum.Parse(typeof(AreaType), obj.area_type.ToString());
-                    areas.Add(new Area(new PointLatLng(double.Parse(obj.root_location[0].ToString()), double.Parse(obj.root_location[1].ToString())), areaType, double.Parse(obj.radius.ToString())));
-                }
-            }
-            catch (WebException)
+            foreach (dynamic obj in arr)
             {
-                return null;
+                var areaType = (AreaType)System.Enum.Parse(typeof(AreaType), obj.area_type.ToString());
+                areas.Add(new Area(new PointLatLng(double.Parse(obj.root_location[0].ToString()), double.Parse(obj.root_location[1].ToString())), areaType, double.Parse(obj.radius.ToString())));
             }
 
             return areas;
@@ -151,35 +121,10 @@ namespace ControlApplication.Core.Networking
         /// <returns></returns>
         public string GetGscan(string gscanId)
         {
-            WebClient.QueryString = new NameValueCollection
-            {
-                {"_id", gscanId}
-            };
-
-            var response = WebClient.DownloadString(new Uri(RemoteServerPath, "gscan"));
+            var response = GetFromDb("gscan", "_id", gscanId);
             dynamic arr = JsonConvert.DeserializeObject(response);
 
             return arr[0].gscan_sn.ToString();
-        }
-
-        /// <summary>
-        /// gets an Area from the database using server's RESTful API
-        /// </summary>
-        /// <param name="areaId">Filter the search by area uniqe ID</param>
-        /// <returns></returns>
-        public Area GetArea(string areaId)
-        { 
-        
-         WebClient.QueryString = new NameValueCollection
-            {
-                {"_id", areaId}
-            };
-
-            var response = WebClient.DownloadString(new Uri(RemoteServerPath, "area"));
-            dynamic arr = JsonConvert.DeserializeObject(response);
-
-            var areaType = (AreaType)System.Enum.Parse(typeof(AreaType), arr[0].area_type.ToString());
-            return new Area(new PointLatLng(double.Parse(arr[0].root_location[0].ToString()), double.Parse(arr[0].root_location[1].ToString())), areaType, double.Parse(arr[0].radius.ToString()));
         }
 
         /// <summary>
@@ -189,19 +134,18 @@ namespace ControlApplication.Core.Networking
         public List<Detection> GetDetections()
         {
             var detectionsList = new List<Detection>();
-            var response = WebClient.DownloadString(new Uri(RemoteServerPath, "detection"));
-            //webException
+            var response = GetFromDb("detection");
 
             dynamic arr = JsonConvert.DeserializeObject(response);
             
             foreach (dynamic obj in arr)
             {
                 DateTime dateTime = DateTime.ParseExact(obj.date_time.ToString(), "G", CultureInfo.InvariantCulture);
-                var position = ParseLocation(obj.location.ToString()); //new PointLatLng(double.Parse(obj.Latitude), double.Parse(obj.Longitude));
+                var position = ParseLocation(obj.location.ToString());
                 string gscanSn = GetGscan(obj.gscan_id.ToString());
-                Area area = GetArea(obj.area_id.ToString());
+                var area = GetArea(obj.area_id.ToString());
                 var material = GetMaterial(materialId:obj.material_id.ToString());
-                var detection = new Detection(dateTime, material[0], position, area, obj.suspect_id.ToString(), obj.plate_number.ToString(), gscanSn, obj.raman_output_id.ToString());
+                var detection = new Detection(dateTime, material[0], position, area[0], obj.suspect_id.ToString(), obj.plate_number.ToString(), gscanSn, obj.raman_output_id.ToString());
                 
                 detectionsList.Add(detection);
             }
@@ -243,14 +187,7 @@ namespace ControlApplication.Core.Networking
                 { "date_time", detection.DateTimeOfDetection.ToString("G", CultureInfo.InvariantCulture) }
             };
 
-            try
-            {
-                WebClient.UploadValues(new Uri(RemoteServerPath, "detection"), postData);
-            }
-            catch (WebException)
-            {
-                Console.WriteLine("Exception caught");
-            }
+            PostToDb("detection", postData);
         }
 
         /// <summary>
@@ -262,27 +199,15 @@ namespace ControlApplication.Core.Networking
         {
             var ids = new Dictionary<string, string>();
 
-            WebClient.QueryString = new NameValueCollection
-            {
-                {"material_name", detection.Material.Name}
-            };
-            var response = WebClient.DownloadString(new Uri(RemoteServerPath, "material"));
+            var response = GetFromDb("material", "material_name", detection.Material.Name);
             dynamic arr = JsonConvert.DeserializeObject(response);
             ids.Add("MaterialId", arr[0]._id.ToString());
 
-            WebClient.QueryString = new NameValueCollection
-            {
-                {"root_location", $"[{detection.Area.RootLocation.Lat},{detection.Area.RootLocation.Lng}]"}
-            };
-            response = WebClient.DownloadString(new Uri(RemoteServerPath, "area"));
+            response = GetFromDb("area", "root_location", $"[{detection.Area.RootLocation.Lat},{detection.Area.RootLocation.Lng}]");
             arr = JsonConvert.DeserializeObject(response);
             ids.Add("AreaId", arr[0]._id.ToString());
 
-            WebClient.QueryString = new NameValueCollection
-            {
-                {"gscan_sn", detection.GunId}
-            };
-            response = WebClient.DownloadString(new Uri(RemoteServerPath, "gscan"));
+            response = GetFromDb("gscan", "gscan_sn", detection.GunId);
             if (response.Equals("[]"))
                 ids.Add("GscanId", "");
             else
@@ -290,16 +215,70 @@ namespace ControlApplication.Core.Networking
                 arr = JsonConvert.DeserializeObject(response);
                 ids.Add("GscanId", arr[0]._id.ToString());
             }
-
-            WebClient.QueryString = new NameValueCollection
-            {
-                {"username", "lds"}
-            };
-            response = WebClient.DownloadString(new Uri(RemoteServerPath, "user"));
+            
+            response = GetFromDb("user", "username", "lds");
             arr = JsonConvert.DeserializeObject(response);
             ids.Add("UserId", arr[0]._id.ToString());
 
             return ids;
+        }
+
+        /// <summary>
+        /// Gets data from the DB and handles WebExeptions
+        /// </summary>
+        /// <param name="uriPath">URI Path</param>
+        /// <param name="key">The key to get value from</param>
+        /// <param name="value">The key value</param>
+        /// <returns>Response from DB</returns>
+        public string GetFromDb(string uriPath, string key = "", string value = "")
+        {
+            if (!string.IsNullOrEmpty(key) && !string.IsNullOrEmpty(value))
+            {
+                WebClient.QueryString = new NameValueCollection
+                {
+                    {key, value}
+                };
+            }
+            else
+            {
+                WebClient.QueryString = new NameValueCollection();
+            }
+
+            try
+            {
+                return WebClient.DownloadString(new Uri(RemoteServerPath, uriPath));
+            }
+            catch (WebException e)
+            {
+                //MessageBox.Show("Your session expired! please reload NT.", "Authentication failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Console.WriteLine("Exception caught: " + e.Message);
+                //Environment.Exit(-1);
+            }
+            finally
+            {
+                WebClient.QueryString = new NameValueCollection();
+            }
+
+            return "";
+        }
+
+        /// <summary>
+        /// Posts data to the DB and handles WebExeptions
+        /// </summary>
+        /// <param name="uriPath">URI Path</param>
+        /// <param name="postData">Data to upload</param>
+        /// <returns>Response</returns>
+        private string PostToDb(string uriPath, NameValueCollection postData)
+        {
+            try
+            {
+                var response = WebClient.UploadValues(new Uri(RemoteServerPath, uriPath), postData);
+                return Encoding.Default.GetString(response);
+            }
+            catch (WebException e)
+            {             
+                return e.Message;                
+            }
         }
 
         /// <summary>
@@ -317,8 +296,7 @@ namespace ControlApplication.Core.Networking
                 { "password", password },
             };
 
-            //try-catch
-            WebClient.UploadValues(new Uri(RemoteServerPath, "user"), postData);
+            PostToDb("user", postData);
         }
 
         /// <summary>
