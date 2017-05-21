@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -49,12 +51,17 @@ namespace ControlApplication.DesktopClient
         
         private void LoadDetections(object sender, RoutedEventArgs e)
         {
-            var detections = ServerConnectionManager.Instance.GetDetections().GroupBy(d => d.Position);
-
-            foreach (var detection in detections)
+            Task.Run(() =>
             {
-                AddMarker(detection.Key, detection.ToList());
-            }
+                Application.Current.Dispatcher.Invoke(() => CircularProgressBar.Visibility = Visibility.Visible);
+                var detections = ServerConnectionManager.Instance.GetDetections().GroupBy(d => d.Position);
+
+                foreach (var detection in detections)
+                {
+                    Application.Current.Dispatcher.Invoke(() => AddMarker(detection.Key, detection.ToList()));
+                }
+                Application.Current.Dispatcher.Invoke(() => CircularProgressBar.Visibility = Visibility.Hidden);
+            });
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
