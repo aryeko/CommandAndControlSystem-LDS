@@ -109,6 +109,7 @@ namespace ControlApplication.DesktopClient.Controls
         {
             var materialsToLoad = ServerConnectionManager.Instance.GetMaterial();
             var data = materialsToLoad.Select(material => material.Name).ToList();
+            data.Sort();
 
             MaterialComboBox.ItemsSource = data;
 

@@ -183,6 +183,7 @@ namespace ControlApplication.DesktopClient
         private void DbBtn_Click(object sender, RoutedEventArgs e)
         {
             var materials = ServerConnectionManager.Instance.GetMaterial();
+            materials.Sort();
 
             new Window
             {
