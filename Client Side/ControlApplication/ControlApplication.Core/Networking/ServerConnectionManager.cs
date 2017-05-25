@@ -9,6 +9,9 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ControlApplication.Core.Contracts;
+using ControlApplication.Core.Networking;
+using System.Runtime.Caching;
+using System.IO;
 using GMap.NET;
 using Newtonsoft.Json;
 
@@ -71,21 +74,19 @@ namespace ControlApplication.Core.Networking
         public List<Material> GetMaterial(string materialId = "", string name = "")
         {
             var materials = new List<Material>();
-            string response;
+            dynamic response;
             if (!string.IsNullOrEmpty(name))
             {
-                response = GetFromDb("material", "material_name", name);
+                response = GetCachedObject("material", "material_name", name);
             }
             else if(!string.IsNullOrEmpty(materialId))
             {
-                response = GetFromDb("material", "_id", materialId);
+                response = GetCachedObject("material", "_id", materialId);
             }
             else
                 response = GetFromDb("material");
 
-            dynamic arr = JsonConvert.DeserializeObject(response);
-
-            foreach (dynamic obj in arr)
+            foreach (dynamic obj in response)
             {
                 var materialType = (MaterialType) System.Enum.Parse(typeof(MaterialType), obj.type.ToString());
                 materials.Add(new Material(obj.name.ToString(), materialType, obj.cas.ToString()));
@@ -101,14 +102,12 @@ namespace ControlApplication.Core.Networking
         public List<Area> GetArea(string areaId = "")
         {
             var areas = new List<Area>();
-            var response = !string.IsNullOrEmpty(areaId) ? GetFromDb("area", "_id", areaId) : GetFromDb("area");
+            dynamic response = !string.IsNullOrEmpty(areaId) ? GetCachedObject("area", "_id", areaId) : GetFromDb("area");
 
-            dynamic arr = JsonConvert.DeserializeObject(response);
-
-            foreach (dynamic obj in arr)
+            foreach (dynamic obj in response)
             {
                 var areaType = (AreaType)System.Enum.Parse(typeof(AreaType), obj.area_type.ToString());
-                areas.Add(new Area(new PointLatLng(double.Parse(obj.root_location[0].ToString()), double.Parse(obj.root_location[1].ToString())), areaType, double.Parse(obj.radius.ToString())));
+                areas.Add(new Area(ParseLocation(obj.root_location.ToString()), areaType, double.Parse(obj.radius.ToString())));
             }
 
             return areas;
@@ -121,10 +120,12 @@ namespace ControlApplication.Core.Networking
         /// <returns></returns>
         public string GetGscan(string gscanId)
         {
-            var response = GetFromDb("gscan", "_id", gscanId);
-            dynamic arr = JsonConvert.DeserializeObject(response);
+            if (gscanId.Equals("no gscan"))
+                return "";
 
-            return arr[0].gscan_sn.ToString();
+            dynamic response = GetCachedObject("gscan", "_id", gscanId);
+
+            return response[0].gscan_sn.ToString();
         }
 
         /// <summary>
@@ -134,23 +135,33 @@ namespace ControlApplication.Core.Networking
         public List<Detection> GetDetections()
         {
             var detectionsList = new List<Detection>();
-            var response = GetFromDb("detection");
+            dynamic response = GetFromDb("detection");
 
-            dynamic arr = JsonConvert.DeserializeObject(response);
-            
-            foreach (dynamic obj in arr)
+            foreach (dynamic obj in response)
             {
                 DateTime dateTime = DateTime.ParseExact(obj.date_time.ToString(), "G", CultureInfo.InvariantCulture);
                 var position = ParseLocation(obj.location.ToString());
                 string gscanSn = GetGscan(obj.gscan_id.ToString());
+                string ramanOutput = GetRaman(obj.raman_output_id.ToString());
                 var area = GetArea(obj.area_id.ToString());
                 var material = GetMaterial(materialId:obj.material_id.ToString());
-                var detection = new Detection(dateTime, material[0], position, area[0], obj.suspect_id.ToString(), obj.plate_number.ToString(), gscanSn, obj.raman_output_id.ToString());
+                var detection = new Detection(dateTime, material[0], position, area[0], obj.suspect_id.ToString(), obj.plate_number.ToString(), gscanSn, ramanOutput);
                 
                 detectionsList.Add(detection);
             }
 
             return detectionsList;
+        }
+
+        private string GetRaman(string ramanOutput)
+        {
+            if (ramanOutput.Equals("no raman"))
+                return "";
+
+
+            return "";
+            //dynamic response = GetCachedObject("gscan", "_id", gscanId);
+            //return response[0].gscan_sn.ToString();
         }
 
         /// <summary>
@@ -199,28 +210,42 @@ namespace ControlApplication.Core.Networking
         {
             var ids = new Dictionary<string, string>();
 
-            var response = GetFromDb("material", "material_name", detection.Material.Name);
-            dynamic arr = JsonConvert.DeserializeObject(response);
-            ids.Add("MaterialId", arr[0]._id.ToString());
+            dynamic response = GetCachedObject("material", "material_name", detection.Material.Name);
+            ids.Add("MaterialId", response[0]._id.ToString());
 
-            response = GetFromDb("area", "root_location", $"[{detection.Area.RootLocation.Lat},{detection.Area.RootLocation.Lng}]");
-            arr = JsonConvert.DeserializeObject(response);
-            ids.Add("AreaId", arr[0]._id.ToString());
+            response = GetCachedObject("area", "root_location", $"[{detection.Area.RootLocation.Lat},{detection.Area.RootLocation.Lng}]");
+            ids.Add("AreaId", response[0]._id.ToString());
 
-            response = GetFromDb("gscan", "gscan_sn", detection.GunId);
-            if (response.Equals("[]"))
+            if (string.IsNullOrEmpty(detection.GunId))
                 ids.Add("GscanId", "");
             else
             {
-                arr = JsonConvert.DeserializeObject(response);
-                ids.Add("GscanId", arr[0]._id.ToString());
+                response = GetCachedObject("gscan", "gscan_sn", detection.GunId);
+                ids.Add("GscanId", response[0]._id.ToString());
             }
             
-            response = GetFromDb("user", "username", "lds");
-            arr = JsonConvert.DeserializeObject(response);
-            ids.Add("UserId", arr[0]._id.ToString());
+            response = GetCachedObject("user", "username", "lds");
+            ids.Add("UserId", response[0]._id.ToString());
 
             return ids;
+        }
+
+        /// <summary>
+        /// A generic method for getting and setting objects to the memory cache.
+        /// </summary>
+        /// <param name="uriPath">URI Path</param>
+        /// <param name="key">The key to get value from</param>
+        /// <param name="value">The key value</param>
+        /// <returns>An object of type dynamic</returns>
+        private dynamic GetCachedObject(string uriPath, string key = "", string value = "")
+        {
+            var response = CacheManager.GetObjectFromCache<dynamic>(value);
+            if (response == null)
+            {
+                response = GetFromDb(uriPath, key, value);
+                CacheManager.SetObjectToCache(value, 30, response);
+            }
+            return response;
         }
 
         /// <summary>
@@ -230,7 +255,7 @@ namespace ControlApplication.Core.Networking
         /// <param name="key">The key to get value from</param>
         /// <param name="value">The key value</param>
         /// <returns>Response from DB</returns>
-        public string GetFromDb(string uriPath, string key = "", string value = "")
+        public dynamic GetFromDb(string uriPath, string key = "", string value = "")
         {
             if (!string.IsNullOrEmpty(key) && !string.IsNullOrEmpty(value))
             {
@@ -246,20 +271,20 @@ namespace ControlApplication.Core.Networking
 
             try
             {
-                return WebClient.DownloadString(new Uri(RemoteServerPath, uriPath));
+                var response = WebClient.DownloadString(new Uri(RemoteServerPath, uriPath));
+                return JsonConvert.DeserializeObject(response);
             }
-            catch (WebException e)
+            catch (WebException)
             {
-                //MessageBox.Show("Your session expired! please reload NT.", "Authentication failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Console.WriteLine("Exception caught: " + e.Message);
-                //Environment.Exit(-1);
+                MessageBox.Show("Your session expired! please reload NT.", "Authentication failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Environment.Exit(-1);
             }
             finally
             {
                 WebClient.QueryString = new NameValueCollection();
             }
 
-            return "";
+            return null;
         }
 
         /// <summary>
