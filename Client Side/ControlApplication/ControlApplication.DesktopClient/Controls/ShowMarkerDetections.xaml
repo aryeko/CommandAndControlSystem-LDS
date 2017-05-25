@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ControlApplication.DesktopClient.Controls"
              mc:Ignorable="d" 
-             Height="NaN" Width="600">
+             Height="NaN" Width="650">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
@@ -28,7 +28,7 @@
                 <ColumnDefinition Width="3.5*"/>
                 <ColumnDefinition Width="3.5*"/>
                 <ColumnDefinition Width="5.5*"/>
-                <ColumnDefinition Width="2.5*"/>
+                <ColumnDefinition Width="3*"/>
             </Grid.ColumnDefinitions>
 
             <Label Grid.Row="0" Grid.Column="0" x:Name="LblDate" Content="Date" HorizontalAlignment="Center" VerticalAlignment="Stretch" FontWeight="Bold" />
