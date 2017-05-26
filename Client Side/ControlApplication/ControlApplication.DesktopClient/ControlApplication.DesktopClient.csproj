@@ -144,6 +144,7 @@
     <Compile Include="Controls\ZoomControl.xaml.cs">
       <DependentUpon>ZoomControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PollingManager.cs" />
     <Compile Include="Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
     </Compile>
