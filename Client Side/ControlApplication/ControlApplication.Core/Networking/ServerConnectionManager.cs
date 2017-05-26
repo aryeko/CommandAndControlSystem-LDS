@@ -21,7 +21,7 @@ namespace ControlApplication.Core.Networking
     /// A class that manages the Server connection and creates a single instance of <see cref="ServerConnectionManager"/> (Singelton)
     /// The class provides a detailed API for sessioned communication with the Server.
     /// </summary>
-    public class ServerConnectionManager : IDisposable
+    public class ServerConnectionManager : INtServerApi, IDisposable
     {
         /// <summary>
         /// The Remote Server Path
@@ -153,15 +153,20 @@ namespace ControlApplication.Core.Networking
             return detectionsList;
         }
 
-        private string GetRaman(string ramanOutput)
+        /// <summary>
+        /// gets a raman from the database using server's RESTful API
+        /// </summary>
+        /// <param name="ramanOutput"></param>
+        /// <returns></returns>
+        public string GetRaman(string ramanOutput)
         {
             if (ramanOutput.Equals("no raman"))
                 return "";
 
-
-            return "";
-            //dynamic response = GetCachedObject("gscan", "_id", gscanId);
-            //return response[0].gscan_sn.ToString();
+            //TODO: handle a real raman link
+            //dynamic response = GetCachedObject("raman", "_id", ramanOutput);
+            //return response[0]._id.ToString();
+            return "";  
         }
 
         /// <summary>
@@ -243,7 +248,7 @@ namespace ControlApplication.Core.Networking
             if (response == null)
             {
                 response = GetFromDb(uriPath, key, value);
-                CacheManager.SetObjectToCache(value, 30, response);
+                CacheManager.SetObjectToCache(value, response);
             }
             return response;
         }
@@ -255,7 +260,7 @@ namespace ControlApplication.Core.Networking
         /// <param name="key">The key to get value from</param>
         /// <param name="value">The key value</param>
         /// <returns>Response from DB</returns>
-        public dynamic GetFromDb(string uriPath, string key = "", string value = "")
+        private dynamic GetFromDb(string uriPath, string key = "", string value = "")
         {
             if (!string.IsNullOrEmpty(key) && !string.IsNullOrEmpty(value))
             {

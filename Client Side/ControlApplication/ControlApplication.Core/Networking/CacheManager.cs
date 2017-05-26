@@ -12,6 +12,11 @@ namespace ControlApplication.Core.Networking
         public static ObjectCache Cache { get; } = MemoryCache.Default;
 
         /// <summary>
+        /// How long to cache an object for.
+        /// </summary>
+        public const double CACHE_TIME_MINUTES = 60*24; //1 day
+
+        /// <summary>
         /// A generic method for getting objects to the memory cache.
         /// </summary>
         /// <typeparam name="T">The type of the object to be returned.</typeparam>
@@ -26,13 +31,12 @@ namespace ControlApplication.Core.Networking
         /// A generic method for setting objects to the memory cache.
         /// </summary>
         /// <param name="cacheItemName">The name to be used when storing this object in the cache.</param>
-        /// <param name="cacheTimeInMinutes">How long to cache this object for.</param>
         /// <param name="objectToCache">A parameterless function to call if the object isn't in the cache and you need to set it.</param>
-        public static void SetObjectToCache(string cacheItemName, int cacheTimeInMinutes, dynamic objectToCache)
+        public static void SetObjectToCache(string cacheItemName, dynamic objectToCache)
         {
             var policy = new CacheItemPolicy
             {
-                AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(cacheTimeInMinutes)
+                AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(CACHE_TIME_MINUTES)
             };
             Cache.Set(cacheItemName, objectToCache, policy);
         }
