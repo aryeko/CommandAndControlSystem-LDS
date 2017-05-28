@@ -70,7 +70,7 @@ namespace ControlApplication.DesktopClient.Controls.Markers
         {
             if(mDetections.Any(d => d.Material.MaterialType == MaterialType.Explosive))
                 return new Tuple<string, SolidColorBrush>("Red", Brushes.Red);
-            else if (mDetections.Any(d => d.Material.MaterialType == MaterialType.Narcotics))
+            else if (mDetections.Any(d => d.Material.MaterialType == MaterialType.Hazardous))
                 return new Tuple<string, SolidColorBrush>("Yellow", Brushes.Yellow);
             return new Tuple<string, SolidColorBrush>("Green", Brushes.Green);
         }

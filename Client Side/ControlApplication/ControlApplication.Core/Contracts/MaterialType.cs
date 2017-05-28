@@ -7,7 +7,7 @@
     {
         Supervision,
         Forbidden,
-        Narcotics,
+        Hazardous,
         Flameable,
         Explosive,
         Alcohol,

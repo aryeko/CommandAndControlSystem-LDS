@@ -29,7 +29,7 @@ namespace ControlApplication.DesktopClient
         private void ToDoFunc(object obj)
         {
             //Console.WriteLine("*****Getting all detections******");
-            Application.Current.Dispatcher.Invoke(()=> GetMainWindow().LoadDetections());
+            Application.Current.Dispatcher.Invoke(()=> GetMainWindow().LoadData());
         }
 
         public void Dispose()

@@ -59,16 +59,17 @@ namespace ControlApplication.DesktopClient
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
         }
 
-        internal void LoadDetections()
+        internal void LoadData()
         {
             Task.Run(() =>
             {
                 Application.Current.Dispatcher.Invoke(() => CircularProgressBar.Visibility = Visibility.Visible);
                 var detections = RemoteServerApi.GetDetections().GroupBy(d => d.Position);
-
+                var areas = RemoteServerApi.GetArea();
                 foreach (var detection in detections)
                 {
                     Application.Current.Dispatcher.Invoke(() => AddMarker(detection.Key, detection.ToList()));
+                    Application.Current.Dispatcher.Invoke(() => AddMarker(detection.Key, areas.ToList()));
                 }
                 Application.Current.Dispatcher.Invoke(() => CircularProgressBar.Visibility = Visibility.Hidden);
             });
@@ -82,7 +83,7 @@ namespace ControlApplication.DesktopClient
             this.GMapControl.SetPositionByKeywords("Israel, Jerusalem");
             ZoomControl.UpdateControl();
             
-            LoadDetections();
+            LoadData();
 
             //TODO: Start Hosted network with a button (handle the case when a client don't support Hosted network 
             //  _hostedNetwork.StartHostedNetwork();

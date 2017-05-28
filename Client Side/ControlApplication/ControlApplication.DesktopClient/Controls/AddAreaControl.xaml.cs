@@ -62,7 +62,7 @@ namespace ControlApplication.DesktopClient.Controls
 
                 if (CheckBoxSetWorkingArea.IsChecked.Value)
                 {
-                    (Application.Current.MainWindow as MainWindow).ActiveArea = newArea;
+                    (Application.Current.MainWindow as MainWindow).ActiveWorkingArea = newArea;
                 }
             }
             
