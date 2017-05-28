@@ -58,7 +58,12 @@ namespace ControlApplication.DesktopClient.Controls
                 var newArea = new Area(mClickPoint, (AreaType)Enum.Parse(typeof(AreaType), ComboAreaType.Text), mRadius);
                 ServerConnectionManager.Instance.AddArea(newArea);
 
-                //(Application.Current.MainWindow as MainWindow).AddMarker(mClickPoint, new[] { newArea });
+                (Application.Current.MainWindow as MainWindow).AddMarker(mClickPoint, new[] { newArea });
+
+                if (CheckBoxSetWorkingArea.IsChecked.Value)
+                {
+                    (Application.Current.MainWindow as MainWindow).ActiveArea = newArea;
+                }
             }
             
         }

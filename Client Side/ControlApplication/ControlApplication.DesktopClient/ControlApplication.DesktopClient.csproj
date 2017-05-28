@@ -85,6 +85,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\Markers\AreaMarker.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Controls\Markers\DetectionMarker.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -132,6 +136,9 @@
     </Compile>
     <Compile Include="Controls\CircularProgressBar.xaml.cs">
       <DependentUpon>CircularProgressBar.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Markers\AreaMarker.xaml.cs">
+      <DependentUpon>AreaMarker.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Markers\DetectionMarker.xaml.cs">
       <DependentUpon>DetectionMarker.xaml</DependentUpon>
@@ -196,11 +203,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Drawable\MapMarker_Blue.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Drawable\anti_logo.png" />
   </ItemGroup>
   <ItemGroup>
@@ -209,6 +211,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Drawable\MapMarker_Yellow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Drawable\MapMarker_Area.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

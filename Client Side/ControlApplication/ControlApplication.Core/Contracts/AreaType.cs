@@ -8,6 +8,7 @@ namespace ControlApplication.Core.Contracts
 {
     public enum AreaType
     {
+        Undefined,
         RoadBlock,
         Airport
     }

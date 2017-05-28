@@ -41,10 +41,14 @@ namespace ControlApplication.DesktopClient
 
         internal INtServerApi RemoteServerApi => ServerConnectionManager.Instance;
 
+        internal Area ActiveWorkingArea { get; set; }
+
         public MainWindow()
         {
             Login fLogin = new Login();
             fLogin.ShowDialog();
+
+            ActiveWorkingArea = new Area(new PointLatLng(0,0), AreaType.Undefined, 0);
 
             this._hostedNetwork = new HostedNetwork();
             InitializeComponent();
@@ -101,16 +105,16 @@ namespace ControlApplication.DesktopClient
             }.ShowDialog();
         }
 
-        internal void AddMarker(Point p, IEnumerable<Detection> detections)
+        internal void AddMarker(Point p, IEnumerable<IMarkerable> markerables)
         {
-            AddMarker(GMapControl.FromLocalToLatLng((int) p.X, (int) p.Y), detections);
+            AddMarker(GMapControl.FromLocalToLatLng((int) p.X, (int) p.Y), markerables);
         }
 
-        internal void AddMarker(PointLatLng p, IEnumerable<Detection> detections)
+        internal void AddMarker(PointLatLng p, IEnumerable<IMarkerable> markerables)
         {
-            foreach (var detection in detections)
+            foreach (var markerable in markerables)
             {
-                detection.Accept(new MarkersManager(GMapControl));
+                markerable.Accept(new MarkersManager(GMapControl));
             }
         }
 
@@ -227,7 +231,7 @@ namespace ControlApplication.DesktopClient
             new Window
             {
                 Title = "Add new area",
-                Content = new AddDetectionControl(new Point(e.GetPosition(this).X, e.GetPosition(this).Y)),
+                Content = new AddAreaControl(new Point(e.GetPosition(this).X, e.GetPosition(this).Y)),
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 SizeToContent = SizeToContent.WidthAndHeight,
                 ResizeMode = ResizeMode.NoResize
