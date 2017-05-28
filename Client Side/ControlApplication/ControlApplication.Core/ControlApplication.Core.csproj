@@ -45,6 +45,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
@@ -63,11 +64,14 @@
     <Compile Include="Contracts\IMarkerableVisitor.cs" />
     <Compile Include="Contracts\Material.cs" />
     <Compile Include="Contracts\MaterialType.cs" />
+    <Compile Include="Networking\CacheManager.cs" />
     <Compile Include="Networking\CookieAwareWebClient.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Networking\HostedNetwork.cs" />
+    <Compile Include="Networking\INtServerApi.cs" />
     <Compile Include="Networking\ServerConnectionManager.cs" />
+    <Compile Include="Networking\ServerProxy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

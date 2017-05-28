@@ -14,7 +14,7 @@
             <ColumnDefinition Width="3.5*"/>
             <ColumnDefinition Width="3.5*"/>
             <ColumnDefinition Width="5.5*"/>
-            <ColumnDefinition Width="2.5*"/>
+            <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
 
 
@@ -24,7 +24,7 @@
         <Label Grid.Row="0" Grid.Column="3" x:Name="dataPlateID" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
         <Label Grid.Row="0" Grid.Column="4" x:Name="dataGunID" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
         <Label Grid.Row="0" Grid.Column="5" x:Name="dataMaterial" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
-        <Label Grid.Row="0" Grid.Column="6" x:Name="openRaman" Content="LINK" FontStyle="Italic" Foreground="CornflowerBlue" HorizontalAlignment="Center" VerticalAlignment="Stretch" MouseUp="OpenRaman_OnMouseDoubleClick"/>
+        <TextBlock Grid.Row="0" Grid.Column="6" x:Name="dataLinkRaman" HorizontalAlignment="Center" VerticalAlignment="Stretch" Margin="0,5,0,0" Text="No Raman"/>
         
     </Grid>
     

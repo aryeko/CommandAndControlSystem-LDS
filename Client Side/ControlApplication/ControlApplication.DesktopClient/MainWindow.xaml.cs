@@ -37,6 +37,10 @@ namespace ControlApplication.DesktopClient
         /// </summary>
         private readonly HostedNetwork _hostedNetwork;
 
+        private PollingManager PollingManager { get; set; }
+
+        internal INtServerApi RemoteServerApi => ServerConnectionManager.Instance;
+
         public MainWindow()
         {
             Login fLogin = new Login();
@@ -44,18 +48,19 @@ namespace ControlApplication.DesktopClient
 
             this._hostedNetwork = new HostedNetwork();
             InitializeComponent();
+            
             Loaded += MainWindow_Loaded;
-            Loaded += LoadDetections;
             MouseWheel += MainWindow_MouseWheel;
+            PollingManager = new PollingManager();
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
         }
-        
-        private void LoadDetections(object sender, RoutedEventArgs e)
+
+        internal void LoadDetections()
         {
             Task.Run(() =>
             {
                 Application.Current.Dispatcher.Invoke(() => CircularProgressBar.Visibility = Visibility.Visible);
-                var detections = ServerConnectionManager.Instance.GetDetections().GroupBy(d => d.Position);
+                var detections = RemoteServerApi.GetDetections().GroupBy(d => d.Position);
 
                 foreach (var detection in detections)
                 {
@@ -72,9 +77,11 @@ namespace ControlApplication.DesktopClient
             GMap.NET.GMaps.Instance.Mode = GMap.NET.AccessMode.ServerOnly;
             this.GMapControl.SetPositionByKeywords("Israel, Jerusalem");
             ZoomControl.UpdateControl();
+            
+            LoadDetections();
 
             //TODO: Start Hosted network with a button (handle the case when a client don't support Hosted network 
-          //  _hostedNetwork.StartHostedNetwork();
+            //  _hostedNetwork.StartHostedNetwork();
         }
         
         private void MainWindow_MouseWheel(object sender, MouseWheelEventArgs e)
@@ -180,7 +187,7 @@ namespace ControlApplication.DesktopClient
 
         private void DbBtn_Click(object sender, RoutedEventArgs e)
         {
-            var materials = ServerConnectionManager.Instance.GetMaterial();
+            var materials = RemoteServerApi.GetMaterial();
 
             new Window
             {

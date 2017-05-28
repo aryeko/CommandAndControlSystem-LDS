@@ -43,7 +43,7 @@ namespace ControlApplication.DesktopClient
 
         private void loginBtn_Click(object sender, RoutedEventArgs e)
         {
-            var loginSuccess = ServerConnectionManager.Instance.Login(usernameBox.Text, passwordBox.Password);
+            var loginSuccess = (Application.Current.MainWindow as MainWindow).RemoteServerApi.Login(usernameBox.Text, passwordBox.Password);
             if (loginSuccess)
             {
                 MessageBox.Show("Login sucess! Welcome to NT Command Application", "Welcome to NT", MessageBoxButton.OK, MessageBoxImage.Asterisk);

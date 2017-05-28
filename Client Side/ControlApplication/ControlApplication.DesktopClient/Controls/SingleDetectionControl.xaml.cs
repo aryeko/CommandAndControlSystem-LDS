@@ -30,11 +30,19 @@ namespace ControlApplication.DesktopClient.Controls
             dataTime.Content = detection.DateTimeOfDetection.ToString("T");
             dataSuspectedID.Content = detection.SuspectId;
             dataPlateID.Content = detection.SuspectPlateId;
-            dataGunID.Content = detection.GunId;
             dataMaterial.Content = detection.Material.Name;
+            dataGunID.Content = string.IsNullOrEmpty(detection.GunId) ? "No G-Scan" : detection.GunId;
+            if (!string.IsNullOrEmpty(detection.RamanId))
+            {
+                dataLinkRaman.Text = "LINK";
+                dataLinkRaman.TextDecorations = TextDecorations.Underline;
+                dataLinkRaman.FontStyle = FontStyles.Italic;
+                dataLinkRaman.Foreground = Brushes.CornflowerBlue;
+                dataLinkRaman.MouseUp += OpenRaman_OnMouseClick;
+            }
         }
 
-        private void OpenRaman_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void OpenRaman_OnMouseClick(object sender, MouseButtonEventArgs e)
         {
             throw new NotImplementedException();
         }

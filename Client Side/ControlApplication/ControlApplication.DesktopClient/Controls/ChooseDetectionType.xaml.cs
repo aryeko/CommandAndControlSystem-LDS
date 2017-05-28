@@ -79,7 +79,7 @@ namespace ControlApplication.DesktopClient.Controls
             Task.Run(() =>
             {
                 mainWindow.Dispatcher.Invoke(() => mainWindow.CircularProgressBar.Visibility = Visibility.Visible);
-                var detectionsToShow = ServerConnectionManager.Instance.GetDetections().Where(d => d.Material.IsContainsMaterialType(cbValues));
+                var detectionsToShow = GetMainWindow().RemoteServerApi.GetDetections().Where(d => d.Material.IsContainsMaterialType(cbValues));
 
                 foreach (var detection in detectionsToShow)
                     mainWindow.Dispatcher.Invoke(()=> mainWindow.AddMarker(detection.Position, new List<Detection> { detection }));
