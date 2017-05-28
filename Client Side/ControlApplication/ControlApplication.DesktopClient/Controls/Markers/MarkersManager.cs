@@ -35,7 +35,12 @@ namespace ControlApplication.DesktopClient.Controls.Markers
 
         public void AddMarker(Area area)
         {
-            throw new NotImplementedException();
+            var marker = new GMapMarker(area.RootLocation);
+            {
+                var s = new AreaMarker(marker, area);
+                marker.Shape = s;
+            }
+            mMapControl.Markers.Add(marker);
         }
     }
 }
