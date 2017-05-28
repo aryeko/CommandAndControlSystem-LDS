@@ -17,6 +17,7 @@ using ControlApplication.Core;
 using ControlApplication.Core.Contracts;
 using ControlApplication.Core.Networking;
 using ControlApplication.DesktopClient.Controls;
+using ControlApplication.DesktopClient.Controls.Markers;
 using GMap.NET;
 using GMap.NET.WindowsForms;
 using GMapMarker = GMap.NET.WindowsPresentation.GMapMarker;
@@ -100,19 +101,9 @@ namespace ControlApplication.DesktopClient
 
         internal void AddMarker(PointLatLng p, IEnumerable<Detection> detections)
         {
-            var exsistingMarker = GMapControl.Markers.SingleOrDefault(m => m.Position.Equals(p));
-            if (exsistingMarker != null)
+            foreach (var detection in detections)
             {
-                ((CustomMarker)exsistingMarker.Shape).AddDetections(detections);
-            }
-            else
-            {
-                var marker = new GMapMarker(p);
-                {
-                    var s = new CustomMarker(this, marker, detections);
-                    marker.Shape = s;
-                }
-                GMapControl.Markers.Add(marker);
+                detection.Accept(new MarkersManager(GMapControl));
             }
         }
 
@@ -178,6 +169,13 @@ namespace ControlApplication.DesktopClient
                 AddPointBtn.Background = Brushes.CornflowerBlue;
                 AddPointBtn.ToolTip = "Press the button to add a manual detection";
             }
+
+            if (Equals(AddAreaBtn.Background, Brushes.DarkBlue))
+            {
+                GMapControl.MouseDoubleClick -= PopAddAreaWindow;
+                AddAreaBtn.Background = Brushes.CornflowerBlue;
+                AddAreaBtn.ToolTip = "Press the button to add an area";
+            }
         }
 
         private void DbBtn_Click(object sender, RoutedEventArgs e)
@@ -188,6 +186,41 @@ namespace ControlApplication.DesktopClient
             {
                 Title = "Show Materials",
                 Content = new MaterialsList(materials),
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                SizeToContent = SizeToContent.WidthAndHeight,
+                ResizeMode = ResizeMode.NoResize
+            }.ShowDialog();
+        }
+
+        private void AddAreaBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (Equals(AddAreaBtn.Background, Brushes.CornflowerBlue))
+            {
+                GMapControl.MouseDoubleClick += PopAddAreaWindow;
+                AddAreaBtn.Background = Brushes.DarkBlue;
+                AddAreaBtn.ToolTip = "Double click on the map to add an area";
+            }
+            else
+            {
+                GMapControl.MouseDoubleClick -= PopAddAreaWindow;
+                AddAreaBtn.Background = Brushes.CornflowerBlue;
+                AddAreaBtn.ToolTip = "Press the button to add aan area";
+            }
+
+            if (Equals(AddPointBtn.Background, Brushes.DarkBlue))
+            {
+                GMapControl.MouseDoubleClick -= PopAddDetectionWindow;
+                AddPointBtn.Background = Brushes.CornflowerBlue;
+                AddPointBtn.ToolTip = "Press the button to add a manual detection";
+            }
+        }
+
+        private void PopAddAreaWindow(object sender, MouseButtonEventArgs e)
+        {
+            new Window
+            {
+                Title = "Add new area",
+                Content = new AddDetectionControl(new Point(e.GetPosition(this).X, e.GetPosition(this).Y)),
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 SizeToContent = SizeToContent.WidthAndHeight,
                 ResizeMode = ResizeMode.NoResize

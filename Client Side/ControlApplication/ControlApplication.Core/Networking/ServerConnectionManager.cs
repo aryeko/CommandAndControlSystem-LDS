@@ -108,7 +108,7 @@ namespace ControlApplication.Core.Networking
             foreach (dynamic obj in arr)
             {
                 var areaType = (AreaType)System.Enum.Parse(typeof(AreaType), obj.area_type.ToString());
-                areas.Add(new Area(new PointLatLng(double.Parse(obj.root_location[0].ToString()), double.Parse(obj.root_location[1].ToString())), areaType, double.Parse(obj.radius.ToString())));
+                areas.Add(new Area(ParseLocation(obj.root_location.ToString()), areaType, double.Parse(obj.radius.ToString())));
             }
 
             return areas;
@@ -188,6 +188,22 @@ namespace ControlApplication.Core.Networking
             };
 
             PostToDb("detection", postData);
+        }
+
+        /// <summary>
+        /// Adds a new area to the database using server's RESTful API
+        /// </summary>
+        /// <param name="newArea">An area to add</param>
+        public void AddArea(Area newArea)
+        {
+            var postData = new NameValueCollection
+            {
+                { "area_type", newArea.AreaType.ToString() },
+                { "root_location", newArea.RootLocation.ToString() },
+                { "radius", newArea.Radius.ToString() },
+            };
+
+            PostToDb("area", postData);
         }
 
         /// <summary>

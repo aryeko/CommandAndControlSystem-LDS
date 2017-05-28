@@ -69,6 +69,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Controls\AddAreaControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\AddDetectionControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -81,7 +85,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\CustomMarker.xaml">
+    <Page Include="Controls\Markers\DetectionMarker.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -117,6 +121,9 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controls\AddAreaControl.xaml.cs">
+      <DependentUpon>AddAreaControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\AddDetectionControl.xaml.cs">
       <DependentUpon>AddDetectionControl.xaml</DependentUpon>
     </Compile>
@@ -126,9 +133,10 @@
     <Compile Include="Controls\CircularProgressBar.xaml.cs">
       <DependentUpon>CircularProgressBar.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\CustomMarker.xaml.cs">
-      <DependentUpon>CustomMarker.xaml</DependentUpon>
+    <Compile Include="Controls\Markers\DetectionMarker.xaml.cs">
+      <DependentUpon>DetectionMarker.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Markers\MarkersManager.cs" />
     <Compile Include="Controls\MaterialsList.xaml.cs">
       <DependentUpon>MaterialsList.xaml</DependentUpon>
     </Compile>
@@ -193,6 +201,13 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Drawable\anti_logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Drawable\MapMarker_Green.png" />
+    <Resource Include="Drawable\MapMarker_Red.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Drawable\MapMarker_Yellow.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
