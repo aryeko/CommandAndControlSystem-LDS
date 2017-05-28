@@ -7,7 +7,7 @@ namespace ControlApplication.Core.Contracts
     /// This calss represents a detection
     /// TODO: Overload constructors for default values, i.e. auto date time
     /// </summary>
-    public class Detection
+    public class Detection : IMarkerable
     {
         /// <summary>
         /// The date of the detection
@@ -71,6 +71,11 @@ namespace ControlApplication.Core.Contracts
             SuspectPlateId = suspectPlateId;
             GunId = gunId;
             RamanId = ramanId;
+        }
+
+        public void Accept(IMarkerableVisitor visitor)
+        {
+            visitor.AddMarker(this);
         }
     }
 }

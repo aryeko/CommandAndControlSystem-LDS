@@ -7,7 +7,7 @@ using GMap.NET;
 
 namespace ControlApplication.Core.Contracts
 {
-    public class Area
+    public class Area : IMarkerable
     {
         public PointLatLng RootLocation { get; }
 
@@ -20,6 +20,11 @@ namespace ControlApplication.Core.Contracts
             RootLocation = rootLocation;
             AreaType = areaType;
             Radius = radius;
+        }
+
+        public void Accept(IMarkerableVisitor visitor)
+        {
+            visitor.AddMarker(this);
         }
     }
 }
