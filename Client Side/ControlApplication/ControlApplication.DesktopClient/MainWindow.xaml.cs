@@ -75,6 +75,25 @@ namespace ControlApplication.DesktopClient
             });
         }
 
+        internal void LoadDataFromClients()
+        {
+            Task.Run(() =>
+            {
+                Application.Current.Dispatcher.Invoke(() => CircularProgressBar.Visibility = Visibility.Visible);
+                var gscansManager = new GscansClientsManager();
+                var clients = gscansManager.GetConnectedDevices();
+                foreach (var client in clients)
+                {
+                    var cliendDetections = gscansManager.GetDeviceDetections(client, ActiveWorkingArea).GroupBy(d => d.Position);
+                    foreach (var cliendDetection in cliendDetections)
+                    {
+                        Application.Current.Dispatcher.Invoke(() => AddMarker(cliendDetection.Key, cliendDetection));
+                    }
+                }
+                Application.Current.Dispatcher.Invoke(() => CircularProgressBar.Visibility = Visibility.Hidden);
+            });
+        }
+
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             // Initialize map:
