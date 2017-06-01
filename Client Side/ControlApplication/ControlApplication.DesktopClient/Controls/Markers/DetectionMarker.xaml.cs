@@ -49,7 +49,7 @@ namespace ControlApplication.DesktopClient.Controls.Markers
                 BorderThickness = new Thickness(2),
                 Padding = new Thickness(5),
                 FontSize = 22,
-                Content = string.Join(" - ", mDetections.Select(d => d.Material.MaterialType).Distinct())
+                Content = string.Join(" - ", mDetections.Select(d => d.Material.MaterialType).Distinct()),
             };
             mPopup.Child = mLabel;
         }
@@ -61,9 +61,10 @@ namespace ControlApplication.DesktopClient.Controls.Markers
 
         public void AddDetections(IEnumerable<Detection> detections)
         {
-            mDetections = mDetections.Concat(detections).ToList();
+            mDetections = mDetections.Concat(detections.Except(mDetections));
             mLabel.Content = string.Join(" - ", mDetections.Select(d => d.Material.MaterialType).Distinct());
             mLabel.Background = GetBrush().Item2;
+            markerIcon.Source = new BitmapImage(new Uri($"/ControlApplication.DesktopClient;component/Drawable/MapMarker_{GetBrush().Item1}.png", UriKind.Relative));
         }
 
         private Tuple<string,SolidColorBrush> GetBrush()
