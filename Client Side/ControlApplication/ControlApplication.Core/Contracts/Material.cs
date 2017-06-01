@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ControlApplication.Core.Contracts
@@ -6,7 +7,7 @@ namespace ControlApplication.Core.Contracts
     /// <summary>
     /// This class represents abstract material
     /// </summary>
-    public class Material
+    public class Material : IEquatable<Material>
     {
         /// <summary>
         /// The name of the material
@@ -39,6 +40,17 @@ namespace ControlApplication.Core.Contracts
         public bool IsContainsMaterialType(List<string> materialTypeList)
         {
             return materialTypeList.Any(materialType => MaterialType.ToString().Equals(materialType));
+        }
+
+        public bool Equals(Material other)
+        {
+            if (other == null) return false;
+            return Cas == other.Cas;
+        }
+
+        public override int GetHashCode()
+        {
+            return Cas.GetHashCode();
         }
     }
 }
