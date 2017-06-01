@@ -1,5 +1,5 @@
 # Welcome!
-###Command And Control System - Cooperation with LDS (Laser Detect Systems)
+### Command And Control System - Cooperation with LDS (Laser Detect Systems)
 JCE - Software Engineering - Final project
 
 ![Project Logo](https://github.com/aryeko/CommandAndControlSystem-LDS/blob/master/Documents/Pictures/LDS/LDS%20logo.jpg)
@@ -47,4 +47,4 @@ This project is developed as part of the requirements for our [Final SE Project]
 - [Sprint 9 - Source Substance Feature](https://github.com/aryeko/CommandAndControlSystem-LDS/wiki/Sprint-9)
 
 
-##Please visit our [Wiki](https://github.com/aryeko/CommandAndControlSystem-LDS/wiki) for further info
+## Please visit our [Wiki](https://github.com/aryeko/CommandAndControlSystem-LDS/wiki) for further info
