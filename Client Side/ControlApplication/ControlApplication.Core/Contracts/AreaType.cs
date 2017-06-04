@@ -10,6 +10,8 @@ namespace ControlApplication.Core.Contracts
     {
         Undefined,
         RoadBlock,
-        Airport
+        Airport,
+        Railway,
+        Port
     }
 }
