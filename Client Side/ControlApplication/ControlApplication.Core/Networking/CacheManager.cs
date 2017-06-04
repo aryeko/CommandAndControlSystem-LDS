@@ -14,7 +14,7 @@ namespace ControlApplication.Core.Networking
         /// <summary>
         /// How long to cache an object for.
         /// </summary>
-        public const double CACHE_TIME_MINUTES = 60*24; //1 day
+        public const double CacheTimeHours = 24; //1 day
 
         /// <summary>
         /// A generic method for getting objects to the memory cache.
@@ -36,7 +36,7 @@ namespace ControlApplication.Core.Networking
         {
             var policy = new CacheItemPolicy
             {
-                AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(CACHE_TIME_MINUTES)
+                AbsoluteExpiration = DateTimeOffset.Now.AddHours(CacheTimeHours)
             };
             Cache.Set(cacheItemName, objectToCache, policy);
         }

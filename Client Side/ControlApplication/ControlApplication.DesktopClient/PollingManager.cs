@@ -10,11 +10,11 @@ namespace ControlApplication.DesktopClient
         /// Timer interval for getting all detections
         /// </summary>
         private Timer Timer { get; set; }
-        internal const double TIME_INTERVAL_MINUTES = 0.2;
+        internal const double TimeIntervalMinutes = 2;
 
         public PollingManager()
         {
-            Timer = new Timer(ToDoFunc, null, TimeSpan.FromMinutes(TIME_INTERVAL_MINUTES), TimeSpan.FromMinutes(TIME_INTERVAL_MINUTES));
+            Timer = new Timer(ToDoFunc, null, TimeSpan.FromMinutes(TimeIntervalMinutes), TimeSpan.FromMinutes(TimeIntervalMinutes));
         }
 
         /// <summary>
