@@ -8,7 +8,7 @@
         WindowStartupLocation ="CenterScreen"
         ResizeMode="NoResize"
         mc:Ignorable="d"
-        Title="NT Login" Height="229.6" Width="554.4">
+        Title="Laser Detect Systems - NT Login" Height="229.6" Width="554.4" Icon="Drawable/logo.png">
     <Grid Margin="0,-10,-2,7" RenderTransformOrigin="0.5,0.5">
         <Grid.RenderTransform>
             <TransformGroup>

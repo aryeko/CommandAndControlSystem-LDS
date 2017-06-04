@@ -27,8 +27,8 @@
                 <ColumnDefinition Width="5*"/>
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="0" x:Name="BtnCancel" Content="Cancel" HorizontalAlignment="Stretch" Background="CornflowerBlue" FontStyle="Oblique" Foreground="White" VerticalAlignment="Stretch" Margin="5,5,5,5" Click="BtnCancel_Click"/>
-            <Button Grid.Column="1" x:Name="BtnSubmit" Content="Submit" HorizontalAlignment="Stretch" Background="CornflowerBlue" FontStyle="Oblique" Foreground="White" VerticalAlignment="Stretch" Margin="5,5,5,5" Click="BtnSubmit_Click"/>
+            <Button Grid.Column="0" x:Name="BtnCancel" Content="Cancel" HorizontalAlignment="Stretch" Background="CornflowerBlue" Foreground="White" VerticalAlignment="Stretch" Margin="5,5,5,5" Click="BtnCancel_Click"/>
+            <Button Grid.Column="1" x:Name="BtnSubmit" Content="Submit" HorizontalAlignment="Stretch" Background="CornflowerBlue" Foreground="White" VerticalAlignment="Stretch" Margin="5,5,5,5" Click="BtnSubmit_Click"/>
         </Grid>
     </Grid>
 </UserControl>

@@ -215,6 +215,12 @@
   <ItemGroup>
     <Resource Include="Drawable\MapMarker_Area.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Drawable\logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Drawable\LDS_LOGO.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(SolutionDir)Certificates\*" "$(ProjectDir)$(OutDir)"</PostBuildEvent>
