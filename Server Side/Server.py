@@ -139,9 +139,14 @@ def handle_area_request():
 	verify_user_session()
 	if request.method == 'GET':
 		# here we want to get the value of user (i.e. ?user=some-value)
+		area_id = request.args.get('_id')
 		area_type = request.args.get('area_type')
 		area_root_location = request.form.get('root_location')
-		if area_root_location is not None:
+		if area_id is not None:
+			parsed_id = loads(area_id)
+			print("retrieving area by id: ", parsed_id)
+			areas = dbHandler.get_areas({'_id': parsed_id})
+		elif area_root_location is not None:
 			print("retrieving area by root location: ", area_root_location)
 			areas = dbHandler.get_areas({'root_location': area_root_location})
 		elif area_type is not None:
