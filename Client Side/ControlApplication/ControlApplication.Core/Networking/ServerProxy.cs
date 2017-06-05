@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,20 +8,24 @@ using ControlApplication.Core.Contracts;
 
 namespace ControlApplication.Core.Networking
 {
-    /*
-    public class ServerProxy : INtServerApi
+    internal class ServerProxy : INtServerApi
     {
 
-        private INtServerApi _realServerApi;
+        private readonly INtServerApi _realServerApi;
 
         public ServerProxy(INtServerApi realServerApi)
         {
-            this._realServerApi = realServerApi;
+            _realServerApi = realServerApi;
         }
 
         public bool Login(string username, string password)
         {
             return _realServerApi.Login(username, password);
+        }
+
+        public void AddUser(string fullName, string userName, string password)
+        {
+            _realServerApi.AddUser(fullName, userName, password);
         }
 
         public List<Material> GetMaterial(string materialId = "", string name = "")
@@ -29,19 +34,18 @@ namespace ControlApplication.Core.Networking
             dynamic response;
             if (!string.IsNullOrEmpty(name))
             {
-                response = GetCachedObject(name);
+                response = GetObject("material", "material_name", name);
             }
             else if (!string.IsNullOrEmpty(materialId))
             {
-                response = GetCachedObject(materialId);
+                response = GetObject("material", "_id", materialId);
             }
             else
                 return _realServerApi.GetMaterial();
 
             foreach (dynamic obj in response)
-            {
-                var materialType = (MaterialType)System.Enum.Parse(typeof(MaterialType), obj.type.ToString());
-                materials.Add(new Material(obj.name.ToString(), materialType, obj.cas.ToString()));
+            {   
+                materials.Add(ServerObjectConverter.ConvertMaterial(obj));
             }
 
             return materials;
@@ -49,34 +53,99 @@ namespace ControlApplication.Core.Networking
 
         public List<Area> GetArea(string areaId = "")
         {
-            if (!string.IsNullOrEmpty(areaId))
+            if (string.IsNullOrEmpty(areaId))
+                return _realServerApi.GetArea();
+
+            var areas = new List<Area>();
+            dynamic response = GetObject("area", "_id", areaId);
+
+            foreach (dynamic obj in response)
             {
-                var area = GetCachedObject<Area>(areaId);
-                if (area == null)
-                {
-                    area = _realServerApi.GetArea(areaId).FirstOrDefault();
-                }
+                areas.Add(ServerObjectConverter.ConvertArea(obj));
             }
+
+            return areas;
         }
 
-        public string GetGscan(string gscanId)
+        public List<string> GetGscan(string gscanId)
         {
-            throw new NotImplementedException();
+            dynamic response;
+            if (gscanId.Equals("no gscan"))
+                return new List<string>() {""};
+
+            if (!string.IsNullOrEmpty(gscanId))
+                response = GetObject("gscan", "_id", gscanId);
+            else
+            {
+                return _realServerApi.GetGscan();
+            }
+
+            return ServerObjectConverter.ConvertGscan(response);
         }
 
         public List<Detection> GetDetections()
         {
-            throw new NotImplementedException();
+            var detectionsList = new List<Detection>();
+            dynamic response = _realServerApi.GetObject("detection");
+
+            foreach (dynamic obj in response)
+            {
+                var gscanSn = GetGscan(obj.gscan_id.ToString());
+                var ramanOutput = GetRaman(obj.raman_output_id.ToString());
+                var area = GetArea(obj.area_id.ToString());
+                var material = GetMaterial(materialId: obj.material_id.ToString());
+                detectionsList.Add(ServerObjectConverter.ConvertDetection(obj, material[0], area[0], gscanSn[0], ramanOutput));
+            }
+
+            return detectionsList;
         }
 
         public string GetRaman(string ramanOutput)
         {
-            throw new NotImplementedException();
+            if (ramanOutput.Equals("no raman"))
+                return "";
+            return "";
         }
 
-        public void AddDetection(Detection detection)
+        public void AddDetection(Detection detection, Dictionary<string, string> idsDictionary = null)
         {
-            throw new NotImplementedException();
+            if(idsDictionary == null)
+                idsDictionary = GetAllDbIds(detection);
+            _realServerApi.AddDetection(detection, idsDictionary);
+        }
+
+        public void AddArea(Area newArea)
+        {
+            _realServerApi.AddArea(newArea);
+        }
+
+        /// <summary>
+        /// Gets all the IDs from a detection in order to add a detection to DB using forein keys
+        /// </summary>
+        /// <param name="detection">The detection to add</param>
+        /// <returns></returns>
+        private Dictionary<string, string> GetAllDbIds(Detection detection)
+        {
+            var ids = new Dictionary<string, string>();
+
+            dynamic response = GetObject("material", "material_name", detection.Material.Name);
+            ids.Add("MaterialId", response[0]._id.ToString());
+
+            response = GetObject("area", "root_location", $"[{detection.Area.RootLocation.Lat},{detection.Area.RootLocation.Lng}]");
+            ids.Add("AreaId", response[0]._id.ToString());
+
+            if (string.IsNullOrEmpty(detection.GunId))
+                ids.Add("GscanId", "");
+            else
+            {
+                response = GetObject("gscan", "gscan_sn", detection.GunId);
+                ids.Add("GscanId", response[0]._id.ToString());
+            }
+
+            response = GetObject("user", "username", "lds");
+            ids.Add("UserId", response[0]._id.ToString());
+
+            return ids;
         }
 
         /// <summary>
@@ -86,28 +155,15 @@ namespace ControlApplication.Core.Networking
         /// <param name="key">The key to get value from</param>
         /// <param name="value">The key value</param>
         /// <returns>An object of type dynamic</returns>
-        private T GetCachedObject<T>(string value = "")
-        {
-            return CacheManager.GetObjectFromCache<T>(value);
-        }
-
-        /// <summary>
-        /// A generic method for getting and setting objects to the memory cache.
-        /// </summary>
-        /// <param name="uriPath">URI Path</param>
-        /// <param name="key">The key to get value from</param>
-        /// <param name="value">The key value</param>
-        /// <returns>An object of type dynamic</returns>
-        private dynamic SetCachedObject(dynamic value, string key = "")
+        public dynamic GetObject(string uriPath, string key = "", string value = "")
         {
             var response = CacheManager.GetObjectFromCache<dynamic>(value);
             if (response == null)
             {
-                response = _realServerApi.GetFromDb(uriPath, key, value);
-                CacheManager.SetObjectToCache(key, response);
+                response = _realServerApi.GetObject(uriPath, key, value);
+                CacheManager.SetObjectToCache(value, response);
             }
             return response;
         }
     }
-    */
 }

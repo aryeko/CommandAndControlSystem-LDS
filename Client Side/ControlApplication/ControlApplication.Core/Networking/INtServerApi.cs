@@ -18,6 +18,14 @@ namespace ControlApplication.Core.Networking
         bool Login(string username, string password);
 
         /// <summary>
+        /// Adds a user to the database using server's RESTful API
+        /// </summary>
+        /// <param name="fullName">user's full name</param>
+        /// <param name="userName">the requested username to add</param>
+        /// <param name="password">the plain password</param>
+        void AddUser(string fullName, string userName, string password);
+
+        /// <summary>
         /// gets materials from the database using server's RESTful API
         /// </summary>
         /// <param name="materialId">Optional: filter by material ID</param>
@@ -36,7 +44,7 @@ namespace ControlApplication.Core.Networking
         /// </summary>
         /// <param name="gscanId">Filter the search by G-Scan uniqe ID</param>
         /// <returns></returns>
-        string GetGscan(string gscanId);
+        List<string> GetGscan(string gscanId = "");
 
         /// <summary>
         /// gets all detections from the database using server's RESTful API
@@ -55,9 +63,24 @@ namespace ControlApplication.Core.Networking
         /// Adds a detection to the database using server's RESTful API
         /// </summary>
         /// <param name="detection">A detection to add</param>
-        void AddDetection(Detection detection);
+        /// <param name="idsDictionary">Dictionary of IDs</param>
+        void AddDetection(Detection detection, Dictionary<string, string> idsDictionary = null);
+
+        /// <summary>
+        /// Adds a new area to the database using server's RESTful API
+        /// </summary>
+        /// <param name="newArea">An area to add</param>
+        void AddArea(Area newArea);
 
 
+        /// <summary>
+        /// A generic method for getting and setting objects to the memory cache.
+        /// </summary>
+        /// <param name="uriPath">URI Path</param>
+        /// <param name="key">The key to get value from</param>
+        /// <param name="value">The key value</param>
+        /// <returns>An object of type dynamic</returns>
+        dynamic GetObject(string uriPath, string key = "", string value = "");
 
     }
 }

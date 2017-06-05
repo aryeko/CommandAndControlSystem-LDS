@@ -39,8 +39,6 @@ namespace ControlApplication.DesktopClient
 
         private PollingManager PollingManager { get; set; }
 
-        internal INtServerApi RemoteServerApi => ServerConnectionManager.Instance;
-
         internal Area ActiveWorkingArea { get; set; }
 
         public MainWindow()
@@ -49,7 +47,7 @@ namespace ControlApplication.DesktopClient
             fLogin.ShowDialog();
 
             ActiveWorkingArea = new Area(new PointLatLng(0,0), AreaType.Undefined, 0);
-
+            
             this._hostedNetwork = new HostedNetwork();
             InitializeComponent();
             
@@ -64,8 +62,8 @@ namespace ControlApplication.DesktopClient
             Task.Run(() =>
             {
                 Application.Current.Dispatcher.Invoke(() => CircularProgressBar.Visibility = Visibility.Visible);
-                var detections = RemoteServerApi.GetDetections().GroupBy(d => d.Position);
-                var areas = RemoteServerApi.GetArea();
+                var detections = NetworkClientsFactory.GetNtServer().GetDetections().GroupBy(d => d.Position);
+                var areas = NetworkClientsFactory.GetNtServer().GetArea();
                 foreach (var detection in detections)
                 {
                     Application.Current.Dispatcher.Invoke(() => AddMarker(detection.Key, detection.ToList()));
@@ -219,8 +217,8 @@ namespace ControlApplication.DesktopClient
 
         private void DbBtn_Click(object sender, RoutedEventArgs e)
         {
-            var materials = RemoteServerApi.GetMaterial();
-
+            var materials = NetworkClientsFactory.GetNtServer().GetMaterial().OrderBy(m => m.Name).ToList();
+            
             new Window
             {
                 Title = "Show Materials",
