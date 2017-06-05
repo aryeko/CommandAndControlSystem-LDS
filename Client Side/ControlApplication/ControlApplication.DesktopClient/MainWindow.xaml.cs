@@ -69,7 +69,10 @@ namespace ControlApplication.DesktopClient
                 foreach (var detection in detections)
                 {
                     Application.Current.Dispatcher.Invoke(() => AddMarker(detection.Key, detection.ToList()));
-                    Application.Current.Dispatcher.Invoke(() => AddMarker(detection.Key, areas.ToList()));
+                }
+                foreach (var area in areas)
+                {
+                    Application.Current.Dispatcher.Invoke(() => AddMarker(area.RootLocation, area));
                 }
                 Application.Current.Dispatcher.Invoke(() => CircularProgressBar.Visibility = Visibility.Hidden);
             });
@@ -128,6 +131,11 @@ namespace ControlApplication.DesktopClient
         internal void AddMarker(Point p, IEnumerable<IMarkerable> markerables)
         {
             AddMarker(GMapControl.FromLocalToLatLng((int) p.X, (int) p.Y), markerables);
+        }
+
+        internal void AddMarker(PointLatLng p, IMarkerable markerable)
+        {
+            AddMarker(p, new []{markerable});
         }
 
         internal void AddMarker(PointLatLng p, IEnumerable<IMarkerable> markerables)
