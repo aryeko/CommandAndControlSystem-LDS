@@ -80,9 +80,12 @@ namespace ControlApplication.DesktopClient.Controls
             {
                 mainWindow.Dispatcher.Invoke(() => mainWindow.CircularProgressBar.Visibility = Visibility.Visible);
                 var detectionsToShow = NetworkClientsFactory.GetNtServer().GetDetections().Where(d => d.Material.IsContainsMaterialType(cbValues));
+                var areasToShow = NetworkClientsFactory.GetNtServer().GetArea();
 
                 foreach (var detection in detectionsToShow)
                     mainWindow.Dispatcher.Invoke(()=> mainWindow.AddMarker(detection.Position, new List<Detection> { detection }));
+                foreach (var area in areasToShow)
+                    mainWindow.Dispatcher.Invoke(() => mainWindow.AddMarker(area.RootLocation, area));
 
                 mainWindow.Dispatcher.Invoke(() => mainWindow.CircularProgressBar.Visibility = Visibility.Hidden);
             });
