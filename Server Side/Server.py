@@ -141,7 +141,7 @@ def handle_area_request():
 		# here we want to get the value of user (i.e. ?user=some-value)
 		area_id = request.args.get('_id')
 		area_type = request.args.get('area_type')
-		area_root_location = request.form.get('root_location')
+		area_root_location = request.args.get('root_location')
 		if area_id is not None:
 			parsed_id = loads(area_id)
 			print("retrieving area by id: ", parsed_id)

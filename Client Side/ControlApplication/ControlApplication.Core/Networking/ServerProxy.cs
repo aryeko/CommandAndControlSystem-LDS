@@ -131,7 +131,7 @@ namespace ControlApplication.Core.Networking
             dynamic response = GetObject("material", "material_name", detection.Material.Name);
             ids.Add("MaterialId", response[0]._id.ToString());
 
-            response = GetObject("area", "root_location", $"[{detection.Area.RootLocation.Lat},{detection.Area.RootLocation.Lng}]");
+            response = GetObject("area", "root_location", detection.Area.RootLocation.ToString());
             ids.Add("AreaId", response[0]._id.ToString());
 
             if (string.IsNullOrEmpty(detection.GunId))
