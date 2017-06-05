@@ -50,8 +50,9 @@ namespace ControlApplication.DesktopClient.Controls
             {
                 Window.GetWindow(this)?.Close();
                 var material = GetMainWindow().RemoteServerApi.GetMaterial(name:MaterialComboBox.Text).First();
-                var area = GetMainWindow().RemoteServerApi.GetArea();
-                var detection = new Detection(mCurrentDateTime, material, mClickPoint, area[0], TxtSuspectId.Text, TxtSuspectPlateNo.Text);
+                Console.WriteLine($"Adding Detection using {GetMainWindow().ActiveWorkingArea.AreaType} area at {GetMainWindow().ActiveWorkingArea.RootLocation}");
+                var area = GetMainWindow().ActiveWorkingArea;
+                var detection = new Detection(mCurrentDateTime, material, mClickPoint, area, TxtSuspectId.Text, TxtSuspectPlateNo.Text);
                 GetMainWindow().RemoteServerApi.AddDetection(detection);
                 GetMainWindow().AddMarker(mClickPoint, new []{detection});
             }
