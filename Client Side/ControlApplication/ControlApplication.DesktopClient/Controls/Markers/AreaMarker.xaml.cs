@@ -84,7 +84,7 @@ namespace ControlApplication.DesktopClient.Controls.Markers
             new Window
             {
                 Title = "Show Area Details",
-                Content = new ShowAreaDetails(mArea, ServerConnectionManager.Instance.GetDetections().Where(d => d.Area.Equals(mArea))),
+                Content = new ShowAreaDetails(mArea, NetworkClientsFactory.GetNtServer().GetDetections().Where(d => d.Area.Equals(mArea))),
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 SizeToContent = SizeToContent.WidthAndHeight,
                 ResizeMode = ResizeMode.NoResize
