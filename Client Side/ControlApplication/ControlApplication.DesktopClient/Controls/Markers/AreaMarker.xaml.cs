@@ -8,6 +8,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using ControlApplication.Core.Contracts;
+using ControlApplication.Core.Networking;
 using GMap.NET.WindowsPresentation;
 
 namespace ControlApplication.DesktopClient.Controls.Markers
@@ -79,16 +80,16 @@ namespace ControlApplication.DesktopClient.Controls.Markers
         {
             if (!IsMouseCaptured) return;
             Mouse.Capture(null);
-            /*
+            
             new Window
             {
-                Title = "Show mMarker's detections",
-                Content = new ShowMarkerDetections(mDetections),
+                Title = "Show Area Details",
+                Content = new ShowAreaDetails(mArea, ServerConnectionManager.Instance.GetDetections().Where(d => d.Area.Equals(mArea))),
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 SizeToContent = SizeToContent.WidthAndHeight,
                 ResizeMode = ResizeMode.NoResize
             }.ShowDialog();
-            */
+            
         }
 
         private void MarkerRightMouseDown(object sender, MouseButtonEventArgs e)
