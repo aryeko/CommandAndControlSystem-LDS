@@ -19,6 +19,8 @@ namespace ControlApplication.DesktopClient.Controls.Markers
     {
         private GMapMarker mMarker;
         private Area mArea;
+        private Popup mPopup;
+        private Label mLabel;
 
         public AreaMarker(GMapMarker marker, Area area)
         {
@@ -33,20 +35,44 @@ namespace ControlApplication.DesktopClient.Controls.Markers
             this.MouseRightButtonUp += MarkerRightMouseUp;
             this.PreviewMouseDoubleClick += MarkerDoubleClicked;
             //this.markerIcon.Source = new BitmapImage(new Uri($"/ControlApplication.DesktopClient;component/Drawable/MapMarker_{GetBrush().Item1}.png", UriKind.Relative));
+
+            mPopup = new Popup { Placement = PlacementMode.Mouse };
+            mLabel = new Label
+            {
+                Background = Brushes.Blue,
+                Foreground = Brushes.Black,
+                BorderBrush = Brushes.WhiteSmoke,
+                BorderThickness = new Thickness(2),
+                Padding = new Thickness(5),
+                FontSize = 22,
+                Content = $"{mArea.AreaType}"
+            };
+            mPopup.Child = mLabel;
         }
         
         private void MarkerDoubleClicked(object sender, MouseButtonEventArgs e)
         {
-            if (!Equals((Application.Current.MainWindow as MainWindow).AddPointBtn.Background, Brushes.DarkBlue)) return;
+            var sMessageBoxText = $"Do you want to this {mArea.AreaType} area as the working area?";
+            var sCaption = "Laser Detect Systems - NT";
+            
+            var messageBoxResult = MessageBox.Show(sMessageBoxText, sCaption, MessageBoxButton.YesNo, MessageBoxImage.Question);
 
-            new Window
+            switch (messageBoxResult)
             {
-                Title = "Append a new detection",
-                Content = new AddDetectionControl(mMarker.Position),
-                WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                SizeToContent = SizeToContent.WidthAndHeight,
-                ResizeMode = ResizeMode.NoResize
-            }.ShowDialog();
+                case MessageBoxResult.Yes:
+                    Console.WriteLine($"Set {mArea.AreaType} at {mArea.RootLocation} as the active working area");
+                    (Application.Current.MainWindow as MainWindow).ActiveWorkingArea = mArea;
+                    break;
+
+                case MessageBoxResult.No:
+                    Console.WriteLine($"[CANCELED] Set {mArea.AreaType} at {mArea.RootLocation} as the active working area");
+                    break;
+
+                default:
+                    Console.WriteLine($"Area marker clicked with not supported option: {messageBoxResult}");
+                    break;
+            }
+
         }
 
         private void MarkerRightMouseUp(object sender, MouseButtonEventArgs e)
@@ -75,11 +101,13 @@ namespace ControlApplication.DesktopClient.Controls.Markers
         private void MarkerMouseLeave(object sender, MouseEventArgs e)
         {
             mMarker.ZIndex -= 10000;
+            mPopup.IsOpen = false;
         }
 
         private void MarkerMouseEnter(object sender, MouseEventArgs e)
         {
             mMarker.ZIndex += 10000;
+            mPopup.IsOpen = true;
         }
     }
 }

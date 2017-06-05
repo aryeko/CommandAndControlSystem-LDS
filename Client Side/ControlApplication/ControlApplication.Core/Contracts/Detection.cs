@@ -7,7 +7,7 @@ namespace ControlApplication.Core.Contracts
     /// This calss represents a detection
     /// TODO: Overload constructors for default values, i.e. auto date time
     /// </summary>
-    public class Detection : IMarkerable
+    public class Detection : IMarkerable, IEquatable<Detection>
     {
         /// <summary>
         /// The date of the detection
@@ -76,6 +76,19 @@ namespace ControlApplication.Core.Contracts
         public void Accept(IMarkerableVisitor visitor)
         {
             visitor.AddMarker(this);
+        }
+
+        public bool Equals(Detection other)
+        {
+            if (other == null) return false;
+            return Position == other.Position
+                && DateTimeOfDetection.Equals(other.DateTimeOfDetection)
+                && Material.Equals(other.Material);
+        }
+
+        public override int GetHashCode()
+        { 
+            return Position.GetHashCode() ^ Material.GetHashCode() ^ DateTimeOfDetection.GetHashCode();
         }
     }
 }

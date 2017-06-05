@@ -34,10 +34,20 @@ namespace ControlApplication.Core.Networking
         private CookieAwareWebClient WebClient { get; }
 
         /// <summary>
-        /// Creates an instance of <see cref="ServerConnectionManager"/> or returns the existing instance
+        /// Lock object for instance safe access (mutex)
+        /// </summary>
+        private static readonly object InstanceLock = new object();
+
+        /// <summary>
+        /// The single instance of <see cref="ServerConnectionManager"/>
+        /// </summary>
+        private static readonly ServerConnectionManager MInstanse = new ServerConnectionManager();
+
+        /// <summary>
+        /// Gets the single instance of <see cref="ServerConnectionManager"/> with lock protection for async access
         /// </summary>
         /// <returns>Returns single instance of <see cref="ServerConnectionManager"/> as long as the app is running</returns>
-        public static ServerConnectionManager Instance { get; } = new ServerConnectionManager();
+        public static ServerConnectionManager Instance { get { lock (InstanceLock) { return MInstanse; } } }
 
         /// <summary>
         /// Private constructor which will avoid from an external class to create another instance of <see cref="ServerConnectionManager"/>

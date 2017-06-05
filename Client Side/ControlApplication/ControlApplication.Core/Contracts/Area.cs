@@ -7,7 +7,7 @@ using GMap.NET;
 
 namespace ControlApplication.Core.Contracts
 {
-    public class Area : IMarkerable
+    public class Area : IMarkerable, IEquatable<Area>
     {
         public PointLatLng RootLocation { get; }
 
@@ -25,6 +25,19 @@ namespace ControlApplication.Core.Contracts
         public void Accept(IMarkerableVisitor visitor)
         {
             visitor.AddMarker(this);
+        }
+
+        public bool Equals(Area other)
+        {
+            if (other == null) return false;
+            return RootLocation == other.RootLocation
+                && AreaType.Equals(other.AreaType)
+                && Radius.Equals(other.Radius);
+        }
+
+        public override int GetHashCode()
+        {
+            return RootLocation.GetHashCode() ^ AreaType.GetHashCode() ^ Radius.GetHashCode();
         }
     }
 }
