@@ -97,6 +97,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\ShowAreaDetails.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ShowMarkerDetections.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -146,6 +150,9 @@
     <Compile Include="Controls\Markers\MarkersManager.cs" />
     <Compile Include="Controls\MaterialsList.xaml.cs">
       <DependentUpon>MaterialsList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ShowAreaDetails.xaml.cs">
+      <DependentUpon>ShowAreaDetails.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ShowMarkerDetections.xaml.cs">
       <DependentUpon>ShowMarkerDetections.xaml</DependentUpon>
