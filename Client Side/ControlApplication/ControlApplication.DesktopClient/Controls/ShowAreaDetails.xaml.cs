@@ -30,9 +30,10 @@ namespace ControlApplication.DesktopClient.Controls
 
             mArea = area;
             mDetections = detections ?? new List<Detection>();
-            AreaIcon.Source = new BitmapImage(new Uri($"/ControlApplication.DesktopClient;component/Drawable/MapMarker_{mArea.AreaType}.png", UriKind.Relative));
+            AreaIcon.Source = new BitmapImage(new Uri($"/ControlApplication.DesktopClient;component/../Drawable/Icon_{mArea.AreaType}.png", UriKind.Relative));
             LabelHeader.Content = $"{mArea.AreaType} Area";
-            LabelAreaDetails.Content = $"Area Effective Radius: {mArea.Radius} - Area Containes {mDetections.Count()} Detections";
+            LabelAreaRadius.Content = $"Area Effective Radius :  {mArea.Radius}";
+            LabelAreaDetectionCount.Content = $"Area Detections Count :  {mDetections.Count()} ";
             this.StackPanel.Children.Add(new ShowMarkerDetections(mDetections));
         }
     }

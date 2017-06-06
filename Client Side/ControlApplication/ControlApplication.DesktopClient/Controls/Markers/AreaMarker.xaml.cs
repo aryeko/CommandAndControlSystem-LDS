@@ -35,7 +35,6 @@ namespace ControlApplication.DesktopClient.Controls.Markers
             this.MouseRightButtonDown += MarkerRightMouseDown;
             this.MouseRightButtonUp += MarkerRightMouseUp;
             this.PreviewMouseDoubleClick += MarkerDoubleClicked;
-            //this.markerIcon.Source = new BitmapImage(new Uri($"/ControlApplication.DesktopClient;component/Drawable/MapMarker_{GetBrush().Item1}.png", UriKind.Relative));
 
             mPopup = new Popup { Placement = PlacementMode.Mouse };
             mLabel = new Label

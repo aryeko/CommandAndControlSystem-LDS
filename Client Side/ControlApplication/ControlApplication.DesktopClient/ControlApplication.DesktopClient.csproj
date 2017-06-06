@@ -228,6 +228,13 @@
   <ItemGroup>
     <Resource Include="Drawable\LDS_LOGO.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Drawable\Icon_Airport.png" />
+    <Resource Include="Drawable\Icon_Port.png" />
+    <Resource Include="Drawable\Icon_Railway.png" />
+    <Resource Include="Drawable\Icon_RoadBlock.png" />
+    <Resource Include="Drawable\Icon_Undefined.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(SolutionDir)Certificates\*" "$(ProjectDir)$(OutDir)"</PostBuildEvent>

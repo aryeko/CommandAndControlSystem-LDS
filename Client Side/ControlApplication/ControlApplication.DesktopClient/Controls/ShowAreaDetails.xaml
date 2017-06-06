@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ControlApplication.DesktopClient.Controls"
              mc:Ignorable="d" 
-             Height="NaN" Width="650">
+             Height="NaN" Width="670">
     <Grid Margin="0,-10,-2,7" RenderTransformOrigin="0.5,0.5">
         <Grid.RenderTransform>
             <TransformGroup>
@@ -15,9 +15,10 @@
                 <TranslateTransform/>
             </TransformGroup>
         </Grid.RenderTransform>
-        <Image x:Name="AreaIcon" Margin="10,23,10,10" HorizontalAlignment="Left" VerticalAlignment="Top" Source="../Drawable/anti_logo.png" Height ="100" Width="100"/>
+        <Image x:Name="AreaIcon" Margin="10,23,10,10" HorizontalAlignment="Left" VerticalAlignment="Top" Source="../Drawable/Icon_Undefined.png" Height ="100" Width="100"/>
         <Label x:Name="LabelHeader" Content="Temp header" HorizontalAlignment="Left" Margin="120,24,10,10" VerticalAlignment="Top" Foreground="CornflowerBlue" FontFamily="Calibri" FontSize="23" FontWeight="Bold"/>
-        <Label x:Name="LabelAreaDetails" Content="Temp details" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="120,67,10,10" FontFamily="Calibri" FontSize="19" FontWeight="Bold"/>
+        <Label x:Name="LabelAreaRadius" Content="Temp details" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="120,67,10,10" Foreground="DimGray" FontFamily="Calibri" FontSize="17" FontWeight="Bold"/>
+        <Label x:Name="LabelAreaDetectionCount" Content="Temp details" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="120,67,10,10" Foreground="DimGray" FontFamily="Calibri" FontSize="17" FontWeight="Bold"/>
         <StackPanel x:Name="StackPanel" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10,110,10,10"></StackPanel>
     </Grid>
 </UserControl>
