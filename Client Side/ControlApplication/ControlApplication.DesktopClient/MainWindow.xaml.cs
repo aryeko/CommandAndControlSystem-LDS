@@ -33,6 +33,11 @@ namespace ControlApplication.DesktopClient
         internal const int MARKER_SIZE = 25;
 
         /// <summary>
+        /// 
+        /// </summary>
+        internal MaterialType DetectionsFilter { get; set; }
+
+        /// <summary>
         /// HostedNetwork API
         /// </summary>
         private readonly HostedNetwork _hostedNetwork;
@@ -45,7 +50,7 @@ namespace ControlApplication.DesktopClient
         {
             Login fLogin = new Login();
             fLogin.ShowDialog();
-
+            DetectionsFilter = ~MaterialType.None;
             ActiveWorkingArea = new Area(new PointLatLng(0,0), AreaType.Undefined, 0);
             
             this._hostedNetwork = new HostedNetwork();
@@ -62,7 +67,9 @@ namespace ControlApplication.DesktopClient
             Task.Run(() =>
             {
                 Application.Current.Dispatcher.Invoke(() => CircularProgressBar.Visibility = Visibility.Visible);
-                var detections = NetworkClientsFactory.GetNtServer().GetDetections().GroupBy(d => d.Position);
+                var detections = NetworkClientsFactory.GetNtServer().GetDetections()
+                .Where(d => DetectionsFilter.HasFlag(d.Material.MaterialType))
+                .GroupBy(d => d.Position);
                 var areas = NetworkClientsFactory.GetNtServer().GetArea();
                 foreach (var detection in detections)
                 {
