@@ -31,8 +31,8 @@
             <Label Grid.Row="0" Grid.Column="0" x:Name="LblAreaType" Content="Area Type:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
             <Label Grid.Row="1" Grid.Column="0" x:Name="LblRadius" Content="Affective Radius (meters):" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
             <Label Grid.Row="2" Grid.Column="0" x:Name="LblSetWorkingArea" Content="Set as Working Area:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-            <ComboBox Grid.Row="0" x:Name="ComboAreaType" Grid.Column="1" HorizontalAlignment="Stretch" Margin="0,3,5,3" VerticalAlignment="Stretch" Loaded="ComboAreaType_OnLoaded"/>
-            <TextBox Grid.Row="1" x:Name="TxtRadius" Grid.Column="1" HorizontalAlignment="Stretch" TextWrapping="Wrap" Margin="0,3,5,3" VerticalAlignment="Stretch" Text="100" SpellCheck.IsEnabled="True" TextAlignment="Center" TextChanged="TxtRadius_OnTextChanged"/>
+            <ComboBox Grid.Row="0" x:Name="ComboAreaType" Grid.Column="1" HorizontalAlignment="Stretch" Margin="0,5,5,5" VerticalAlignment="Stretch" Loaded="ComboAreaType_OnLoaded"/>
+            <TextBox Grid.Row="1" x:Name="TxtRadius" Grid.Column="1" HorizontalAlignment="Stretch" TextWrapping="Wrap" Margin="0,5,5,5" VerticalAlignment="Stretch" Text="100" SpellCheck.IsEnabled="True" TextAlignment="Center" TextChanged="TxtRadius_OnTextChanged"/>
             <CheckBox Grid.Row="2" x:Name="CheckBoxSetWorkingArea" Grid.Column="1" HorizontalAlignment="Center" Margin="0.3,3,5,3" VerticalAlignment="Center" IsChecked="True"/>
         </Grid>
 

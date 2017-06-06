@@ -73,6 +73,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\AddCombinationAlert.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\AddDetectionControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -113,6 +117,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\SingleMaterialCombination.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ZoomControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -131,6 +139,9 @@
     </Compile>
     <Compile Include="Controls\AddAreaControl.xaml.cs">
       <DependentUpon>AddAreaControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\AddCombinationAlert.xaml.cs">
+      <DependentUpon>AddCombinationAlert.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\AddDetectionControl.xaml.cs">
       <DependentUpon>AddDetectionControl.xaml</DependentUpon>
@@ -162,6 +173,9 @@
     </Compile>
     <Compile Include="Controls\SingleMaterial.xaml.cs">
       <DependentUpon>SingleMaterial.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SingleMaterialCombination.xaml.cs">
+      <DependentUpon>SingleMaterialCombination.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ZoomControl.xaml.cs">
       <DependentUpon>ZoomControl.xaml</DependentUpon>
@@ -234,6 +248,9 @@
     <Resource Include="Drawable\Icon_Railway.png" />
     <Resource Include="Drawable\Icon_RoadBlock.png" />
     <Resource Include="Drawable\Icon_Undefined.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Drawable\Add_Icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

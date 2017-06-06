@@ -39,7 +39,7 @@ namespace ControlApplication.Core.Networking
 
                 DateTime dateTime = new DateTime(long.Parse(detectionObj.scan_time.ToString())); //TODO: Fix..
                 string gscanSn = NetworkClientsFactory.GetNtServer().GetGscan(devices.Item1.ToString()).FirstOrDefault();
-                string ramanOutput = "SHOULD HAVE RAMAN";//GetRaman(obj.raman_output_id.ToString());
+                string ramanOutput = "SHOULD HAVE RAMAN";//GetRaman(obj.raman_output_id.ToString()); //TODO: Get actual link
                 var material = NetworkClientsFactory.GetNtServer().GetMaterial(name: detectionObj.material_detected.ToString());
                 var detection = new Detection(dateTime, material[0], activeArea.RootLocation, activeArea, detectionObj.id_num.ToString(), detectionObj.plate_num.ToString(), gscanSn, ramanOutput);
 
