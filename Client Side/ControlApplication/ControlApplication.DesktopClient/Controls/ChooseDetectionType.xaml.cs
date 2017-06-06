@@ -29,8 +29,10 @@ namespace ControlApplication.DesktopClient.Controls
             InitializeComponent();
 
             var j = 0;
-            foreach (var material in Enum.GetValues(typeof(MaterialType)))
+            foreach (MaterialType material in Enum.GetValues(typeof(MaterialType)))
             {
+                if(material == MaterialType.None) continue;
+                
                 DetectionDataXmal.RowDefinitions.Insert(j, new RowDefinition());
                 var cb = new CheckBox
                 {
@@ -38,6 +40,7 @@ namespace ControlApplication.DesktopClient.Controls
                     Content = material.ToString(),
                     FontSize = 14,
                     FontWeight = FontWeights.Bold,
+                    IsChecked = GetMainWindow().DetectionsFilter.HasFlag(material)
                 };
 
                 Grid.SetRow(cb, j);
@@ -65,27 +68,25 @@ namespace ControlApplication.DesktopClient.Controls
         {
             Window.GetWindow(this)?.Close();
             var cbValues = (from CheckBox cb in DetectionDataXmal.Children where cb.IsChecked != null && cb.IsChecked.Value select cb.Name).ToList();
-
-            if (cbValues.Count == 0)
-                return;
-            
+ 
             GetMainWindow().DeleteMarkers();
             ShowSelectedDetections(cbValues);
         }
 
         private void ShowSelectedDetections(List<string> cbValues)
-        { 
-            var mainWindow = GetMainWindow();
-            Task.Run(() =>
+        {
+            MaterialType newFiler;
+            if (cbValues.Count == 0)
+                newFiler = MaterialType.None;
+            else
             {
-                mainWindow.Dispatcher.Invoke(() => mainWindow.CircularProgressBar.Visibility = Visibility.Visible);
-                var detectionsToShow = NetworkClientsFactory.GetNtServer().GetDetections().Where(d => d.Material.IsContainsMaterialType(cbValues));
+                newFiler = cbValues.Select(s => Enum.Parse(typeof(MaterialType), s))
+                    .Cast<MaterialType>()
+                    .Aggregate(MaterialType.None, (current, newMaterial) => current | newMaterial);
+            }
 
-                foreach (var detection in detectionsToShow)
-                    mainWindow.Dispatcher.Invoke(()=> mainWindow.AddMarker(detection.Position, new List<Detection> { detection }));
-
-                mainWindow.Dispatcher.Invoke(() => mainWindow.CircularProgressBar.Visibility = Visibility.Hidden);
-            });
+            GetMainWindow().DetectionsFilter = newFiler;
+            GetMainWindow().LoadData();
         }
            
     }
