@@ -11,7 +11,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="1*"/>
-            <RowDefinition x:Name="MaterialsList" Height="3*"/>
+            <RowDefinition Height="3*"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
 
@@ -22,23 +22,28 @@
                 <RowDefinition Height="10*" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="4*"/>
-                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="3.5*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="4.5*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
 
-            <Label Grid.Row="0" Grid.Column="0" x:Name="LblAreaType" Content="Area Type:" FontSize="14" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-            <TextBox Grid.Row="0" x:Name="TxtAlert" Grid.Column="1" HorizontalAlignment="Stretch" TextWrapping="Wrap" Margin="0,3,5,3" VerticalAlignment="Stretch"/>
+            <Label Grid.Row="0" Grid.Column="0" x:Name="LblAreaType" Content="Alert Type:" FontSize="14" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            <TextBox Grid.Row="0" x:Name="TxtAlert" Grid.Column="2" HorizontalAlignment="Stretch" TextWrapping="Wrap" Margin="5,3,5,3" VerticalAlignment="Stretch"/>
 
         </Grid>
 
-        <ScrollViewer Grid.Row="2">
-            <Grid>
+        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Hidden">
+            <Grid x:Name="MaterialsListScroll" x:FieldModifier="public">
 
             </Grid>
         </ScrollViewer>
         
         <Grid Grid.Row="3">
+            
+            <Grid.RowDefinitions>
+                <RowDefinition Height="35"/>
+            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="5*"/>
                 <ColumnDefinition Width="5*"/>

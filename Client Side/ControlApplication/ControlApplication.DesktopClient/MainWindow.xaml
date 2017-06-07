@@ -40,7 +40,7 @@
             </Grid.RowDefinitions>
             <controls:ZoomControl x:Name="ZoomControl" Grid.Column="4" Grid.Row="0" Margin="17,5,17,5"/>
             <Button Grid.Row="5" Grid.Column="0" x:Name="DetectionBtn" Content="Show Detections" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" Background="CornflowerBlue" Foreground="White" Width="97" Height="30" Margin="17,8.2,0,7.4" RenderTransformOrigin="-0.047,0.447" Click="DetectionBtn_Click"/>
-            <Button Grid.Row="7" Grid.Column="0" x:Name="OptionBtn" Content="Options" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" Background="CornflowerBlue" Foreground="White" Width="97" Height="30" Margin="17,7.8,0,7.8"/>
+            <Button Grid.Row="7" Grid.Column="0" x:Name="OptionBtn" Content="Options" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" Background="CornflowerBlue" Foreground="White" Width="97" Height="30" Margin="17,7.8,0,7.8" Click="OptionBtn_OnClick"/>
             <Button Grid.Row="9" Grid.Column="0" x:Name="AlertsBtn" Content="Alerts" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" Background="CornflowerBlue" Foreground="White" Width="97" Height="30" Margin="17,7.4,0,8.2"/>
             <Button Grid.Row="5" Grid.Column="4" x:Name="AddPointBtn" Content="Add Point" HorizontalAlignment="Right" VerticalContentAlignment="Center" VerticalAlignment="Center" Background="CornflowerBlue" Foreground="White" Width="90" Height="30" Margin="17,6" Click="AddPointBtn_Click" ToolTip="Press the button to add a manual detection"/>
             <Button Grid.Row="7" Grid.Column="4" x:Name="AddAreaBtn" Content="Add Area" HorizontalAlignment="Right" VerticalContentAlignment="Center" VerticalAlignment="Bottom" Background="CornflowerBlue" Foreground="White" Width="90" Height="30" Margin="0,0,17,8" Click="AddAreaBtn_Click"/>
@@ -50,11 +50,9 @@
             <Viewbox HorizontalAlignment="Left" Height="99" Margin="10,10,0,0" VerticalAlignment="Top" Width="114">
                 <controls:CircularProgressBar x:Name="CircularProgressBar"/>
             </Viewbox>
-            <Image x:Name="image" Grid.Column="3" HorizontalAlignment="Left" Height="100" Margin="210.8,3.2,0,-89.6" Grid.Row="13" VerticalAlignment="Top" Width="100"/>
-
 
         </Grid>
-        <Image x:Name="LdsImage" Source="Drawable/LDS_LOGO.png" HorizontalAlignment="Center" Height="100" Margin="719,0,9.6,10.4" VerticalAlignment="Bottom" Width="265"/>
+        <Image x:Name="LdsImage" Source="Drawable/LDS_LOGO.png" HorizontalAlignment="Right" Height="100" Margin="719,0,9.6,10.4" VerticalAlignment="Bottom" Width="265"/>
         <Image x:Name="NT_image" Source="Drawable/anti_logo.png" HorizontalAlignment="Right" Height="71" Margin="0,0,40.6,24.4" VerticalAlignment="Bottom" Width="76"/>
     </Grid>
 </Window>

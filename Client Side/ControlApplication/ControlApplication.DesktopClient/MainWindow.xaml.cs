@@ -37,6 +37,8 @@ namespace ControlApplication.DesktopClient
         /// </summary>
         internal MaterialType DetectionsFilter { get; set; }
 
+        internal int NumberOfMaterialsToShow { get; set; }
+
         /// <summary>
         /// HostedNetwork API
         /// </summary>
@@ -52,14 +54,14 @@ namespace ControlApplication.DesktopClient
             fLogin.ShowDialog();
             DetectionsFilter = ~MaterialType.None;
             ActiveWorkingArea = new Area(new PointLatLng(0,0), AreaType.Undefined, 0);
-            
+
             this._hostedNetwork = new HostedNetwork();
             InitializeComponent();
             
             Loaded += MainWindow_Loaded;
             MouseWheel += MainWindow_MouseWheel;
             PollingManager = new PollingManager();
-            WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            WindowState = WindowState.Maximized;
         }
 
         internal void LoadData()
@@ -265,6 +267,19 @@ namespace ControlApplication.DesktopClient
             {
                 Title = "Add new area",
                 Content = new AddAreaControl(new Point(e.GetPosition(this).X, e.GetPosition(this).Y)),
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                SizeToContent = SizeToContent.WidthAndHeight,
+                ResizeMode = ResizeMode.NoResize
+            }.ShowDialog();
+        }
+
+        private void OptionBtn_OnClick(object sender, RoutedEventArgs e)
+        {
+            NumberOfMaterialsToShow = 2;
+            new Window
+            {
+                Title = "Choose an option",
+                Content = new OptionControl(),
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 SizeToContent = SizeToContent.WidthAndHeight,
                 ResizeMode = ResizeMode.NoResize

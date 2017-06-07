@@ -21,21 +21,53 @@ namespace ControlApplication.DesktopClient.Controls
     /// </summary>
     public partial class SingleMaterialCombination : UserControl
     {
-        public SingleMaterialCombination()
+        private readonly List<string> _materialsToLoad;
+
+        public SingleMaterialCombination(List<string> materialsToLoad)
         {
             InitializeComponent();
+            _materialsToLoad = materialsToLoad;
+        }
+
+        /// <summary>
+        /// Gets the MainWindow control
+        /// </summary>
+        /// <returns>The MainWindow or null on error</returns>
+        private static MainWindow GetMainWindow()
+        {
+            return Application.Current.MainWindow as MainWindow;
         }
 
         private void OnLoadedMaterialComboBox_OnLoaded(object sender, RoutedEventArgs e)
         {
-            var materialsToLoad = NetworkClientsFactory.GetNtServer().GetMaterial();
-            var data = materialsToLoad.Select(material => material.Name).ToList();
-            data.Sort();
-
-            MaterialComboBox.ItemsSource = data;
+            MaterialComboBox.ItemsSource = _materialsToLoad;
 
             //Make the first item selected...
             MaterialComboBox.SelectedIndex = 0;
+        }
+
+        private void AddIcon_OnMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            foreach (Window window in Application.Current.Windows)
+            {
+                if (!window.Title.Equals("Add new material combination")) continue;
+                if (GetMainWindow().NumberOfMaterialsToShow >= 6) continue;
+
+                GetMainWindow().NumberOfMaterialsToShow++;
+                window.Content = new AddCombinationAlert(GetMainWindow().NumberOfMaterialsToShow);
+            }
+        }
+
+        private void RemoveIcon_OnMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            foreach (Window window in Application.Current.Windows)
+            {
+                if (!window.Title.Equals("Add new material combination")) continue;
+                if (GetMainWindow().NumberOfMaterialsToShow <= 1) continue;
+
+                GetMainWindow().NumberOfMaterialsToShow--;
+                window.Content = new AddCombinationAlert(GetMainWindow().NumberOfMaterialsToShow);
+            }
         }
     }
 }
