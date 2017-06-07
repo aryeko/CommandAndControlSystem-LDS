@@ -101,6 +101,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\OptionControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ShowAreaDetails.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -161,6 +165,9 @@
     <Compile Include="Controls\Markers\MarkersManager.cs" />
     <Compile Include="Controls\MaterialsList.xaml.cs">
       <DependentUpon>MaterialsList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\OptionControl.xaml.cs">
+      <DependentUpon>OptionControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ShowAreaDetails.xaml.cs">
       <DependentUpon>ShowAreaDetails.xaml</DependentUpon>
@@ -251,6 +258,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Drawable\Add_Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Drawable\Delete_Icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

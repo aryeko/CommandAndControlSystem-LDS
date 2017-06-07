@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="ControlApplication.DesktopClient.Controls.OptionControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ControlApplication.DesktopClient.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="220" d:DesignWidth="270">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+
+        <Button Grid.Row="0" x:Name="BtnAddCombination" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Margin="10,10,10,5" VerticalContentAlignment="Center" FontSize="20" Background="CornflowerBlue" Foreground="White" RenderTransformOrigin="-0.047,0.447" Width="250" Height="100" Click="BtnAddCombination_OnClick">
+            <TextBlock> <Bold>Add a Combination</Bold></TextBlock>
+        </Button>
+        <Button Grid.Row="1" x:Name="BtnShowCombinations" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Margin="10,5,10,10" VerticalContentAlignment="Center" FontSize="20" Background="CornflowerBlue" Foreground="White" RenderTransformOrigin="-0.047,0.447" Width="250" Height="100" Click="BtnShowCombinations_OnClick">
+            <TextBlock> <Bold>Show Combination List</Bold></TextBlock>
+        </Button>
+    </Grid>
+</UserControl>
