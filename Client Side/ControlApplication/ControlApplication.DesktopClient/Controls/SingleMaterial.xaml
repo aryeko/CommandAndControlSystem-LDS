@@ -5,18 +5,17 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ControlApplication.DesktopClient.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="50" d:DesignWidth="NaN">
-    <Grid>
+             Height="NaN" Width="400">
+    <Grid x:Name="Grid">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
 
-
-        <Label Grid.Row="0" Grid.Column="0" x:Name="dataName" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
-        <Label Grid.Row="0" Grid.Column="1" x:Name="dataType" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
-        <Label Grid.Row="0" Grid.Column="2" x:Name="dataCas" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
+        <Label Grid.Row="0" Grid.Column="0" x:Name="dataName" HorizontalAlignment="Center" FontSize="15"/>
+        <Label Grid.Row="0" Grid.Column="1" x:Name="dataType" HorizontalAlignment="Center" FontSize="15"/>
+        <Label Grid.Row="0" Grid.Column="2" x:Name="dataCas" HorizontalAlignment="Center" FontSize="15"/>
 
     </Grid>
 </UserControl>

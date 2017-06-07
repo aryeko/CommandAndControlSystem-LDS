@@ -28,7 +28,7 @@
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
 
-            <Label Grid.Row="0" Grid.Column="0" x:Name="LblAreaType" Content="Alert Type:" FontSize="14" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            <Label Grid.Row="0" Grid.Column="0" x:Name="LblAreaType" Content="Alert Name:" FontSize="14" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
             <TextBox Grid.Row="0" x:Name="TxtAlert" Grid.Column="2" HorizontalAlignment="Stretch" TextWrapping="Wrap" Margin="5,3,5,3" VerticalAlignment="Stretch"/>
 
         </Grid>

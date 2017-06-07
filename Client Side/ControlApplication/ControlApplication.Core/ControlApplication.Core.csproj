@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="Contracts\Area.cs" />
     <Compile Include="Contracts\AreaType.cs" />
+    <Compile Include="Contracts\Combination.cs" />
     <Compile Include="Contracts\Detection.cs" />
     <Compile Include="Contracts\IMarkerable.cs" />
     <Compile Include="Contracts\IMarkerableVisitor.cs" />

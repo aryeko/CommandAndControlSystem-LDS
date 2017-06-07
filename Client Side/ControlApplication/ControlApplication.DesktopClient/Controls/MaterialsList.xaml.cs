@@ -21,20 +21,19 @@ namespace ControlApplication.DesktopClient.Controls
     /// </summary>
     public partial class MaterialsList : UserControl
     {
-        public MaterialsList(List<Material> materials)
+        public MaterialsList(IEnumerable<Material> materials)
         {
             InitializeComponent();
 
-            int j = 0;
             foreach (var material in materials)
             {
-                MaterialDataXmal.RowDefinitions.Insert(j, new RowDefinition());
+                var newRowIndex = MaterialDataXmal.RowDefinitions.Count;
+                MaterialDataXmal.RowDefinitions.Insert(newRowIndex, new RowDefinition());
 
                 var newControl = new SingleMaterial(material);
 
-                Grid.SetRow(newControl, j);
+                Grid.SetRow(newControl, newRowIndex);
                 MaterialDataXmal.Children.Add(newControl);
-                j++;
             }
         }
     }

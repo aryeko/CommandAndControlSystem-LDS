@@ -109,7 +109,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\ShowCombinationAlerts.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ShowMarkerDetections.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SingleCombinationList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -172,8 +180,14 @@
     <Compile Include="Controls\ShowAreaDetails.xaml.cs">
       <DependentUpon>ShowAreaDetails.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ShowCombinationAlerts.xaml.cs">
+      <DependentUpon>ShowCombinationAlerts.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ShowMarkerDetections.xaml.cs">
       <DependentUpon>ShowMarkerDetections.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SingleCombinationList.xaml.cs">
+      <DependentUpon>SingleCombinationList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\SingleDetectionControl.xaml.cs">
       <DependentUpon>SingleDetectionControl.xaml</DependentUpon>

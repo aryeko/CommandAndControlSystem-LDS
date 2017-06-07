@@ -230,7 +230,7 @@ namespace ControlApplication.DesktopClient
             
             new Window
             {
-                Title = "Show Materials",
+                Title = "Materials list from DB",
                 Content = new MaterialsList(materials),
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 SizeToContent = SizeToContent.WidthAndHeight,

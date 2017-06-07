@@ -36,7 +36,6 @@ namespace ControlApplication.DesktopClient.Controls
             {
                 dataLinkRaman.Text = "LINK";
                 dataLinkRaman.TextDecorations = TextDecorations.Underline;
-                dataLinkRaman.FontStyle = FontStyles.Italic;
                 dataLinkRaman.Foreground = Brushes.CornflowerBlue;
                 dataLinkRaman.MouseUp += OpenRaman_OnMouseClick;
             }

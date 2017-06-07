@@ -9,32 +9,29 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
-            <RowDefinition Height="1*"/>
             <RowDefinition x:Name="NumOfMaterials" Height="1*"/>
         </Grid.RowDefinitions>
 
-        <Label Grid.Row="0" x:Name="LblTitle" Content="Materials List" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Candara" FontWeight="ExtraBold" FontSize="16" Foreground="DarkBlue"/>
-
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="0">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
 
-            <Label Grid.Row="0" Grid.Column="0" x:Name="LblMatName" Content="Name" HorizontalAlignment="Center" VerticalAlignment="Stretch" FontWeight="Bold" />
-            <Label Grid.Row="0" Grid.Column="1" x:Name="LblMatType" Content="Material Type" HorizontalAlignment="Center" VerticalAlignment="Stretch" FontWeight="Bold"/>
-            <Label Grid.Row="0" Grid.Column="2" x:Name="LblMatCas" Content="CAS" HorizontalAlignment="Center" VerticalAlignment="Stretch" FontWeight="Bold"/>
+            <TextBlock Grid.Row="0" Grid.Column="0" x:Name="LblMatName" Text="Name" TextDecorations="Underline" HorizontalAlignment="Center" FontSize="14" VerticalAlignment="Stretch" FontWeight="Bold" />
+            <TextBlock  Grid.Row="0" Grid.Column="1" x:Name="LblMatType" Text="Material Type" TextDecorations="Underline" HorizontalAlignment="Center" FontSize="14" VerticalAlignment="Stretch" FontWeight="Bold"/>
+            <TextBlock  Grid.Row="0" Grid.Column="2" x:Name="LblMatCas" Text="CAS" TextDecorations="Underline" HorizontalAlignment="Center" FontSize="14" VerticalAlignment="Stretch" FontWeight="Bold"/>
             
         </Grid>
 
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden" Margin="0,26.333,0,0" Grid.RowSpan="2">
-            <Grid Row="2" x:Name="MaterialDataXmal">
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden" Margin="0,3,0,0">
+            <Grid Row="1" x:Name="MaterialDataXmal">
 
             </Grid>
         </ScrollViewer>
