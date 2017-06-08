@@ -214,6 +214,43 @@ def handle_material_request():
 
 		return "Deleted " + str(deleted_material_id.deleted_count) + " materials"
 
+
+@app.route('/materials_combination', methods=['GET', 'POST', 'DELETE'])
+def handle_alerts_request():
+	verify_user_session()
+	if request.method == 'GET':
+		# here we want to get the value of user (i.e. ?user=some-value)
+		print("incoming materials_combination request")
+		materials_combination_id = request.args.get('_id')
+		if materials_combination_id is not None:
+			print("retrieving materials_combination by materials_combination_id: ", materials_combination_id)
+			alerts = dbHandler.get_materials_combination({'_id': loads(materials_combination_id)})
+		else:
+			print("retrieving all materials_combinations")
+			alerts = dbHandler.get_materials_combination()
+		print("found", alerts.count(), "materials_combinations")
+
+		return dumps(alerts)
+
+	elif request.method == 'POST':
+		materials_list_str = request.form.get('materials_list')
+		materials_list = [loads(material_id) for material_id in materials_list_str.split(',')]
+		alert_name = request.form.get('alert_name')
+		print("adding materials_combination, alert name: ", alert_name, "\nMaterials list:", materials_list)
+		new_object_id = dbHandler.add_materials_combination(materials_list, alert_name)
+		if new_object_id is None:
+			abort(500)
+		return str(new_object_id)
+
+	elif request.method == 'DELETE':
+		materials_combination_id = request.form.get('_id')
+		print("delete materials_combinations by id: ", materials_combination_id)
+
+		deleted_materials_combination_id = dbHandler.delete_materials_combination({'_id': loads(materials_combination_id)})
+
+		return "Deleted " + str(deleted_materials_combination_id.deleted_count) + " materials_combinations"
+
+
 @app.route('/detection', methods=['GET', 'POST'])
 def handle_detection_request():
 	verify_user_session()
