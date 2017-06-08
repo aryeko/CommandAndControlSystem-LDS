@@ -83,6 +83,7 @@ namespace ControlApplication.DesktopClient.Controls.Markers
             new Window
             {
                 Title = "Append a new detection",
+                Icon = new BitmapImage(new Uri(@"../../Drawable/logo.png", UriKind.Relative)),
                 Content = new AddDetectionControl(mMarker.Position, mDetections),
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 SizeToContent = SizeToContent.WidthAndHeight,
