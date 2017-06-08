@@ -72,6 +72,18 @@ namespace ControlApplication.Core.Networking
         /// <param name="newArea">An area to add</param>
         void AddArea(Area newArea);
 
+        /// <summary>
+        /// Adds a materials combination to the database using server's RESfull API
+        /// </summary>
+        /// <param name="combination">the combination to add</param>
+        void AddMaterialsCombinationAlert(Combination combination);
+
+        /// <summary>
+        /// Get materials combination alert from the database using server's RESfull API
+        /// </summary>
+        /// <param name="combinationId">the combination ID to filter, gets all combinations if empty</param>
+        /// <returns></returns>
+        List<Combination> GetMaterialsCombinationsAlerts(string combinationId = "");
 
         /// <summary>
         /// A generic method for getting and setting objects to the memory cache.
@@ -81,6 +93,5 @@ namespace ControlApplication.Core.Networking
         /// <param name="value">The key value</param>
         /// <returns>An object of type dynamic</returns>
         dynamic GetObject(string uriPath, string key = "", string value = "");
-
     }
 }

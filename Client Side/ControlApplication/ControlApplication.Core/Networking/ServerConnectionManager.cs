@@ -84,7 +84,9 @@ namespace ControlApplication.Core.Networking
         public List<Material> GetMaterial(string materialId = "", string name = "")
         {
             var materials = new List<Material>();
-            dynamic response = GetObject("material");
+            dynamic response = !string.IsNullOrEmpty(materialId) ? 
+                GetObject("material", "_id", materialId) : 
+                GetObject("material");
 
             foreach (dynamic obj in response)
             {
@@ -192,6 +194,52 @@ namespace ControlApplication.Core.Networking
 
             PostToDb("area", postData);
         }
+
+        /// <summary>
+        /// Adds a materials combination to the database using server's RESfull API
+        /// </summary>
+        /// <param name="combination">the combination to add</param>
+        public void AddMaterialsCombinationAlert(Combination combination)
+        {
+            var materialsIds = combination.CombinationMaterialsList.Select(m => m.DatabaseId);
+            
+            var postData = new NameValueCollection
+            {
+                { "materials_list", string.Join(",", materialsIds) },
+                { "alert_name", combination.AlertName }
+            };
+
+            PostToDb("materials_combination", postData);
+        }
+
+        /// <summary>
+        /// Get materials combination alert from the database using server's RESfull API
+        /// </summary>
+        /// <param name="combinationId">the combination ID to filter, gets all combinations if empty</param>
+        /// <returns></returns>
+        public List<Combination> GetMaterialsCombinationsAlerts(string combinationId = "")
+        {
+            var combinationsList = new List<Combination>();
+
+            dynamic response = !string.IsNullOrEmpty(combinationId) ? 
+                GetObject("materials_combination", "_id", combinationId) : 
+                GetObject("materials_combination");
+
+            foreach (dynamic obj in response)
+            {
+                //TODO: move to ServerObjectConverter?
+                var materialsIds = new List<string>();
+                foreach (dynamic o in obj.materials_list)
+                {
+                    materialsIds.Add(o.ToString());
+                }
+                var materialsList = materialsIds.Select(materialId => GetMaterial(materialId: materialId).First()).ToList();
+                combinationsList.Add(new Combination(obj.alert_name.ToString(), materialsList));
+            }
+
+            return combinationsList;
+        }
+
 
         /// <summary>
         /// Gets data from the DB and handles WebExeptions

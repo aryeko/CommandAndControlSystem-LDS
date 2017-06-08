@@ -120,6 +120,42 @@ namespace ControlApplication.Core.Networking
         }
 
         /// <summary>
+        /// Adds a materials combination to the database using server's RESfull API
+        /// </summary>
+        /// <param name="combination">the combination to add</param>
+        public void AddMaterialsCombinationAlert(Combination combination)
+        {
+            _realServerApi.AddMaterialsCombinationAlert(combination);
+        }
+
+        /// <summary>
+        /// Get materials combination alert from the database using server's RESfull API
+        /// </summary>
+        /// <param name="combinationId">the combination ID to filter, gets all combinations if empty</param>
+        /// <returns></returns>
+        public List<Combination> GetMaterialsCombinationsAlerts(string combinationId = "")
+        {
+            var combinationsList = new List<Combination>();
+            dynamic response = !string.IsNullOrEmpty(combinationId) ?
+                GetObject("materials_combination", "_id", combinationId) : 
+                _realServerApi.GetObject("materials_combination");
+
+            foreach (dynamic obj in response)
+            {
+                //TODO: move to ServerObjectConverter?
+                var materialsIds = new List<string>();
+                foreach (dynamic o in obj.materials_list)
+                {
+                    materialsIds.Add(o.ToString());
+                }
+                var materialsList = materialsIds.Select(materialId => GetMaterial(materialId: materialId).First()).ToList();
+                combinationsList.Add(new Combination(obj.alert_name.ToString(), materialsList));
+            }
+
+            return combinationsList;
+        }
+
+        /// <summary>
         /// Gets all the IDs from a detection in order to add a detection to DB using forein keys
         /// </summary>
         /// <param name="detection">The detection to add</param>
