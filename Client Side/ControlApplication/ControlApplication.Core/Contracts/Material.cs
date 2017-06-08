@@ -25,16 +25,23 @@ namespace ControlApplication.Core.Contracts
         public string Cas { get; }
 
         /// <summary>
+        /// The Database ID
+        /// </summary>
+        internal string DatabaseId { get; }
+
+        /// <summary>
         /// Material class constructor
         /// </summary>
         /// <param name="name">The name of the material</param>
         /// <param name="materialType">The type of the material</param>
         /// <param name="cas">The uniqe material ID</param>
-        public Material(string name, MaterialType materialType, string cas)
+        /// <param name="databaseId">The database ID</param>
+        public Material(string name, MaterialType materialType, string cas, string databaseId = "")
         {
             Name = name;
             MaterialType = materialType;
             Cas = cas;
+            DatabaseId = databaseId;
         }
 
         public bool IsContainsMaterialType(List<string> materialTypeList)

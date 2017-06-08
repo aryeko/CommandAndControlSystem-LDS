@@ -32,11 +32,10 @@ namespace ControlApplication.Core.Networking
             return new Area(ParseLocation(obj.root_location.ToString()), areaType, double.Parse(obj.radius.ToString()));
         }
 
-
         public static Material ConvertMaterial(dynamic obj)
         {
             var materialType = (MaterialType)System.Enum.Parse(typeof(MaterialType), obj.type.ToString());
-            return new Material(obj.name.ToString(), materialType, obj.cas.ToString());
+            return new Material(obj.name.ToString(), materialType, obj.cas.ToString(), obj._id.ToString());
         }
 
         public static string ConvertGscan(dynamic obj)
@@ -49,6 +48,11 @@ namespace ControlApplication.Core.Networking
             var dateTime = DateTime.ParseExact(obj.date_time.ToString(), "G", CultureInfo.InvariantCulture);
             var position = ServerObjectConverter.ParseLocation(obj.location.ToString());
             return new Detection(dateTime, material, position, area, obj.suspect_id.ToString(), obj.plate_number.ToString(), gscanSn, ramanOutput);
+        }
+
+        public static Combination ConvertCombination(object o)
+        {
+            throw new NotImplementedException();
         }
     }
 }
