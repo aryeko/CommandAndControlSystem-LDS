@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Windows;
-using ControlApplication.Core.Contracts;
+﻿using System.Windows;
+using ControlApplication.Core.Networking;
 
 namespace ControlApplication.DesktopClient.Controls
 {
@@ -41,23 +40,7 @@ namespace ControlApplication.DesktopClient.Controls
         {
             Window.GetWindow(this)?.Close();
 
-            List<Material> materialsCombination = new List<Material>()
-            {
-                new Material("bla", MaterialType.Hazardous, "123-123"),
-                new Material("ewrt", MaterialType.Safe, "123-123"),
-                new Material("fdsgthrdfgdfgdfgdfgdfgth", MaterialType.Explosive, "123-123"),
-            };
-
-            var combinationsList = new List<Combination>
-            {
-                new Combination("Alertdfgdfgdfgdfgdfgdfg", materialsCombination),
-                new Combination("Alert2", materialsCombination),
-                new Combination("Alertdfgdfgdfgdfgdfgdfg", materialsCombination),
-                new Combination("Alert2", materialsCombination),
-                new Combination("Alertdfgdfgdfgdfgdfgdfg", materialsCombination),
-                new Combination("Alert2", materialsCombination),
-            };
-            
+            var combinationsList = NetworkClientsFactory.GetNtServer().GetMaterialsCombinationsAlerts();
 
             new Window
             {
