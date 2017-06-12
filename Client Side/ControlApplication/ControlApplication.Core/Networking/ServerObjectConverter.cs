@@ -50,9 +50,26 @@ namespace ControlApplication.Core.Networking
             return new Detection(dateTime, material, position, area, obj.suspect_id.ToString(), obj.plate_number.ToString(), gscanSn, ramanOutput);
         }
 
+        internal static Alert ConvertAlert(dynamic obj, List<Detection> detectionsList, Area area)
+        {
+            var isDirty = !obj.is_dirty.ToString().Equals("0");
+            var dateTime = DateTime.ParseExact(obj.date_time.ToString(), "G", CultureInfo.InvariantCulture);
+            return new Alert(obj.alert_name.ToString(), area, detectionsList, dateTime, isDirty);
+        }
+
         public static Combination ConvertCombination(object o)
         {
             throw new NotImplementedException();
         }
+
+        public static T Convert<T>(dynamic obj)
+        {
+            if (typeof(T) == typeof(Material))
+                return ConvertMaterial(obj);
+
+            throw new NotSupportedException($"Generic convert is not supported for type: {typeof(T)}");
+        }
+
+       
     }
 }

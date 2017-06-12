@@ -50,6 +50,11 @@ namespace ControlApplication.Core.Contracts
         public string RamanId { get; }
 
         /// <summary>
+        /// The Database ID
+        /// </summary>
+        internal string DatabaseId { get; }
+
+        /// <summary>
         /// Detection class constructor
         /// </summary>
         /// <param name="dateTime">The date of the detection</param>
@@ -60,8 +65,9 @@ namespace ControlApplication.Core.Contracts
         /// <param name="suspectPlateId">Suspect's plate ID number</param>
         /// <param name="gunId">G-Scan ID number</param>
         /// <param name="ramanId">Raman graph ID</param>
+        /// <param name="databaseId">DB ID</param>
         public Detection(DateTime dateTime, Material material, PointLatLng position, Area area, string suspectId,
-            string suspectPlateId, string gunId = "", string ramanId = "")
+            string suspectPlateId, string gunId = "", string ramanId = "", string databaseId = "")
         {
             DateTimeOfDetection = dateTime;
             Material = material;
@@ -71,6 +77,7 @@ namespace ControlApplication.Core.Contracts
             SuspectPlateId = suspectPlateId;
             GunId = gunId;
             RamanId = ramanId;
+            DatabaseId = databaseId;
         }
 
         public void Accept(IMarkerableVisitor visitor)

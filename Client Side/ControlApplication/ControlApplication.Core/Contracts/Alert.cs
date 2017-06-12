@@ -15,13 +15,13 @@ namespace ControlApplication.Core.Contracts
 
         public bool IsDirty { get; set; }
 
-        public Alert(string alertName, Area area, List<Detection> detections)
+        public Alert(string alertName, Area area, List<Detection> detections, DateTime alertTime, bool isDirty = false)
         {
             AlertName = alertName;
             Area = area;
             Detections = detections;
-            AlertTime = DateTime.Now;
-            IsDirty = false;
+            AlertTime = AlertTime;
+            IsDirty = isDirty;
         }
     }
 }

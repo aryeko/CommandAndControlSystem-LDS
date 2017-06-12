@@ -84,9 +84,7 @@ namespace ControlApplication.Core.Networking
         public List<Material> GetMaterial(string materialId = "", string name = "")
         {
             var materials = new List<Material>();
-            dynamic response = !string.IsNullOrEmpty(materialId) ? 
-                GetObject("material", "_id", materialId) : 
-                GetObject("material");
+            dynamic response = GetObject("material");
 
             foreach (dynamic obj in response)
             {
@@ -135,7 +133,7 @@ namespace ControlApplication.Core.Networking
         /// gets all detections from the database using server's RESTful API
         /// </summary>
         /// <returns></returns>
-        public List<Detection> GetDetections()
+        public List<Detection> GetDetections(string detectionId = "")
         {
             return null;
         }
@@ -219,27 +217,13 @@ namespace ControlApplication.Core.Networking
         /// <returns></returns>
         public List<Combination> GetMaterialsCombinationsAlerts(string combinationId = "")
         {
-            var combinationsList = new List<Combination>();
-
-            dynamic response = !string.IsNullOrEmpty(combinationId) ? 
-                GetObject("materials_combination", "_id", combinationId) : 
-                GetObject("materials_combination");
-
-            foreach (dynamic obj in response)
-            {
-                //TODO: move to ServerObjectConverter?
-                var materialsIds = new List<string>();
-                foreach (dynamic o in obj.materials_list)
-                {
-                    materialsIds.Add(o.ToString());
-                }
-                var materialsList = materialsIds.Select(materialId => GetMaterial(materialId: materialId).First()).ToList();
-                combinationsList.Add(new Combination(obj.alert_name.ToString(), materialsList));
-            }
-
-            return combinationsList;
+            return null;
         }
 
+        public List<Alert> GetAlerts()
+        {
+            return null;
+        }
 
         /// <summary>
         /// Gets data from the DB and handles WebExeptions
@@ -323,6 +307,6 @@ namespace ControlApplication.Core.Networking
         public void Dispose()
         {
             WebClient.Dispose();
-        }
+        }     
     }
 }

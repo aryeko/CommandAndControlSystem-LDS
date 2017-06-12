@@ -53,11 +53,11 @@ namespace ControlApplication.Core.Networking
 
         public List<Area> GetArea(string areaId = "")
         {
-            if (string.IsNullOrEmpty(areaId))
-                return _realServerApi.GetArea();
+            dynamic response = !string.IsNullOrEmpty(areaId)
+                ? GetObject("area", "_id", areaId)
+                : _realServerApi.GetObject("area");
 
             var areas = new List<Area>();
-            dynamic response = GetObject("area", "_id", areaId);
 
             foreach (dynamic obj in response)
             {
@@ -83,10 +83,32 @@ namespace ControlApplication.Core.Networking
             return ServerObjectConverter.ConvertGscan(response);
         }
 
-        public List<Detection> GetDetections()
+        public List<Alert> GetAlerts()
+        {
+            var alertsList = new List<Alert>();
+            dynamic response = _realServerApi.GetObject("alert");
+
+            foreach (var obj in response)
+            {
+                var detectionsIds = new List<string>();
+                foreach (var detection in obj.detection_list)
+                {
+                    detectionsIds.Add(detection.ToString());
+                }
+                var detectionsList = detectionsIds.Select(detectionId => GetDetections(detectionId).First()).ToList();
+                var area = GetArea(obj.area_id.ToString());
+                alertsList.Add(ServerObjectConverter.ConvertAlert(obj, detectionsList, area));
+            }
+            return alertsList;
+        }
+
+        public List<Detection> GetDetections(string detectionId = "")
         {
             var detectionsList = new List<Detection>();
-            dynamic response = _realServerApi.GetObject("detection");
+          
+            dynamic response = !string.IsNullOrEmpty(detectionId) ?
+                GetObject("detection", "_id", detectionId) :
+                _realServerApi.GetObject("detection");
 
             foreach (dynamic obj in response)
             {
@@ -201,5 +223,23 @@ namespace ControlApplication.Core.Networking
             }
             return response;
         }
+
+        //private List<T> GetAllObjects<T>(string uriPath)
+        //{
+        //    var cachedObects = CacheManager.GetObjectFromCache<List<T>>($"all_objects_{typeof(T)}");
+        //    if (cachedObects == null)
+        //    {
+        //        cachedObects = new List<T>();
+        //        dynamic response = _realServerApi.GetObject(uriPath);
+        //        foreach (var obj in response)
+        //        {
+        //            cachedObects.Add(ServerObjectConverter.Convert<T>(obj));
+        //            CacheManager.SetObjectToCache(obj._id, obj);
+        //        }
+        //        CacheManager.SetObjectToCache($"all_objects_{typeof(T)}", cachedObects);
+        //    }           
+
+        //    return cachedObects;
+        //}
     }
 }

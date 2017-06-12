@@ -298,8 +298,8 @@ namespace ControlApplication.DesktopClient
         {
             List<Detection> detections = NetworkClientsFactory.GetNtServer().GetDetections();
             Area area = NetworkClientsFactory.GetNtServer().GetArea().First();
-            Alert alert = new Alert("Test", area, detections);
-            List<Alert> alertList = new List<Alert> { alert, alert, alert, alert, alert, alert, alert, alert, alert, alert, alert, alert, alert, alert, alert, alert,alert, alert,alert,alert, alert, alert, alert, alert , alert, alert, alert, alert , alert, alert, alert, alert};
+            Alert alert = new Alert("Test", area, detections,DateTime.Now);
+            List<Alert> alertList = new List<Alert> { alert, alert, alert, alert, alert, alert, alert, alert, alert, alert, alert, alert, alert, alert, alert, alert,alert, alert,alert,alert, alert, alert, alert, alert , alert, alert, alert, alert , alert, alert, alert, alert}; //NetworkClientsFactory.GetNtServer().GetAlerts();
             new Window
             {
                 Title = "Show alerts list",

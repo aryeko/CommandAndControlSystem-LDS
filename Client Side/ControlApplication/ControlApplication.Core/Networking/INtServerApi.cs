@@ -50,7 +50,13 @@ namespace ControlApplication.Core.Networking
         /// gets all detections from the database using server's RESTful API
         /// </summary>
         /// <returns></returns>
-        List<Detection> GetDetections();
+        List<Detection> GetDetections(string detectionId = "");
+
+        /// <summary>
+        /// gets all alerts from the database using server's RESTful API
+        /// </summary>
+        /// <returns></returns>
+        List<Alert> GetAlerts();
 
         /// <summary>
         /// gets a raman from the database using server's RESTful API
