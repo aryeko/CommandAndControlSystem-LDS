@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.Remoting.Channels;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -60,8 +61,15 @@ namespace ControlApplication.DesktopClient
             
             Loaded += MainWindow_Loaded;
             MouseWheel += MainWindow_MouseWheel;
+            AlertsManager.CombinationFoundAlert += OnCombinationAlert;
             PollingManager = new PollingManager();
             WindowState = WindowState.Maximized;
+        }
+
+        private void OnCombinationAlert(object source, CombinationAlertArgs args)
+        {
+            //TODO: Add alert to DB, Flicker button's color
+            AlertsBtn.Background = Brushes.Red;
         }
 
         internal void LoadData()
@@ -280,6 +288,22 @@ namespace ControlApplication.DesktopClient
             {
                 Title = "Choose an option",
                 Content = new OptionControl(),
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                SizeToContent = SizeToContent.WidthAndHeight,
+                ResizeMode = ResizeMode.NoResize
+            }.ShowDialog();
+        }
+
+        private void AlertsBtn_Click(object sender, RoutedEventArgs e)
+        {
+            List<Detection> detections = NetworkClientsFactory.GetNtServer().GetDetections();
+            Area area = NetworkClientsFactory.GetNtServer().GetArea().First();
+            Alert alert = new Alert("Test", area, detections);
+            List<Alert> alertList = new List<Alert> { alert, alert, alert, alert, alert, alert, alert, alert, alert, alert, alert, alert, alert, alert, alert, alert,alert, alert,alert,alert, alert, alert, alert, alert , alert, alert, alert, alert , alert, alert, alert, alert};
+            new Window
+            {
+                Title = "Show alerts list",
+                Content = new ShowAlertsControl(alertList),
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 SizeToContent = SizeToContent.WidthAndHeight,
                 ResizeMode = ResizeMode.NoResize

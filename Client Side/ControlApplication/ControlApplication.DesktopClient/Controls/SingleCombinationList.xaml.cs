@@ -12,12 +12,11 @@ namespace ControlApplication.DesktopClient.Controls
     {
         public List<Material> CombinationMaterialsList { get; set; }
 
-        public SingleCombinationList(int serialNum, string alertName, List<Material> combinationMaterialsList)
+        public SingleCombinationList(string alertName, List<Material> combinationMaterialsList)
         {
             InitializeComponent();
 
             CombinationMaterialsList = combinationMaterialsList;
-            Lblserial.Text = serialNum + ".";
             LblAlertName.Text = alertName;
         }
 

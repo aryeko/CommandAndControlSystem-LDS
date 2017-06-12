@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="ControlApplication.DesktopClient.Controls.ShowCombinationAlerts"
+﻿<UserControl x:Class="ControlApplication.DesktopClient.Controls.ShowAlertsControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -13,7 +13,9 @@
             <RowDefinition Height="3*"/>
         </Grid.RowDefinitions>
 
-        <Label Grid.Row="0" x:Name="LblTitle" Content="Showing materials combinations" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Candara" FontWeight="ExtraBold" FontSize="20" Foreground="DarkBlue"/>
+        <Grid Grid.Row="0" Background="DarkRed">
+            <Label Grid.Row="0" x:Name="LblTitle" Content="Alerts table" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Candara" FontWeight="ExtraBold" FontSize="30" Margin="0,3,0,3" Foreground="White"/>
+        </Grid>
 
         <Grid Grid.Row="1">
 
@@ -23,13 +25,15 @@
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Row="0" Grid.Column="0" x:Name="LblAlertName" Text="Alert Name" TextDecorations="Underline" Margin="15,7,0,7" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="16" FontWeight="Bold" />
+            <TextBlock Grid.Row="0" Grid.Column="0" x:Name="LblAlertName" Text="Alert Name" TextDecorations="Underline" Margin="0,7,0,7" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" FontWeight="Bold" />
+            <TextBlock Grid.Row="0" Grid.Column="1" x:Name="LblTime" Text="Date And Time" TextDecorations="Underline" Margin="0,7,0,7" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" FontWeight="Bold"/>
         </Grid>
-        
+
         <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Hidden">
-            <Grid x:Name="CombinationDataXaml"></Grid>
+            <Grid x:Name="AlertDataXaml"></Grid>
         </ScrollViewer>
     </Grid>
 </UserControl>

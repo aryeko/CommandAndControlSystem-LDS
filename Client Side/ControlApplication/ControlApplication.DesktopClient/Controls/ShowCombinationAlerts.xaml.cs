@@ -16,13 +16,13 @@ namespace ControlApplication.DesktopClient.Controls
 
             foreach (var combination in combinationList)
             {
-                var newRowIndex = AlertDataXaml.RowDefinitions.Count;
-                AlertDataXaml.RowDefinitions.Insert(newRowIndex, new RowDefinition());
+                var newRowIndex = CombinationDataXaml.RowDefinitions.Count;
+                CombinationDataXaml.RowDefinitions.Insert(newRowIndex, new RowDefinition());
 
-                var newControl = new SingleCombinationList(newRowIndex+1, combination.AlertName, combination.CombinationMaterialsList);
+                var newControl = new SingleCombinationList(combination.AlertName, combination.CombinationMaterialsList);
 
                 Grid.SetRow(newControl, newRowIndex);
-                AlertDataXaml.Children.Add(newControl);
+                CombinationDataXaml.Children.Add(newControl);
             }
         }
     }
