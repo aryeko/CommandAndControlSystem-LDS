@@ -109,6 +109,24 @@ class DbHandler:
 	def delete_materials_combination(self, json_filter):
 		return self.db.MaterialsCombination.delete_many(json_filter)
 
+	def add_alert(self, alert_name, detections_list, area_id, is_dirty, date_time):
+		doc = {"alert_name": alert_name,
+			   "detection_list": detections_list,
+			   "area_id": area_id,
+			   "is_dirty": is_dirty,
+			   "date_time": date_time}
+
+		affected_doc_id = self.db.Alerts.insert_one(doc)
+		return affected_doc_id.inserted_id
+
+	def get_alert(self, json_filter=None):
+		if json_filter is None:
+			return self.db.Alerts.find()
+		return self.db.Alerts.find(json_filter)
+
+	def delete_alert(self, json_filter):
+		return self.db.Alerts.delete_many(json_filter)
+
 	def add_detection(self, user_id, material_id, area_id, gscan_id, raman_output_id, suspect_id, plate_number, location, date_time):
 		doc = {"user_id": user_id,
 			   "gscan_id": gscan_id,

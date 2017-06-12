@@ -216,7 +216,7 @@ def handle_material_request():
 
 
 @app.route('/materials_combination', methods=['GET', 'POST', 'DELETE'])
-def handle_alerts_request():
+def handle_materials_combinations_request():
 	verify_user_session()
 	if request.method == 'GET':
 		# here we want to get the value of user (i.e. ?user=some-value)
@@ -249,6 +249,45 @@ def handle_alerts_request():
 		deleted_materials_combination_id = dbHandler.delete_materials_combination({'_id': loads(materials_combination_id)})
 
 		return "Deleted " + str(deleted_materials_combination_id.deleted_count) + " materials_combinations"
+
+@app.route('/alert', methods=['GET', 'POST', 'DELETE'])
+def handle_alerts_request():
+	verify_user_session()
+	if request.method == 'GET':
+		# here we want to get the value of user (i.e. ?user=some-value)
+		print("incoming alert request")
+		alert_id = request.args.get('_id')
+		if alert_id is not None:
+			print("retrieving alert by alert_id: ", alert_id)
+			alerts = dbHandler.get_alert({'_id': loads(alert_id)})
+		else:
+			print("retrieving all alerts")
+			alerts = dbHandler.get_alert()
+		print("found", alerts.count(), "alerts")
+
+		return dumps(alerts)
+
+	elif request.method == 'POST':
+		alert_name = request.form.get('alert_name')
+		detections_list_str = request.form.get('materials_list')
+		detections_list = [loads(detection_id) for detection_id in detections_list_str.split(',')]
+		area_id = loads(request.form.get('area_id'))
+		is_dirty = request.form.get('is_dirty')
+		date_time = request.form.get('date_time')
+
+		print("adding alert, alert name: ", alert_name)
+		new_object_id = dbHandler.add_alert(alert_name, detections_list, area_id, is_dirty, date_time)
+		if new_object_id is None:
+			abort(500)
+		return str(new_object_id)
+
+	elif request.method == 'DELETE':
+		alert_id = request.form.get('_id')
+		print("delete alert by id: ", alert_id)
+
+		deleted_alert_id = dbHandler.delete_alert({'_id': loads(alert_id)})
+
+		return "Deleted " + str(deleted_alert_id.deleted_count) + " alerts"
 
 
 @app.route('/detection', methods=['GET', 'POST'])
