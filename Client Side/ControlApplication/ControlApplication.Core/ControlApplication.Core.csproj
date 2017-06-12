@@ -65,6 +65,7 @@
     <Compile Include="Contracts\IMarkerableVisitor.cs" />
     <Compile Include="Contracts\Material.cs" />
     <Compile Include="Contracts\MaterialType.cs" />
+    <Compile Include="AlertsManager.cs" />
     <Compile Include="Networking\CacheManager.cs" />
     <Compile Include="Networking\CookieAwareWebClient.cs">
       <SubType>Component</SubType>
