@@ -121,6 +121,7 @@ namespace ControlApplication.Core.Networking
             {
                 response = _realServerApi.GetObject("detection");
             }
+            }
             
             foreach (dynamic obj in response)
             {
