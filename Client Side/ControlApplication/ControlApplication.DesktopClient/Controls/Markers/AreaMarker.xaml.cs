@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using ControlApplication.Core;
 using ControlApplication.Core.Contracts;
 using ControlApplication.Core.Networking;
 using GMap.NET.WindowsPresentation;
@@ -48,8 +51,36 @@ namespace ControlApplication.DesktopClient.Controls.Markers
                 Content = $"{mArea.AreaType}"
             };
             mPopup.Child = mLabel;
+
+            AlertsManager.CombinationFoundAlert += OnCombinationAlert;
         }
-        
+
+        private void OnCombinationAlert(object source, CombinationAlertArgs args)
+        {
+            Console.WriteLine($"Area {mArea.AreaType} at {mArea.RootLocation} being notified for combination alert");
+            if (!args.Area.Equals(mArea))
+                return;
+            Console.WriteLine($"Area {mArea.AreaType} at {mArea.RootLocation} is responding to combination alert");
+
+            (Application.Current.MainWindow as MainWindow).GMapControl.Position = mArea.RootLocation;
+            (Application.Current.MainWindow as MainWindow).GMapControl.Zoom = 15;
+            Task.Run(() =>
+            {
+                Console.WriteLine($"Area {mArea.AreaType} is starting alarm");
+                bool dummyFlag = false;
+                while (!args.Handled)
+                {
+                    Application.Current.Dispatcher.Invoke(
+                        () => this.markerIcon.Source = new BitmapImage(new Uri($"/ControlApplication.DesktopClient;component/Drawable/MapMarker_{(dummyFlag ? "Red" : "Area")}.png", UriKind.Relative)));
+                    dummyFlag = !dummyFlag;
+                    Thread.Sleep(500);
+                }
+                Console.WriteLine($"Area {mArea.AreaType} is stopping the alarm");
+                Application.Current.Dispatcher.Invoke(
+                    () => this.markerIcon.Source = new BitmapImage(new Uri($"/ControlApplication.DesktopClient;component/Drawable/MapMarker_Area.png", UriKind.Relative)));
+            });
+        }
+
         private void MarkerDoubleClicked(object sender, MouseButtonEventArgs e)
         {
             var sMessageBoxText = $"Do you want to this {mArea.AreaType} area as the working area?";
