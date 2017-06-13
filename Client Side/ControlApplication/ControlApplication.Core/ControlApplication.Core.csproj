@@ -70,6 +70,7 @@
     <Compile Include="Networking\CookieAwareWebClient.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Networking\DetectionAddedEventArgs.cs" />
     <Compile Include="Networking\GscansClientsManager.cs" />
     <Compile Include="Networking\HostedNetwork.cs" />
     <Compile Include="Networking\IGscanClientsApi.cs" />
