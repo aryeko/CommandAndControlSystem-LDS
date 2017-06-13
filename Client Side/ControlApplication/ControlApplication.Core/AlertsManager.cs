@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,8 +17,6 @@ namespace ControlApplication.Core
 
         public List<Detection> Detections { get; }
 
-        public DateTime AlertTime { get; }
-
         public bool Handled { get; set; }
 
         public CombinationAlertArgs(string alertName, Area area, List<Detection> detections)
@@ -25,7 +24,6 @@ namespace ControlApplication.Core
             AlertName = alertName;
             Area = area;
             Detections = detections;
-            AlertTime = DateTime.Now;
             Handled = false;
         }
     }
@@ -41,7 +39,7 @@ namespace ControlApplication.Core
 
         private static void OnDetectionAdded(object sender, DetectionAddedEventArgs e)
         {
-            var affectedAreaDetections = NetworkClientsFactory.GetNtServer().GetDetections(e.Detection.Area.DatabaseId);
+            var affectedAreaDetections = NetworkClientsFactory.GetNtServer().GetDetections(areaId: e.Detection.Area.DatabaseId);
             var affectedAreaMaterials = affectedAreaDetections.Select(d => d.Material).ToList();
 
             var combinations = NetworkClientsFactory.GetNtServer().GetMaterialsCombinationsAlerts();

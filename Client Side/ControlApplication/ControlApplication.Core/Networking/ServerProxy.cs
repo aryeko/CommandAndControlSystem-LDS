@@ -91,18 +91,23 @@ namespace ControlApplication.Core.Networking
             var alertsList = new List<Alert>();
             dynamic response = _realServerApi.GetObject("alert");
 
-            foreach (var obj in response)
+            foreach (dynamic obj in response)
             {
                 var detectionsIds = new List<string>();
-                foreach (var detection in obj.detection_list)
+                foreach (dynamic detection in obj.detection_list)
                 {
                     detectionsIds.Add(detection.ToString());
                 }
-                var detectionsList = detectionsIds.Select(detectionId => GetDetections(detectionId).First()).ToList();
-                var area = GetArea(obj.area_id.ToString());
-                alertsList.Add(ServerObjectConverter.ConvertAlert(obj, detectionsList, area));
+                List<Detection> detectionsList = detectionsIds.Select(detectionId => GetDetections(detectionId: detectionId).First()).ToList();
+                List<Area> area = GetArea(obj.area_id.ToString());
+                alertsList.Add(ServerObjectConverter.ConvertAlert(obj, detectionsList, area.First()));
             }
             return alertsList;
+        }
+
+        public void AddAlert(Alert alert)
+        {
+            _realServerApi.AddAlert(alert);
         }
 
         public List<Detection> GetDetections(string areaId = "", string detectionId = "")
@@ -120,7 +125,6 @@ namespace ControlApplication.Core.Networking
             else
             {
                 response = _realServerApi.GetObject("detection");
-            }
             }
             
             foreach (dynamic obj in response)
@@ -232,9 +236,18 @@ namespace ControlApplication.Core.Networking
             if (response == null)
             {
                 response = _realServerApi.GetObject(uriPath, key, value);
-                CacheManager.SetObjectToCache(value, response);
+                SetObject(value, response);
             }
+            //else
+            //{
+            //    Console.WriteLine("Got from cache " + response);
+            //}
             return response;
+        }
+
+        public void SetObject(string key, dynamic value)
+        {
+            CacheManager.SetObjectToCache(key, value);
         }
 
         //private List<T> GetAllObjects<T>(string uriPath)

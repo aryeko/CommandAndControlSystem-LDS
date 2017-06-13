@@ -52,7 +52,7 @@ namespace ControlApplication.Core.Contracts
         /// <summary>
         /// The Database ID
         /// </summary>
-        internal string DatabaseId { get; }
+        public string DatabaseId { get; }
 
         /// <summary>
         /// Detection class constructor

@@ -47,7 +47,7 @@ namespace ControlApplication.Core.Networking
         {
             var dateTime = DateTime.ParseExact(obj.date_time.ToString(), "G", CultureInfo.InvariantCulture);
             var position = ServerObjectConverter.ParseLocation(obj.location.ToString());
-            return new Detection(dateTime, material, position, area, obj.suspect_id.ToString(), obj.plate_number.ToString(), gscanSn, ramanOutput);
+            return new Detection(dateTime, material, position, area, obj.suspect_id.ToString(), obj.plate_number.ToString(), gscanSn, ramanOutput, obj._id.ToString());
         }
 
         internal static Alert ConvertAlert(dynamic obj, List<Detection> detectionsList, Area area)
