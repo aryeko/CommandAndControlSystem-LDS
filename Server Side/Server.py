@@ -164,7 +164,7 @@ def handle_area_request():
 		new_object_id = dbHandler.add_area(request.form.get('area_type'), request.form.get('root_location') , request.form.get('radius'))
 		if new_object_id is None:
 			abort(500)
-		return str(new_object_id)
+		return dumps(new_object_id)
 
 	elif request.method == 'DELETE':
 		area_root_location = request.form.get('root_location')
@@ -257,12 +257,19 @@ def handle_detection_request():
 	if request.method == 'GET':
 		# here we want to get the value of user (i.e. ?user=some-value)
 		material_id = request.args.get('material_id')
-		print("material_id is: ", material_id)
-		if material_id is not None:
+		area_id = request.args.get('area_id')
+		print("incoming detections request")
+		if area_id is not None:
+			area_id = loads(area_id)
+			print("retrieving detections by area_id: ", area_id)
+			detections = dbHandler.get_detections({'area_id': area_id})
+		elif material_id is not None:
+			print("retrieving detections by material_id: ", material_id)
 			detections = dbHandler.get_detections({'material_id': material_id})
 		else:
+			print("retrieving all detections")
 			detections = dbHandler.get_detections()
-
+		print("found", detections.count(), "detections")
 		return dumps(detections)
 
 	elif request.method == 'POST':
