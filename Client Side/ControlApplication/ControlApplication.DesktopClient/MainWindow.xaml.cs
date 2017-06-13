@@ -88,7 +88,7 @@ namespace ControlApplication.DesktopClient
             AlertsBtn.Background = Brushes.Red;
             Task.Run(() =>
             {
-                Logger.Log($"[{DateTime.Now.TimeOfDay.ToString("g")}] Alert button is starting alarm", GetType().Name);
+                Logger.Log("Alert button is starting alarm", GetType().Name);
                 bool dummyFlag = false;
                 while (!args.Handled)
                 {
