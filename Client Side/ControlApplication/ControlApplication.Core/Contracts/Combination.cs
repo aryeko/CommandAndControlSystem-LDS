@@ -26,5 +26,10 @@ namespace ControlApplication.Core.Contracts
             AlertName = alertName;
             CombinationMaterialsList = combinationMaterialsList;
         }
+
+        public bool ContainesCombination(List<Material> materials)
+        {
+            return CombinationMaterialsList.Except(materials).Any();
+        }
     }
 }
