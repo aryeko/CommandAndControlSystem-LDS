@@ -218,6 +218,30 @@ namespace ControlApplication.Core.Networking
             return null;
         }
 
+        public void AddAlert(Alert alert)
+        {
+            //TODO: List of detections contained NULL somehow
+            var detectionsIds = alert.Detections.Select(d =>
+            {
+                if (d != null)
+                    return d.DatabaseId;
+                return"";
+            });
+
+            //alert.AlertTime = DateTime.Now;
+            //TODO: fix dateTime which changes while moving as a parameter inside Alert (WEIRD!!!)
+            var postData = new NameValueCollection
+            {
+                { "detections_list", string.Join(",", detectionsIds) },
+                { "alert_name", alert.AlertName },
+                { "area_id", alert.Area.DatabaseId },
+                { "is_dirty", alert.IsDirty ? "1":"0"},
+                { "date_time", alert.AlertTime.ToString("G", CultureInfo.InvariantCulture) }
+            };
+
+            PostToDb("alert", postData);
+        }
+
         /// <summary>
         /// Gets data from the DB and handles WebExeptions
         /// </summary>
@@ -311,6 +335,11 @@ namespace ControlApplication.Core.Networking
         public void Dispose()
         {
             WebClient.Dispose();
+        }
+
+        public void SetObject(string key, dynamic value)
+        {
+            throw new NotImplementedException();
         }
     }
 }

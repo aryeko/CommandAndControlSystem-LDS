@@ -64,6 +64,12 @@ namespace ControlApplication.Core.Networking
 		List<Alert> GetAlerts();
 
         /// <summary>
+        /// post an alert to the database using server's RESTful API
+        /// </summary>
+        /// <param name="alert"></param>
+        void AddAlert(Alert alert);
+
+        /// <summary>
         /// gets a raman from the database using server's RESTful API
         /// </summary>
         /// <param name="ramanOutput"></param>
@@ -104,5 +110,7 @@ namespace ControlApplication.Core.Networking
         /// <param name="value">The key value</param>
         /// <returns>An object of type dynamic</returns>
         dynamic GetObject(string uriPath, string key = "", string value = "");
+
+        void SetObject(string key, dynamic value);
     }
 }
