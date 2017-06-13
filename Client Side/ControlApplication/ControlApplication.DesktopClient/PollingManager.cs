@@ -10,7 +10,7 @@ namespace ControlApplication.DesktopClient
         /// Timer interval for getting all detections
         /// </summary>
         private Timer Timer { get; set; }
-        internal const double TimeIntervalMinutes = 2;
+        internal const double TimeIntervalMinutes = 0.5;
 
         public PollingManager()
         {
@@ -28,9 +28,7 @@ namespace ControlApplication.DesktopClient
 
         private void ToDoFunc(object obj)
         {
-            //Console.WriteLine("*****Getting all detections******");
             Application.Current.Dispatcher.Invoke(()=> GetMainWindow().LoadData());
-            //Application.Current.Dispatcher.Invoke(() => GetMainWindow().LoadDataFromClients());
         }
 
         public void Dispose()

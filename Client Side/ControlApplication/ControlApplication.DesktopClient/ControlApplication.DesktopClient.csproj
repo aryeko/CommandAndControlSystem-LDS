@@ -105,6 +105,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\ShowAlertsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ShowAreaDetails.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -114,6 +118,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\ShowMarkerDetections.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SingleAlertControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -177,6 +185,9 @@
     <Compile Include="Controls\OptionControl.xaml.cs">
       <DependentUpon>OptionControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ShowAlertsControl.xaml.cs">
+      <DependentUpon>ShowAlertsControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ShowAreaDetails.xaml.cs">
       <DependentUpon>ShowAreaDetails.xaml</DependentUpon>
     </Compile>
@@ -185,6 +196,9 @@
     </Compile>
     <Compile Include="Controls\ShowMarkerDetections.xaml.cs">
       <DependentUpon>ShowMarkerDetections.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SingleAlertControl.xaml.cs">
+      <DependentUpon>SingleAlertControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\SingleCombinationList.xaml.cs">
       <DependentUpon>SingleCombinationList.xaml</DependentUpon>

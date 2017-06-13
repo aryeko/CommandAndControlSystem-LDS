@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="ControlApplication.DesktopClient.Controls.SingleAlertControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ControlApplication.DesktopClient.Controls"
+             mc:Ignorable="d" 
+             Height="35" Width="NaN">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" x:Name="LblAlertName" Text="Alert Name" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" TextDecorations="Underline" Foreground="CornflowerBlue" FontSize="14" MouseLeftButtonUp="LblAlertName_OnMouseLeftButtonUp"/>
+        <TextBlock Grid.Row="0" Grid.Column="1" x:Name="LblDateTime" Text="date and time" FontWeight="DemiBold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14" />
+    </Grid>
+</UserControl>

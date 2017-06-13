@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using ControlApplication.Core.Contracts;
 using ControlApplication.Core.Networking;
 
 namespace ControlApplication.DesktopClient.Controls
@@ -40,7 +41,24 @@ namespace ControlApplication.DesktopClient.Controls
 
             Window.GetWindow(this)?.Close();
 
-            //TODO: Insert combination to DB
+            var materialsList = GetMaterialsList(chosenCombination);
+            var combination = new Combination(TxtAlert.Text, materialsList);
+            NetworkClientsFactory.GetNtServer().AddMaterialsCombinationAlert(combination);
+        }
+
+        /// <summary>
+        /// Get all combination materials by their name
+        /// </summary>
+        /// <param name="chosenMaterialNamesCombination">Materials name text list</param>
+        /// <returns>A list of <see cref="Material"></see>/> type </returns>
+        private List<Material> GetMaterialsList(List<string> chosenMaterialNamesCombination)
+        {
+            var materialsList = new List<Material>();
+
+            foreach (var material in chosenMaterialNamesCombination)
+                materialsList.Add(NetworkClientsFactory.GetNtServer().GetMaterial(name: material).First());
+
+            return materialsList;
         }
 
         /// <summary>

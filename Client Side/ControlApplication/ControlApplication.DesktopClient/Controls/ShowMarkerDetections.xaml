@@ -13,7 +13,7 @@
             <RowDefinition x:Name="NumOfDetections" Height="1*"/>
         </Grid.RowDefinitions>
 
-        <Label Grid.Row="0" x:Name="LblTitle" Content="Marker Detections" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Candara" FontWeight="ExtraBold" FontSize="16" Foreground="DarkBlue"/>
+        <Label Grid.Row="0" x:Name="LblTitle" Content="Detections List" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Candara" FontWeight="ExtraBold" FontSize="16" Foreground="DarkBlue"/>
 
         <Grid Grid.Row="1">
 

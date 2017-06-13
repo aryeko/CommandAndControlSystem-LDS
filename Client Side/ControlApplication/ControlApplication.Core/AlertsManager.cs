@@ -10,14 +10,17 @@ namespace ControlApplication.Core
 {
     public class CombinationAlertArgs : EventArgs
     {
+        public string AlertName { get; }
+
         public Area Area { get; }
 
         public List<Detection> Detections { get; }
 
         public DateTime AlertTime { get; } 
 
-        public CombinationAlertArgs(Area area, List<Detection> detections)
+        public CombinationAlertArgs(string alertName, Area area, List<Detection> detections)
         {
+            AlertName = alertName;
             Area = area;
             Detections = detections;
             AlertTime = DateTime.Now;
@@ -55,9 +58,9 @@ namespace ControlApplication.Core
             }
         }
 
-        public static void AlertSystem(object source, Area area, List<Detection> detections)
+        public static void AlertSystem(object source, string alertName, Area area, List<Detection> detections)
         {
-            CombinationFoundAlert?.Invoke(source, new CombinationAlertArgs(area, detections));
+            CombinationFoundAlert?.Invoke(source, new CombinationAlertArgs(alertName, area, detections));
         }
     }
 }
