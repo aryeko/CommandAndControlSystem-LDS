@@ -5,14 +5,8 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using ControlApplication.Core.Contracts;
-using ControlApplication.Core.Networking;
-using System.Runtime.Caching;
-using System.IO;
-using GMap.NET;
 using Newtonsoft.Json;
 
 namespace ControlApplication.Core.Networking
@@ -36,18 +30,13 @@ namespace ControlApplication.Core.Networking
         /// <summary>
         /// Lock object for instance safe access (mutex)
         /// </summary>
-        private static readonly object InstanceLock = new object();
+        private static readonly object RestOperationLock = new object();
 
         /// <summary>
-        /// The single instance of <see cref="ServerConnectionManager"/>
-        /// </summary>
-        private static readonly ServerConnectionManager MInstanse = new ServerConnectionManager();
-
-        /// <summary>
-        /// Gets the single instance of <see cref="ServerConnectionManager"/> with lock protection for async access
+        /// Gets the single instance of <see cref="ServerConnectionManager"/> 
         /// </summary>
         /// <returns>Returns single instance of <see cref="ServerConnectionManager"/> as long as the app is running</returns>
-        public static ServerConnectionManager Instance { get { lock (InstanceLock) { return MInstanse; } } }
+        public static ServerConnectionManager Instance { get; } = new ServerConnectionManager();
 
         /// <summary>
         /// Private constructor which will avoid from an external class to create another instance of <see cref="ServerConnectionManager"/>
@@ -253,33 +242,35 @@ namespace ControlApplication.Core.Networking
         /// <returns>Response from DB</returns>
         public dynamic GetObject(string uriPath, string key = "", string value = "")
         {
-            if (!string.IsNullOrEmpty(key) && !string.IsNullOrEmpty(value))
+            lock (RestOperationLock)
             {
-                WebClient.QueryString = new NameValueCollection
+                if (!string.IsNullOrEmpty(key) && !string.IsNullOrEmpty(value))
+                {
+                    WebClient.QueryString = new NameValueCollection
                 {
                     {key, value}
                 };
-            }
-            else
-            {
-                WebClient.QueryString = new NameValueCollection();
-            }
+                }
+                else
+                {
+                    WebClient.QueryString = new NameValueCollection();
+                }
 
-            try
-            {
-                var response = WebClient.DownloadString(new Uri(RemoteServerPath, uriPath));
-                return JsonConvert.DeserializeObject(response);
+                try
+                {
+                    var response = WebClient.DownloadString(new Uri(RemoteServerPath, uriPath));
+                    return JsonConvert.DeserializeObject(response);
+                }
+                catch (WebException)
+                {
+                    MessageBox.Show("Your session expired! please reload NT.", "Authentication failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Environment.Exit(-1);
+                }
+                finally
+                {
+                    WebClient.QueryString = new NameValueCollection();
+                }
             }
-            catch (WebException)
-            {
-                MessageBox.Show("Your session expired! please reload NT.", "Authentication failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Environment.Exit(-1);
-            }
-            finally
-            {
-                WebClient.QueryString = new NameValueCollection();
-            }
-
             return null;
         }
 
@@ -291,14 +282,17 @@ namespace ControlApplication.Core.Networking
         /// <returns>Response</returns>
         private string PostToDb(string uriPath, NameValueCollection postData)
         {
-            try
+            lock (RestOperationLock)
             {
-                var response = WebClient.UploadValues(new Uri(RemoteServerPath, uriPath), postData);
-                return Encoding.Default.GetString(response);
-            }
-            catch (WebException e)
-            {             
-                return e.Message;                
+                try
+                {
+                    var response = WebClient.UploadValues(new Uri(RemoteServerPath, uriPath), postData);
+                    return Encoding.Default.GetString(response);
+                }
+                catch (WebException e)
+                {
+                    return e.Message;
+                }
             }
         }
 
