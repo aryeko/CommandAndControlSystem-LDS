@@ -48,7 +48,8 @@ namespace ControlApplication.Core
 
             foreach (var combination in combinations)
             {
-                if (combination.ContainesCombination(affectedAreaMaterials))
+                if (combination.ContainesCombination(affectedAreaMaterials) 
+                    && combination.CombinationMaterialsList.Contains(e.Detection.Material))
                 {
                     var alertedDetections =
                         affectedAreaDetections.GroupBy(d => d.Material)
