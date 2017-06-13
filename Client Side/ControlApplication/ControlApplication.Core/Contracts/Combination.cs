@@ -29,7 +29,7 @@ namespace ControlApplication.Core.Contracts
 
         public bool ContainesCombination(List<Material> materials)
         {
-            return CombinationMaterialsList.Except(materials).Any();
+            return !CombinationMaterialsList.Except(materials).Any();
         }
     }
 }
