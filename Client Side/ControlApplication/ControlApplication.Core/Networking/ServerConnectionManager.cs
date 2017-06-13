@@ -57,6 +57,8 @@ namespace ControlApplication.Core.Networking
             WebClient = new CookieAwareWebClient();
         }
 
+        public event EventHandler<DetectionAddedEventArgs> DetectionAdded;
+
         /// <summary>
         /// User login authentication 
         /// </summary>
@@ -135,7 +137,7 @@ namespace ControlApplication.Core.Networking
         /// gets all detections from the database using server's RESTful API
         /// </summary>
         /// <returns></returns>
-        public List<Detection> GetDetections()
+        public List<Detection> GetDetections(string areaId = "")
         {
             return null;
         }
@@ -177,6 +179,7 @@ namespace ControlApplication.Core.Networking
             };
 
             PostToDb("detection", postData);
+            DetectionAdded?.Invoke(this, new DetectionAddedEventArgs(detection));
         }
 
         /// <summary>
@@ -192,7 +195,7 @@ namespace ControlApplication.Core.Networking
                 { "radius", newArea.Radius.ToString() }
             };
 
-            PostToDb("area", postData);
+            newArea.DatabaseId = PostToDb("area", postData);
         }
 
         /// <summary>

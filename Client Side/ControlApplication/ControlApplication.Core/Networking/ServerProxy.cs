@@ -16,7 +16,10 @@ namespace ControlApplication.Core.Networking
         public ServerProxy(INtServerApi realServerApi)
         {
             _realServerApi = realServerApi;
+            _realServerApi.DetectionAdded += (sender, args) => DetectionAdded?.Invoke(sender, args);
         }
+
+        public event EventHandler<DetectionAddedEventArgs> DetectionAdded;
 
         public bool Login(string username, string password)
         {
@@ -83,10 +86,18 @@ namespace ControlApplication.Core.Networking
             return ServerObjectConverter.ConvertGscan(response);
         }
 
-        public List<Detection> GetDetections()
+        public List<Detection> GetDetections(string areaId = "")
         {
             var detectionsList = new List<Detection>();
-            dynamic response = _realServerApi.GetObject("detection");
+            dynamic response;
+            if (!string.IsNullOrEmpty(areaId))
+            {
+                response = _realServerApi.GetObject("detection", "area_id", areaId);
+            }
+            else
+            {
+                response = _realServerApi.GetObject("detection");
+            }
 
             foreach (dynamic obj in response)
             {
