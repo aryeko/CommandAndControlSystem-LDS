@@ -5,14 +5,9 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
 using ControlApplication.Core.Contracts;
-using ControlApplication.Core.Networking;
-using System.Runtime.Caching;
-using System.IO;
-using GMap.NET;
 using Newtonsoft.Json;
 
 namespace ControlApplication.Core.Networking
@@ -36,18 +31,13 @@ namespace ControlApplication.Core.Networking
         /// <summary>
         /// Lock object for instance safe access (mutex)
         /// </summary>
-        private static readonly object InstanceLock = new object();
+        private static readonly object RestOperationLock = new object();
 
         /// <summary>
-        /// The single instance of <see cref="ServerConnectionManager"/>
-        /// </summary>
-        private static readonly ServerConnectionManager MInstanse = new ServerConnectionManager();
-
-        /// <summary>
-        /// Gets the single instance of <see cref="ServerConnectionManager"/> with lock protection for async access
+        /// Gets the single instance of <see cref="ServerConnectionManager"/> 
         /// </summary>
         /// <returns>Returns single instance of <see cref="ServerConnectionManager"/> as long as the app is running</returns>
-        public static ServerConnectionManager Instance { get { lock (InstanceLock) { return MInstanse; } } }
+        public static ServerConnectionManager Instance { get; } = new ServerConnectionManager();
 
         /// <summary>
         /// Private constructor which will avoid from an external class to create another instance of <see cref="ServerConnectionManager"/>
@@ -56,6 +46,8 @@ namespace ControlApplication.Core.Networking
         {
             WebClient = new CookieAwareWebClient();
         }
+
+        public event EventHandler<DetectionAddedEventArgs> DetectionAdded;
 
         /// <summary>
         /// User login authentication 
@@ -90,7 +82,7 @@ namespace ControlApplication.Core.Networking
             {
                 materials.Add(ServerObjectConverter.ConvertMaterial(obj));
             }
-           
+
             return materials;
         }
 
@@ -105,7 +97,7 @@ namespace ControlApplication.Core.Networking
 
             foreach (dynamic obj in response)
             {
-               areas.Add(ServerObjectConverter.ConvertArea(obj));
+                areas.Add(ServerObjectConverter.ConvertArea(obj));
             }
 
             return areas;
@@ -133,7 +125,7 @@ namespace ControlApplication.Core.Networking
         /// gets all detections from the database using server's RESTful API
         /// </summary>
         /// <returns></returns>
-        public List<Detection> GetDetections(string detectionId = "")
+        public List<Detection> GetDetections(string areaId = "", string detectionId = "")
         {
             return null;
         }
@@ -151,7 +143,7 @@ namespace ControlApplication.Core.Networking
             //TODO: handle a real raman link
             //dynamic response = GetObject("raman", "_id", ramanOutput);
             //return response[0]._id.ToString();
-            return "";  
+            return "";
         }
 
         /// <summary>
@@ -160,13 +152,13 @@ namespace ControlApplication.Core.Networking
         /// <param name="detection">A detection to add</param>
         /// <param name="idsDictionary">Dictionary of IDs</param>
         public void AddDetection(Detection detection, Dictionary<string,string> idsDictionary)
-        {    
+        {
             var postData = new NameValueCollection
             {
                 { "user_id", idsDictionary["UserId"] },
                 { "material_id", idsDictionary["MaterialId"] },
                 { "area_id", idsDictionary["AreaId"] },
-                { "gscan_id", idsDictionary["GscanId"] },               
+                { "gscan_id", idsDictionary["GscanId"] },
                 { "suspect_id", detection.SuspectId },
                 { "raman_id", detection.RamanId },
                 { "plate_number", detection.SuspectPlateId },
@@ -175,6 +167,7 @@ namespace ControlApplication.Core.Networking
             };
 
             PostToDb("detection", postData);
+            DetectionAdded?.Invoke(this, new DetectionAddedEventArgs(detection));
         }
 
         /// <summary>
@@ -190,7 +183,7 @@ namespace ControlApplication.Core.Networking
                 { "radius", newArea.Radius.ToString() }
             };
 
-            PostToDb("area", postData);
+            newArea.DatabaseId = PostToDb("area", postData);
         }
 
         /// <summary>
@@ -200,7 +193,7 @@ namespace ControlApplication.Core.Networking
         public void AddMaterialsCombinationAlert(Combination combination)
         {
             var materialsIds = combination.CombinationMaterialsList.Select(m => m.DatabaseId);
-            
+
             var postData = new NameValueCollection
             {
                 { "materials_list", string.Join(",", materialsIds) },
@@ -234,33 +227,38 @@ namespace ControlApplication.Core.Networking
         /// <returns>Response from DB</returns>
         public dynamic GetObject(string uriPath, string key = "", string value = "")
         {
-            if (!string.IsNullOrEmpty(key) && !string.IsNullOrEmpty(value))
+            Logger.Log($"Thread [{Thread.CurrentThread.ManagedThreadId}] is trying to achieve GET REST lock", GetType().Name);
+            lock (RestOperationLock)
             {
-                WebClient.QueryString = new NameValueCollection
+                Logger.Log($"Thread [{Thread.CurrentThread.ManagedThreadId}] has achieved GET REST lock", GetType().Name);
+                if (!string.IsNullOrEmpty(key) && !string.IsNullOrEmpty(value))
+                {
+                    WebClient.QueryString = new NameValueCollection
                 {
                     {key, value}
                 };
-            }
-            else
-            {
-                WebClient.QueryString = new NameValueCollection();
-            }
+                }
+                else
+                {
+                    WebClient.QueryString = new NameValueCollection();
+                }
 
-            try
-            {
-                var response = WebClient.DownloadString(new Uri(RemoteServerPath, uriPath));
-                return JsonConvert.DeserializeObject(response);
+                try
+                {
+                    var response = WebClient.DownloadString(new Uri(RemoteServerPath, uriPath));
+                    Logger.Log($"Thread [{Thread.CurrentThread.ManagedThreadId}] is releasing GET REST lock", GetType().Name);
+                    return JsonConvert.DeserializeObject(response);
+                }
+                catch (WebException)
+                {
+                    MessageBox.Show("Your session expired! please reload NT.", "Authentication failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Environment.Exit(-1);
+                }
+                finally
+                {
+                    WebClient.QueryString = new NameValueCollection();
+                }
             }
-            catch (WebException)
-            {
-                MessageBox.Show("Your session expired! please reload NT.", "Authentication failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Environment.Exit(-1);
-            }
-            finally
-            {
-                WebClient.QueryString = new NameValueCollection();
-            }
-
             return null;
         }
 
@@ -272,14 +270,20 @@ namespace ControlApplication.Core.Networking
         /// <returns>Response</returns>
         private string PostToDb(string uriPath, NameValueCollection postData)
         {
-            try
+            Logger.Log($"Thread [{Thread.CurrentThread.ManagedThreadId}] is trying to achieve POST REST lock", GetType().Name);
+            lock (RestOperationLock)
             {
-                var response = WebClient.UploadValues(new Uri(RemoteServerPath, uriPath), postData);
-                return Encoding.Default.GetString(response);
-            }
-            catch (WebException e)
-            {             
-                return e.Message;                
+                Logger.Log($"Thread [{Thread.CurrentThread.ManagedThreadId}] has achieved POST REST lock", GetType().Name);
+                try
+                {
+                    var response = WebClient.UploadValues(new Uri(RemoteServerPath, uriPath), postData);
+                    Logger.Log($"Thread [{Thread.CurrentThread.ManagedThreadId}] is releasing POST REST lock", GetType().Name);
+                    return Encoding.Default.GetString(response);
+                }
+                catch (WebException e)
+                {
+                    return e.Message;
+                }
             }
         }
 
@@ -307,6 +311,6 @@ namespace ControlApplication.Core.Networking
         public void Dispose()
         {
             WebClient.Dispose();
-        }     
+        }
     }
 }

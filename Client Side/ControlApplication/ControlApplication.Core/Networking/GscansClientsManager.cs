@@ -34,7 +34,7 @@ namespace ControlApplication.Core.Networking
             var detectionsList = new List<Detection>();
             foreach (Match match in matches)
             {
-                //Console.WriteLine($"{ramanPathKey}: {match.Groups[ramanPathKey]}");
+                //Logger.Log($"{ramanPathKey}: {match.Groups[ramanPathKey]}");
                 dynamic detectionObj =  JsonConvert.DeserializeObject(match.Groups[detectionKey].Value); //TODO: JSON can't convert
 
                 DateTime dateTime = new DateTime(long.Parse(detectionObj.scan_time.ToString())); //TODO: Fix..
@@ -67,7 +67,7 @@ namespace ControlApplication.Core.Networking
             foreach (var physicalAddress in physicalAddresses)
             {
                 var mac = Regex.Replace(physicalAddress.ToString(), ".{2}", "$0-").Remove(17);
-                Console.WriteLine($"Getting ip for mac: {physicalAddress}");
+                Logger.Log($"Getting ip for mac: {physicalAddress}", GetType().Name);
                 var ipMatch = Regex.Match(output, string.Format(ipPattern, mac), RegexOptions.IgnoreCase);
                 ipAdresses.Add(IPAddress.Parse(ipMatch.Groups[1].Value));
             }
@@ -88,12 +88,12 @@ namespace ControlApplication.Core.Networking
             var clients = Regex.Match(output, string.Format(linePattern, numnerOfClientsKey));
             if (status.Groups[1].Value.Equals("Started") && !clients.Groups[1].Value.Equals("0"))
             {
-                Console.WriteLine($"Found {clients.Groups[1].Value} connected clients");
+                Logger.Log($"Found {clients.Groups[1].Value} connected clients", GetType().Name);
                 var macMatch = Regex.Matches(output, @"(?<MAC>\w+:\w+:\w+:\w+:\w+:\w+)\s+Authenticated");
                 foreach (Match match in macMatch)
                 {
                     var adress = match.Groups["MAC"].Value.ToUpper().Replace(":", "-");
-                    Console.WriteLine("FOUND MAC!! : " + adress);
+                    Logger.Log("FOUND MAC!! : " + adress, GetType().Name);
                     physicalAdresses.Add(PhysicalAddress.Parse(adress));
                 }
             }

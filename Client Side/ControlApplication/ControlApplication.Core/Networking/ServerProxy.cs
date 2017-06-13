@@ -16,7 +16,10 @@ namespace ControlApplication.Core.Networking
         public ServerProxy(INtServerApi realServerApi)
         {
             _realServerApi = realServerApi;
+            _realServerApi.DetectionAdded += (sender, args) => DetectionAdded?.Invoke(sender, args);
         }
+
+        public event EventHandler<DetectionAddedEventArgs> DetectionAdded;
 
         public bool Login(string username, string password)
         {
@@ -44,7 +47,7 @@ namespace ControlApplication.Core.Networking
                 return _realServerApi.GetMaterial();
 
             foreach (dynamic obj in response)
-            {   
+            {
                 materials.Add(ServerObjectConverter.ConvertMaterial(obj));
             }
 
@@ -102,14 +105,23 @@ namespace ControlApplication.Core.Networking
             return alertsList;
         }
 
-        public List<Detection> GetDetections(string detectionId = "")
+        public List<Detection> GetDetections(string areaId = "", string detectionId = "")
         {
             var detectionsList = new List<Detection>();
-          
-            dynamic response = !string.IsNullOrEmpty(detectionId) ?
-                GetObject("detection", "_id", detectionId) :
-                _realServerApi.GetObject("detection");
-
+			dynamic response;
+            if (!string.IsNullOrEmpty(areaId))
+            {
+                response = _realServerApi.GetObject("detection", "area_id", areaId);
+            }
+			else if(!string.IsNullOrEmpty(detectionId))
+            {
+                response = GetObject("detection", "_id", detectionId);
+            }
+            else
+            {
+                response = _realServerApi.GetObject("detection");
+            }
+            
             foreach (dynamic obj in response)
             {
                 var gscanSn = GetGscan(obj.gscan_id.ToString());
@@ -159,7 +171,7 @@ namespace ControlApplication.Core.Networking
         {
             var combinationsList = new List<Combination>();
             dynamic response = !string.IsNullOrEmpty(combinationId) ?
-                GetObject("materials_combination", "_id", combinationId) : 
+                GetObject("materials_combination", "_id", combinationId) :
                 _realServerApi.GetObject("materials_combination");
 
             foreach (dynamic obj in response)

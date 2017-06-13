@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.TextFormatting;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using ControlApplication.Core;
 using ControlApplication.Core.Contracts;
 using ControlApplication.Core.Networking;
@@ -47,15 +48,30 @@ namespace ControlApplication.DesktopClient
 
         private PollingManager PollingManager { get; set; }
 
-        internal Area ActiveWorkingArea { get; set; }
+        private Area _workingArea;
+
+        public Queue<CombinationAlertArgs> AlertsQueue { get; set; }
+
+        internal Area ActiveWorkingArea
+        {
+            get
+            {
+                return _workingArea;
+            }
+            set
+            {
+                _workingArea = value;
+                LblWorkingArea.Content = $"Active area: {value.AreaType}";
+                LblWorkingArea.Foreground = Brushes.Green;
+            }
+        }
 
         public MainWindow()
         {
             Login fLogin = new Login();
             fLogin.ShowDialog();
             DetectionsFilter = ~MaterialType.None;
-            ActiveWorkingArea = new Area(new PointLatLng(0,0), AreaType.Undefined, 0);
-
+            AlertsQueue = new Queue<CombinationAlertArgs>();
             this._hostedNetwork = new HostedNetwork();
             InitializeComponent();
             
@@ -68,31 +84,54 @@ namespace ControlApplication.DesktopClient
 
         private void OnCombinationAlert(object source, CombinationAlertArgs args)
         {
-            //TODO: Add alert to DB, Flicker button's color
+            AlertsQueue.Enqueue(args);
             AlertsBtn.Background = Brushes.Red;
+            Task.Run(() =>
+            {
+                Logger.Log($"[{DateTime.Now.TimeOfDay.ToString("g")}] Alert button is starting alarm", GetType().Name);
+                bool dummyFlag = false;
+                while (!args.Handled)
+                {
+                    Application.Current.Dispatcher.Invoke(
+                        () => this.AlertsBtn.Background = dummyFlag ? Brushes.Red : Brushes.GhostWhite);
+                    dummyFlag = !dummyFlag;
+                    Thread.Sleep(500);
+                }
+                Logger.Log($"[{DateTime.Now.TimeOfDay.ToString("g")}] Alert button is stopping the alarm", GetType().Name);
+                Application.Current.Dispatcher.Invoke(
+                    () => this.AlertsBtn.Background = Brushes.CornflowerBlue);
+            });
         }
 
-        internal void LoadData()
+        internal void LoadData(bool checkAlerts = true)
         {
             Task.Run(() =>
             {
-                Application.Current.Dispatcher.Invoke(() => CircularProgressBar.Visibility = Visibility.Visible);
+                Logger.Log("Starting load data", GetType().Name);
+                if (checkAlerts && AlertsQueue.Any())
+                {
+                    Logger.Log("Skipping load data", GetType().Name);
+                    return;
+                }
+
+                Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Render, new Action(() => CircularProgressBar.Visibility = Visibility.Visible));
                 var detections = NetworkClientsFactory.GetNtServer().GetDetections()
                 .Where(d => DetectionsFilter.HasFlag(d.Material.MaterialType))
                 .GroupBy(d => d.Position);
                 var areas = NetworkClientsFactory.GetNtServer().GetArea();
                 foreach (var detection in detections)
                 {
-                    Application.Current.Dispatcher.Invoke(() => AddMarker(detection.Key, detection.ToList()));
+                    Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => AddMarker(detection.Key, detection.ToList())));
                 }
                 foreach (var area in areas)
                 {
-                    Application.Current.Dispatcher.Invoke(() => AddMarker(area.RootLocation, area));
+                    Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => AddMarker(area.RootLocation, area)));
                 }
-                Application.Current.Dispatcher.Invoke(() => CircularProgressBar.Visibility = Visibility.Hidden);
+                Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Render, new Action(() => CircularProgressBar.Visibility = Visibility.Hidden));
+                Logger.Log("Load data ended", GetType().Name);
             });
         }
-
+        
         internal void LoadDataFromClients()
         {
             Task.Run(() =>
@@ -119,13 +158,28 @@ namespace ControlApplication.DesktopClient
             GMap.NET.GMaps.Instance.Mode = GMap.NET.AccessMode.ServerOnly;
             this.GMapControl.SetPositionByKeywords("Israel, Jerusalem");
             ZoomControl.UpdateControl();
-            
-            LoadData();
+
+            LblWorkingArea.Content = "THE ACTIVE WORKING AREA IS NOT SET";
+            LblWorkingArea.Foreground = Brushes.Red;
+			//CacheMaterials();
+            LoadData(false);
 
             //TODO: Start Hosted network with a button (handle the case when a client don't support Hosted network 
             //  _hostedNetwork.StartHostedNetwork();
         }
-        
+
+        //private void CacheMaterials()
+        //{
+        //    dynamic materials = NetworkClientsFactory.GetNtServer(false).GetObject("material");
+
+        //    foreach (dynamic material in materials)
+        //    {
+        //        Console.WriteLine("Name is: " + material.name.ToString() + " ID is: " + material._id.ToString());
+        //        NetworkClientsFactory.GetNtServer().SetObject(material.name.ToString(), material);
+        //        NetworkClientsFactory.GetNtServer().SetObject(material._id.ToString(), material);
+        //    }
+        //}
+
         private void MainWindow_MouseWheel(object sender, MouseWheelEventArgs e)
         {
             ZoomControl.UpdateControl();
@@ -133,6 +187,12 @@ namespace ControlApplication.DesktopClient
 
         private void PopAddDetectionWindow(object sender, MouseButtonEventArgs e)
         {
+            if (ActiveWorkingArea == null)
+            {
+                MessageBox.Show(this, "Please set the active working area", "Please set the active working area",
+                    MessageBoxButton.OK);
+                return;
+            }
             new Window
             {
                 Title = "Add new detection",
@@ -296,6 +356,9 @@ namespace ControlApplication.DesktopClient
 
         private void AlertsBtn_Click(object sender, RoutedEventArgs e)
         {
+            if(AlertsQueue.Any())
+                AlertsQueue.Dequeue().Handled = true;
+
             List<Detection> detections = NetworkClientsFactory.GetNtServer().GetDetections();
             Area area = NetworkClientsFactory.GetNtServer().GetArea().First();
             Alert alert = new Alert("Test", area, detections,DateTime.Now);

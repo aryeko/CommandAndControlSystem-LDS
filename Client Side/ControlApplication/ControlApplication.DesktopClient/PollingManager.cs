@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace ControlApplication.DesktopClient
 {
@@ -28,7 +29,7 @@ namespace ControlApplication.DesktopClient
 
         private void ToDoFunc(object obj)
         {
-            Application.Current.Dispatcher.Invoke(()=> GetMainWindow().LoadData());
+            Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(()=> GetMainWindow().LoadData()));
         }
 
         public void Dispose()

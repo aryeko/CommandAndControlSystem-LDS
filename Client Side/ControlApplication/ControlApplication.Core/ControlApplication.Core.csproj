@@ -67,10 +67,12 @@
     <Compile Include="Contracts\Material.cs" />
     <Compile Include="Contracts\MaterialType.cs" />
     <Compile Include="AlertsManager.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="Networking\CacheManager.cs" />
     <Compile Include="Networking\CookieAwareWebClient.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Networking\DetectionAddedEventArgs.cs" />
     <Compile Include="Networking\GscansClientsManager.cs" />
     <Compile Include="Networking\HostedNetwork.cs" />
     <Compile Include="Networking\IGscanClientsApi.cs" />

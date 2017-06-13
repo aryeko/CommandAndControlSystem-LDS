@@ -29,7 +29,7 @@ namespace ControlApplication.Core.Networking
         public static Area ConvertArea(dynamic obj)
         {
             var areaType = (AreaType)System.Enum.Parse(typeof(AreaType), obj.area_type.ToString());
-            return new Area(ParseLocation(obj.root_location.ToString()), areaType, double.Parse(obj.radius.ToString()));
+            return new Area(ParseLocation(obj.root_location.ToString()), areaType, double.Parse(obj.radius.ToString()), obj._id.ToString());
         }
 
         public static Material ConvertMaterial(dynamic obj)

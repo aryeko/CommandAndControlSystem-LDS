@@ -15,11 +15,14 @@ namespace ControlApplication.Core.Contracts
 
         public double Radius { get; }
 
-        public Area(PointLatLng rootLocation, AreaType areaType, double radius)
+        public string DatabaseId { get; internal set; }
+
+        public Area(PointLatLng rootLocation, AreaType areaType, double radius, string databaseId = "")
         {
             RootLocation = rootLocation;
             AreaType = areaType;
             Radius = radius;
+            DatabaseId = databaseId;
         }
 
         public void Accept(IMarkerableVisitor visitor)

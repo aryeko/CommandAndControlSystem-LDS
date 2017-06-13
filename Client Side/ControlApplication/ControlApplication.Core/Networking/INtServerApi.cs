@@ -10,6 +10,11 @@ namespace ControlApplication.Core.Networking
     public interface INtServerApi
     {
         /// <summary>
+        /// Event useed to indicate that a detection has been added
+        /// </summary>
+        event EventHandler<DetectionAddedEventArgs> DetectionAdded;
+
+        /// <summary>
         /// User login authentication 
         /// </summary>
         /// <param name="username">The username</param>
@@ -50,13 +55,13 @@ namespace ControlApplication.Core.Networking
         /// gets all detections from the database using server's RESTful API
         /// </summary>
         /// <returns></returns>
-        List<Detection> GetDetections(string detectionId = "");
+		List<Detection> GetDetections(string areaId = "", string detectionId = "");
 
         /// <summary>
         /// gets all alerts from the database using server's RESTful API
         /// </summary>
         /// <returns></returns>
-        List<Alert> GetAlerts();
+		List<Alert> GetAlerts();
 
         /// <summary>
         /// gets a raman from the database using server's RESTful API
