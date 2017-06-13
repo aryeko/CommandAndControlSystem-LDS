@@ -47,15 +47,28 @@ namespace ControlApplication.DesktopClient
 
         private PollingManager PollingManager { get; set; }
 
-        internal Area ActiveWorkingArea { get; set; }
+        private Area _workingArea;
+
+        internal Area ActiveWorkingArea
+        {
+            get
+            {
+                return _workingArea;
+            }
+            set
+            {
+                _workingArea = value;
+                LblWorkingArea.Content = $"Active area: {value.AreaType}";
+                LblWorkingArea.Foreground = Brushes.Green;
+            }
+        }
 
         public MainWindow()
         {
             Login fLogin = new Login();
             fLogin.ShowDialog();
             DetectionsFilter = ~MaterialType.None;
-            ActiveWorkingArea = new Area(new PointLatLng(0,0), AreaType.Undefined, 0);
-
+            
             this._hostedNetwork = new HostedNetwork();
             InitializeComponent();
             
@@ -119,7 +132,10 @@ namespace ControlApplication.DesktopClient
             GMap.NET.GMaps.Instance.Mode = GMap.NET.AccessMode.ServerOnly;
             this.GMapControl.SetPositionByKeywords("Israel, Jerusalem");
             ZoomControl.UpdateControl();
-            
+
+            LblWorkingArea.Content = "THE ACTIVE WORKING AREA IS NOT SET";
+            LblWorkingArea.Foreground = Brushes.Red;
+
             LoadData();
 
             //TODO: Start Hosted network with a button (handle the case when a client don't support Hosted network 
@@ -133,6 +149,12 @@ namespace ControlApplication.DesktopClient
 
         private void PopAddDetectionWindow(object sender, MouseButtonEventArgs e)
         {
+            if (ActiveWorkingArea == null)
+            {
+                MessageBox.Show(this, "Please set the active working area", "Please set the active working area",
+                    MessageBoxButton.OK);
+                return;
+            }
             new Window
             {
                 Title = "Add new detection",
