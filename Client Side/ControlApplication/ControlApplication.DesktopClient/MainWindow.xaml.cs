@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.Remoting.Channels;
@@ -84,11 +85,13 @@ namespace ControlApplication.DesktopClient
 
         private void OnCombinationAlert(object source, CombinationAlertArgs args)
         {
+            Logger.Log("Alert was caught: " + args.AlertName, "MainWindow.AlertHandler");
+            NetworkClientsFactory.GetNtServer().AddAlert(new Alert(args.AlertName, args.Area, args.Detections, DateTime.Now));
             AlertsQueue.Enqueue(args);
             AlertsBtn.Background = Brushes.Red;
             Task.Run(() =>
             {
-                Logger.Log($"[{DateTime.Now.TimeOfDay.ToString("g")}] Alert button is starting alarm", GetType().Name);
+                Logger.Log("Alert button is starting alarm", GetType().Name);
                 bool dummyFlag = false;
                 while (!args.Handled)
                 {
@@ -359,10 +362,7 @@ namespace ControlApplication.DesktopClient
             if(AlertsQueue.Any())
                 AlertsQueue.Dequeue().Handled = true;
 
-            List<Detection> detections = NetworkClientsFactory.GetNtServer().GetDetections();
-            Area area = NetworkClientsFactory.GetNtServer().GetArea().First();
-            Alert alert = new Alert("Test", area, detections,DateTime.Now);
-            List<Alert> alertList = new List<Alert> { alert, alert, alert, alert, alert, alert, alert, alert, alert, alert, alert, alert, alert, alert, alert, alert,alert, alert,alert,alert, alert, alert, alert, alert , alert, alert, alert, alert , alert, alert, alert, alert}; //NetworkClientsFactory.GetNtServer().GetAlerts();
+            var alertList = NetworkClientsFactory.GetNtServer().GetAlerts().OrderBy(a => a.AlertTime.TimeOfDay).ToList();
             new Window
             {
                 Title = "Show alerts list",

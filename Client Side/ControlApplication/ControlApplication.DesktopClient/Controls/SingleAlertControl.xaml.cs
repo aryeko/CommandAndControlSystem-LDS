@@ -28,7 +28,7 @@ namespace ControlApplication.DesktopClient.Controls
             InitializeComponent();
 
             LblAlertName.Text = alert.AlertName;
-            LblAlertName.Foreground = !alert.IsDirty ? Brushes.Red : Brushes.Black;
+            Border.BorderBrush = !alert.IsDirty ? Brushes.Red : Brushes.White;
             LblDateTime.Text = alert.AlertTime.ToString("D");
             _alert = alert;
         }
@@ -36,6 +36,7 @@ namespace ControlApplication.DesktopClient.Controls
         private void LblAlertName_OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             _alert.IsDirty = true; //TODO: need to update the DB
+            Border.BorderBrush = Brushes.White;
             new Window
             {
                 Title = "Showing all alert's detections",

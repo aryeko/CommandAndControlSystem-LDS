@@ -60,6 +60,7 @@ namespace ControlApplication.Core
 
         public static void AlertSystem(object source, string alertName, Area area, List<Detection> detections)
         {
+            Logger.Log($"Alerting system for [{alertName}] alarm at area type [{area.AreaType}]");
             CombinationFoundAlert?.Invoke(source, new CombinationAlertArgs(alertName, area, detections));
         }
     }

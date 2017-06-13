@@ -16,7 +16,9 @@
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock Grid.Row="0" Grid.Column="0" x:Name="LblAlertName" Text="Alert Name" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" TextDecorations="Underline" Foreground="CornflowerBlue" FontSize="14" MouseLeftButtonUp="LblAlertName_OnMouseLeftButtonUp"/>
+        <Border Grid.Row="0" Grid.Column="0" x:Name="Border" BorderThickness="1" Margin="5,0,5,0" Height="22" BorderBrush="IndianRed">
+            <TextBlock  x:Name="LblAlertName" Text="Alert Name" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" TextDecorations="Underline" Foreground="Red" FontSize="14" MouseLeftButtonUp="LblAlertName_OnMouseLeftButtonUp"/>
+        </Border>
         <TextBlock Grid.Row="0" Grid.Column="1" x:Name="LblDateTime" Text="date and time" FontWeight="DemiBold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14" />
     </Grid>
 </UserControl>
