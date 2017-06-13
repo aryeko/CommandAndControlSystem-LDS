@@ -16,7 +16,9 @@ namespace ControlApplication.Core
 
         public List<Detection> Detections { get; }
 
-        public DateTime AlertTime { get; } 
+        public DateTime AlertTime { get; }
+
+        public bool Handled { get; set; }
 
         public CombinationAlertArgs(string alertName, Area area, List<Detection> detections)
         {
@@ -24,14 +26,13 @@ namespace ControlApplication.Core
             Area = area;
             Detections = detections;
             AlertTime = DateTime.Now;
+            Handled = false;
         }
     }
 
     public static class AlertsManager
     {
-        public delegate void CombinationFoundAlertHandler(object source, CombinationAlertArgs args);
-
-        public static event CombinationFoundAlertHandler CombinationFoundAlert;
+        public static event EventHandler<CombinationAlertArgs> CombinationFoundAlert;
 
         static AlertsManager()
         {
@@ -53,7 +54,7 @@ namespace ControlApplication.Core
                         affectedAreaDetections.GroupBy(d => d.Material)
                             .Select(
                                 group => combination.CombinationMaterialsList.Contains(group.Key) ? group.Last() : null).ToList();
-                    AlertSystem(sender, e.Detection.Area, alertedDetections);
+                    AlertSystem(sender, combination.AlertName, e.Detection.Area, alertedDetections);
                 }
             }
         }
