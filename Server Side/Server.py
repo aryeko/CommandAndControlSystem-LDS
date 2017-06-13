@@ -269,7 +269,7 @@ def handle_alerts_request():
 
 	elif request.method == 'POST':
 		alert_name = request.form.get('alert_name')
-		detections_list_str = request.form.get('materials_list')
+		detections_list_str = request.form.get('detections_list')
 		detections_list = [loads(detection_id) for detection_id in detections_list_str.split(',')]
 		area_id = loads(request.form.get('area_id'))
 		is_dirty = request.form.get('is_dirty')
@@ -295,10 +295,15 @@ def handle_detection_request():
 	verify_user_session()
 	if request.method == 'GET':
 		# here we want to get the value of user (i.e. ?user=some-value)
+		detection_id = request.args.get('_id')
 		material_id = request.args.get('material_id')
 		area_id = request.args.get('area_id')
 		print("incoming detections request")
-		if area_id is not None:
+		if detection_id is not None:
+			detection_id = loads(detection_id)
+			print("retrieving detections by detection_id: ", detection_id)
+			detections = dbHandler.get_detections({'_id': detection_id})
+		elif area_id is not None:
 			area_id = loads(area_id)
 			print("retrieving detections by area_id: ", area_id)
 			detections = dbHandler.get_detections({'area_id': area_id})
