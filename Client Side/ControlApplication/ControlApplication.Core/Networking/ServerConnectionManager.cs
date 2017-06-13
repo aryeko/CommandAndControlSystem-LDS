@@ -243,10 +243,10 @@ namespace ControlApplication.Core.Networking
         /// <returns>Response from DB</returns>
         public dynamic GetObject(string uriPath, string key = "", string value = "")
         {
-            Console.WriteLine($"Thread [{Thread.CurrentThread.ManagedThreadId}] is trying to achieve GET REST lock");
+            Logger.Log($"Thread [{Thread.CurrentThread.ManagedThreadId}] is trying to achieve GET REST lock", GetType().Name);
             lock (RestOperationLock)
             {
-                Console.WriteLine($"Thread [{Thread.CurrentThread.ManagedThreadId}] has achieved GET REST lock");
+                Logger.Log($"Thread [{Thread.CurrentThread.ManagedThreadId}] has achieved GET REST lock", GetType().Name);
                 if (!string.IsNullOrEmpty(key) && !string.IsNullOrEmpty(value))
                 {
                     WebClient.QueryString = new NameValueCollection
@@ -262,7 +262,7 @@ namespace ControlApplication.Core.Networking
                 try
                 {
                     var response = WebClient.DownloadString(new Uri(RemoteServerPath, uriPath));
-                    Console.WriteLine($"Thread [{Thread.CurrentThread.ManagedThreadId}] is releasing GET REST lock");
+                    Logger.Log($"Thread [{Thread.CurrentThread.ManagedThreadId}] is releasing GET REST lock", GetType().Name);
                     return JsonConvert.DeserializeObject(response);
                 }
                 catch (WebException)
@@ -286,14 +286,14 @@ namespace ControlApplication.Core.Networking
         /// <returns>Response</returns>
         private string PostToDb(string uriPath, NameValueCollection postData)
         {
-            Console.WriteLine($"Thread [{Thread.CurrentThread.ManagedThreadId}] is trying to achieve POST REST lock");
+            Logger.Log($"Thread [{Thread.CurrentThread.ManagedThreadId}] is trying to achieve POST REST lock", GetType().Name);
             lock (RestOperationLock)
             {
-                Console.WriteLine($"Thread [{Thread.CurrentThread.ManagedThreadId}] has achieved POST REST lock");
+                Logger.Log($"Thread [{Thread.CurrentThread.ManagedThreadId}] has achieved POST REST lock", GetType().Name);
                 try
                 {
                     var response = WebClient.UploadValues(new Uri(RemoteServerPath, uriPath), postData);
-                    Console.WriteLine($"Thread [{Thread.CurrentThread.ManagedThreadId}] is releasing POST REST lock");
+                    Logger.Log($"Thread [{Thread.CurrentThread.ManagedThreadId}] is releasing POST REST lock", GetType().Name);
                     return Encoding.Default.GetString(response);
                 }
                 catch (WebException e)

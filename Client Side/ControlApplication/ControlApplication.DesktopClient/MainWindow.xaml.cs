@@ -88,7 +88,7 @@ namespace ControlApplication.DesktopClient
             AlertsBtn.Background = Brushes.Red;
             Task.Run(() =>
             {
-                Console.WriteLine($"[{DateTime.Now.TimeOfDay.ToString("g")}] Alert button is starting alarm");
+                Logger.Log($"[{DateTime.Now.TimeOfDay.ToString("g")}] Alert button is starting alarm", GetType().Name);
                 bool dummyFlag = false;
                 while (!args.Handled)
                 {
@@ -97,7 +97,7 @@ namespace ControlApplication.DesktopClient
                     dummyFlag = !dummyFlag;
                     Thread.Sleep(500);
                 }
-                Console.WriteLine($"[{DateTime.Now.TimeOfDay.ToString("g")}] Alert button is stopping the alarm");
+                Logger.Log($"[{DateTime.Now.TimeOfDay.ToString("g")}] Alert button is stopping the alarm", GetType().Name);
                 Application.Current.Dispatcher.Invoke(
                     () => this.AlertsBtn.Background = Brushes.CornflowerBlue);
             });
@@ -107,10 +107,10 @@ namespace ControlApplication.DesktopClient
         {
             Task.Run(() =>
             {
-                Console.WriteLine("Starting load data");
+                Logger.Log("Starting load data", GetType().Name);
                 if (checkAlerts && AlertsQueue.Any())
                 {
-                    Console.WriteLine("Skipping load data");
+                    Logger.Log("Skipping load data", GetType().Name);
                     return;
                 }
 
@@ -128,7 +128,7 @@ namespace ControlApplication.DesktopClient
                     Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => AddMarker(area.RootLocation, area)));
                 }
                 Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Render, new Action(() => CircularProgressBar.Visibility = Visibility.Hidden));
-                Console.WriteLine("Load data ended");
+                Logger.Log("Load data ended", GetType().Name);
             });
         }
         

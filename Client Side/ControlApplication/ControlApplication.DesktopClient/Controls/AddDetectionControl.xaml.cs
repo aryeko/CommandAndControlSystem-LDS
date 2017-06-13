@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using ControlApplication.Core;
 using ControlApplication.Core.Contracts;
 using ControlApplication.Core.Networking;
 using GMap.NET;
@@ -50,7 +51,7 @@ namespace ControlApplication.DesktopClient.Controls
             {
                 Window.GetWindow(this)?.Close();
                 var material = NetworkClientsFactory.GetNtServer().GetMaterial(name:MaterialComboBox.Text).First();
-                Console.WriteLine($"Adding Detection using {GetMainWindow().ActiveWorkingArea.AreaType} area at {GetMainWindow().ActiveWorkingArea.RootLocation}");
+                Logger.Log($"Adding Detection using {GetMainWindow().ActiveWorkingArea.AreaType} area at {GetMainWindow().ActiveWorkingArea.RootLocation}", GetType().Name);
                 var area = GetMainWindow().ActiveWorkingArea;
                 var detection = new Detection(mCurrentDateTime, material, mClickPoint, area, TxtSuspectId.Text, TxtSuspectPlateNo.Text);
                 NetworkClientsFactory.GetNtServer().AddDetection(detection);

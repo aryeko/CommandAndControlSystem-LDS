@@ -57,16 +57,16 @@ namespace ControlApplication.DesktopClient.Controls.Markers
 
         private void OnCombinationAlert(object source, CombinationAlertArgs args)
         {
-            Console.WriteLine($"Area {mArea.AreaType} at {mArea.RootLocation} being notified for combination alert");
+            Logger.Log($"Area {mArea.AreaType} at {mArea.RootLocation} being notified for combination alert", GetType().Name);
             if (!args.Area.Equals(mArea))
                 return;
-            Console.WriteLine($"Area {mArea.AreaType} at {mArea.RootLocation} is responding to combination alert");
+            Logger.Log($"Area {mArea.AreaType} at {mArea.RootLocation} is responding to combination alert", GetType().Name);
 
             (Application.Current.MainWindow as MainWindow).GMapControl.Position = mArea.RootLocation;
             (Application.Current.MainWindow as MainWindow).GMapControl.Zoom = 15;
             Task.Run(() =>
             {
-                Console.WriteLine($"Area {mArea.AreaType} is starting alarm");
+                Logger.Log($"Area {mArea.AreaType} is starting alarm", GetType().Name);
                 bool dummyFlag = false;
                 while (!args.Handled)
                 {
@@ -75,7 +75,7 @@ namespace ControlApplication.DesktopClient.Controls.Markers
                     dummyFlag = !dummyFlag;
                     Thread.Sleep(500);
                 }
-                Console.WriteLine($"Area {mArea.AreaType} is stopping the alarm");
+                Logger.Log($"Area {mArea.AreaType} is stopping the alarm", GetType().Name);
                 Application.Current.Dispatcher.Invoke(
                     () => this.markerIcon.Source = new BitmapImage(new Uri($"/ControlApplication.DesktopClient;component/Drawable/MapMarker_Area.png", UriKind.Relative)));
             });
@@ -91,16 +91,16 @@ namespace ControlApplication.DesktopClient.Controls.Markers
             switch (messageBoxResult)
             {
                 case MessageBoxResult.Yes:
-                    Console.WriteLine($"Set {mArea.AreaType} at {mArea.RootLocation} as the active working area");
+                    Logger.Log($"Set {mArea.AreaType} at {mArea.RootLocation} as the active working area", GetType().Name);
                     (Application.Current.MainWindow as MainWindow).ActiveWorkingArea = mArea;
                     break;
 
                 case MessageBoxResult.No:
-                    Console.WriteLine($"[CANCELED] Set {mArea.AreaType} at {mArea.RootLocation} as the active working area");
+                    Logger.Log($"[CANCELED] Set {mArea.AreaType} at {mArea.RootLocation} as the active working area", GetType().Name);
                     break;
 
                 default:
-                    Console.WriteLine($"Area marker clicked with not supported option: {messageBoxResult}");
+                    Logger.Log($"Area marker clicked with not supported option: {messageBoxResult}", GetType().Name);
                     break;
             }
 
