@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ControlApplication.Core.Contracts;
+using ControlApplication.Core.Networking;
 
 namespace ControlApplication.DesktopClient.Controls
 {
@@ -41,6 +42,38 @@ namespace ControlApplication.DesktopClient.Controls
 
             LblMac.Content = gscan.PhysicalAddress;
             LblIp.Content = gscan.IpAddress;
+            MouseDoubleClick += OnDoubleClick;
+            MouseRightButtonUp += OnRightMouseUp;
+        }
+
+        private void OnRightMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            var activeArea = (Application.Current.MainWindow as MainWindow).ActiveWorkingArea;
+            if (activeArea == null)
+            {
+                MessageBox.Show(Application.Current.MainWindow, "Please set the active working area", "Please set the active working area",
+                    MessageBoxButton.OK);
+                return;
+            }
+
+            var deviceDetections = NetworkClientsFactory.GetGscanClientsApi().GetDeviceDetections(Gscan, activeArea);
+            foreach (var deviceDetection in deviceDetections)
+            {
+                NetworkClientsFactory.GetNtServer().AddDetection(deviceDetection);
+            }
+            
+        }
+
+        private void OnDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var result = MessageBox.Show(Window.GetWindow(this),
+                "Are you sure you want to add this Gscan to the database?", "Add Gscan to the database",
+                MessageBoxButton.OKCancel);
+
+            if (result == MessageBoxResult.OK)
+            {
+                NetworkClientsFactory.GetNtServer().AddGscan(Gscan);
+            }
         }
     }
 }

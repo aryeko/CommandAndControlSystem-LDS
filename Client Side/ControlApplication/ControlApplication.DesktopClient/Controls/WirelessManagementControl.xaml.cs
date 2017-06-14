@@ -57,8 +57,8 @@ namespace ControlApplication.DesktopClient.Controls
         {
             if (!NetworkClientsFactory.GetGscanClientsApi().TryStartHostedNetwork())
             {
-                MessageBox.Show(Application.Current.MainWindow, "Hosted Network Error" ,"Hosted network is not supported in your computer", MessageBoxButton.OK);
-                CheckBoxWifiStatus.IsChecked = false;
+                MessageBox.Show(Window.GetWindow(this), "Hosted Network Error" ,"Hosted network is not supported in your computer", MessageBoxButton.OK);
+                Window.GetWindow(this).Close();
                 return;
             }
 
