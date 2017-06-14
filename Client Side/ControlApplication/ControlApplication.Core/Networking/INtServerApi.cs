@@ -70,6 +70,12 @@ namespace ControlApplication.Core.Networking
         void AddAlert(Alert alert);
 
         /// <summary>
+        /// update an alert to the database by alert ID using server's RESTful API
+        /// </summary>
+        /// <param name="alert"></param>
+        void UpdateAlert(Alert alert);
+
+        /// <summary>
         /// gets a raman from the database using server's RESTful API
         /// </summary>
         /// <param name="ramanOutput"></param>

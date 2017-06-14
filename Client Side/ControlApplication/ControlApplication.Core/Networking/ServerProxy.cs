@@ -103,6 +103,11 @@ namespace ControlApplication.Core.Networking
             _realServerApi.AddAlert(alert);
         }
 
+        public void UpdateAlert(Alert alert)
+        {
+            _realServerApi.UpdateAlert(alert);
+        }
+
         public List<Detection> GetDetections(string areaId = "", string detectionId = "")
         {
             var detectionsList = new List<Detection>();

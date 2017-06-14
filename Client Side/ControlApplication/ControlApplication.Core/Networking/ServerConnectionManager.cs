@@ -220,18 +220,22 @@ namespace ControlApplication.Core.Networking
 
         public void AddAlert(Alert alert)
         {
-            var detectionsIds = alert.Detections.Select(d =>
-            {
-                if (d != null)
-                    return d.DatabaseId;
-                return"";
-            });
+            var postData = BuildAlertValueCollection(alert);
+            PostToDb("alert", postData);
+        }
 
-            detectionsIds = detectionsIds.Where(s => !string.IsNullOrWhiteSpace(s)).Distinct().ToList();
+        public void UpdateAlert(Alert alert)
+        {
+            var postData = BuildAlertValueCollection(alert);
+            postData.Add("_id", alert.DatabaseId);
+            PostToDb("alert", postData);
+        }
 
-            //alert.AlertTime = DateTime.Now;
-            //TODO: fix dateTime which changes while moving as a parameter inside Alert (WEIRD!!!)
-            var postData = new NameValueCollection
+        private static NameValueCollection BuildAlertValueCollection(Alert alert)
+        {
+            var detectionsIds = alert.Detections.Select(d => d.DatabaseId);
+
+            return new NameValueCollection
             {
                 { "detections_list", string.Join(",", detectionsIds) },
                 { "alert_name", alert.AlertName },
@@ -239,8 +243,6 @@ namespace ControlApplication.Core.Networking
                 { "is_dirty", alert.IsDirty ? "1":"0"},
                 { "date_time", alert.AlertTime.ToString("G", CultureInfo.InvariantCulture) }
             };
-
-            PostToDb("alert", postData);
         }
 
         /// <summary>
