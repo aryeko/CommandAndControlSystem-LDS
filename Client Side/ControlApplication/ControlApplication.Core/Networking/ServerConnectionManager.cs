@@ -106,16 +106,16 @@ namespace ControlApplication.Core.Networking
         /// <summary>
         /// gets a G-Scan from the database using server's RESTful API
         /// </summary>
-        /// <param name="gscanId">Filter the search by G-Scan uniqe ID</param>
+        /// <param name="gscanSn">Filter the search by G-Scan uniqe ID</param>
         /// <returns></returns>
-        public List<string> GetGscan(string gscanId = "")
+        public List<Gscan> GetGscan(string gscanSn = "")
         {
-            var gscans = new List<string>();
+            var gscans = new List<Gscan>();
             var response = GetObject("gscan");
 
             foreach (dynamic obj in response)
             {
-                gscans.Add(obj[0].gscan_sn.ToString());
+                gscans.Add(ServerObjectConverter.ConvertGscan(obj));
             }
 
             return gscans;
@@ -184,6 +184,21 @@ namespace ControlApplication.Core.Networking
             };
 
             newArea.DatabaseId = PostToDb("area", postData);
+        }
+
+        /// <summary>
+        /// Adds a new Gscan to the database using server's RESTfull API
+        /// </summary>
+        /// <param name="newGscan">a Gscan to add</param>
+        public void AddGscan(Gscan newGscan)
+        {
+            var postData = new NameValueCollection
+            {
+                { "gscan_sn", newGscan.PhysicalAddress.ToString() },
+                { "owned_unit_id", newGscan.OwnedUnitDatabaseId }
+            };
+
+            PostToDb("gscan", postData);
         }
 
         /// <summary>

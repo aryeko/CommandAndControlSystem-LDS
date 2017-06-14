@@ -49,13 +49,19 @@ namespace ControlApplication.Core.Networking
         /// </summary>
         /// <param name="gscanId">Filter the search by G-Scan uniqe ID</param>
         /// <returns></returns>
-        List<string> GetGscan(string gscanId = "");
+        List<Gscan> GetGscan(string gscanSn = "");
+
+        /// <summary>
+        /// Adds a new Gscan to the database usint server's RESTfull API
+        /// </summary>
+        /// <param name="newGscan"></param>
+        void AddGscan(Gscan newGscan);
 
         /// <summary>
         /// gets all detections from the database using server's RESTful API
         /// </summary>
         /// <returns></returns>
-		List<Detection> GetDetections(string areaId = "", string detectionId = "");
+        List<Detection> GetDetections(string areaId = "", string detectionId = "");
 
         /// <summary>
         /// gets all alerts from the database using server's RESTful API

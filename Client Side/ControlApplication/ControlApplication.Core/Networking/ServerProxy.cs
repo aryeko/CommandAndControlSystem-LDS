@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 using ControlApplication.Core.Contracts;
@@ -63,20 +65,29 @@ namespace ControlApplication.Core.Networking
             return areas;
         }
 
-        public List<string> GetGscan(string gscanId)
+        public List<Gscan> GetGscan(string gscanSn)
         {
-            dynamic response;
-            if (gscanId.Equals("no gscan"))
-                return new List<string>() {""};
+            List<Gscan> list = new List<Gscan>();
 
-            if (!string.IsNullOrEmpty(gscanId))
-                response = GetObject("gscan", "_id", gscanId);
-            else
-            {
+            if (gscanSn.Equals("no gscan"))
+                return new List<Gscan> {new Gscan(PhysicalAddress.None, IPAddress.None)};
+
+            if (string.IsNullOrEmpty(gscanSn))
                 return _realServerApi.GetGscan();
+                
+            dynamic response = GetObject("gscan", "gscan_sn", gscanSn);
+
+            foreach (dynamic obj in response)
+            {
+                list.Add(ServerObjectConverter.ConvertGscan(obj));
             }
 
-            return ServerObjectConverter.ConvertGscan(response);
+            return list;
+        }
+
+        public void AddGscan(Gscan newGscan)
+        {
+            _realServerApi.AddGscan(newGscan);
         }
 
         public List<Alert> GetAlerts()
@@ -127,11 +138,11 @@ namespace ControlApplication.Core.Networking
             
             foreach (dynamic obj in response)
             {
-                var gscanSn = GetGscan(obj.gscan_id.ToString());
+                List<Gscan> gscan = GetGscan(obj.gscan_id.ToString());
                 var ramanOutput = GetRaman(obj.raman_output_id.ToString());
                 var area = GetArea(obj.area_id.ToString());
                 var material = GetMaterial(materialId: obj.material_id.ToString());
-                detectionsList.Add(ServerObjectConverter.ConvertDetection(obj, material[0], area[0], gscanSn[0], ramanOutput));
+                detectionsList.Add(ServerObjectConverter.ConvertDetection(obj, material[0], area[0], gscan[0].PhysicalAddress.ToString(), ramanOutput));
             }
 
             return detectionsList;

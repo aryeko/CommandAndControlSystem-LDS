@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -38,9 +40,9 @@ namespace ControlApplication.Core.Networking
             return new Material(obj.name.ToString(), materialType, obj.cas.ToString(), obj._id.ToString());
         }
 
-        public static string ConvertGscan(dynamic obj)
+        public static Gscan ConvertGscan(dynamic obj)
         {
-            return obj[0].gscan_sn.ToString();
+            return new Gscan(PhysicalAddress.Parse(obj.gscan_sn.ToString()), IPAddress.None);
         }
 
         internal static Detection ConvertDetection(dynamic obj, Material material, Area area, string gscanSn, string ramanOutput)
