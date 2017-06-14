@@ -15,6 +15,13 @@ namespace ControlApplication.Core.Networking
     {
         private readonly WebClient webClient;
 
+        private const string IdKey = "_ID";
+        private const string ScanTimeKey = "scan_time";
+        private const string SuspectIdKey = "id_num";
+        private const string PlateIdKey = "plate_num";
+        private const string MaterialNameKey = "material_detected";
+        private const string ScanResultKey = "scan_result";
+
         /// <summary>
         /// HostedNetwork API
         /// </summary>
@@ -57,9 +64,9 @@ namespace ControlApplication.Core.Networking
             return hostedNetwork.HostedNetworkSsid;
         }
 
-        public List<Detection> GetDeviceDetections(Tuple<PhysicalAddress, IPAddress> devices, Area activeArea)
+        public List<Detection> GetDeviceDetections(Gscan device, Area activeArea)
         {
-            var uri = new Uri($"http://{devices.Item2}:8080/getall");
+            var uri = new Uri($"http://{device.IpAddress}:8080/getall");
             var result = webClient.DownloadString(uri);
 
             var detectionKey = "detectionData";
@@ -71,19 +78,24 @@ namespace ControlApplication.Core.Networking
             var detectionsList = new List<Detection>();
             foreach (Match match in matches)
             {
-                //Logger.Log($"{ramanPathKey}: {match.Groups[ramanPathKey]}");
-                dynamic detectionObj =  JsonConvert.DeserializeObject(match.Groups[detectionKey].Value); //TODO: JSON can't convert
-
-                DateTime dateTime = new DateTime(long.Parse(detectionObj.scan_time.ToString())); //TODO: Fix..
-                string gscanSn = NetworkClientsFactory.GetNtServer().GetGscan(devices.Item1.ToString()).FirstOrDefault();
+                DateTime dateTime = new DateTime(long.Parse(ExtractGscanDetectionValue(ScanTimeKey, match.Groups[detectionKey].Value))); //TODO: Fix..
                 string ramanOutput = "SHOULD HAVE RAMAN";//GetRaman(obj.raman_output_id.ToString()); //TODO: Get actual link
-                var material = NetworkClientsFactory.GetNtServer().GetMaterial(name: detectionObj.material_detected.ToString());
-                var detection = new Detection(dateTime, material[0], activeArea.RootLocation, activeArea, detectionObj.id_num.ToString(), detectionObj.plate_num.ToString(), gscanSn, ramanOutput);
+                var material = NetworkClientsFactory.GetNtServer().GetMaterial(name: ExtractGscanDetectionValue(MaterialNameKey, match.Groups[detectionKey].Value));
+                var detection = new Detection(dateTime, material[0], activeArea.RootLocation, activeArea, ExtractGscanDetectionValue(SuspectIdKey, match.Groups[detectionKey].Value), ExtractGscanDetectionValue(PlateIdKey, match.Groups[detectionKey].Value), device.PhysicalAddress.ToString(), ramanOutput);
 
                 detectionsList.Add(detection);
             }
             
             return detectionsList;
+        }
+
+        private string ExtractGscanDetectionValue(string key, string input)
+        {
+            var pattern = $"\"{key}\":\"(.*?)\"";
+
+            var match = Regex.Match(input, pattern);
+
+            return match.Success ? match.Groups[1].Value : string.Empty;
         }
 
         public List<Gscan> GetConnectedDevices()

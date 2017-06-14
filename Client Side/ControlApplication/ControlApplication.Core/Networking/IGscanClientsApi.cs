@@ -19,6 +19,6 @@ namespace ControlApplication.Core.Networking
 
         List<Gscan> GetConnectedDevices();
 
-        List<Detection> GetDeviceDetections(Tuple<PhysicalAddress, IPAddress> devices, Area activeArea);
+        List<Detection> GetDeviceDetections(Gscan device, Area activeArea);
     }
 }
