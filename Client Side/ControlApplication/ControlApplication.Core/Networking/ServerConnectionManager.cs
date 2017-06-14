@@ -220,13 +220,14 @@ namespace ControlApplication.Core.Networking
 
         public void AddAlert(Alert alert)
         {
-            //TODO: List of detections contained NULL somehow
             var detectionsIds = alert.Detections.Select(d =>
             {
                 if (d != null)
                     return d.DatabaseId;
                 return"";
             });
+
+            detectionsIds = detectionsIds.Where(s => !string.IsNullOrWhiteSpace(s)).Distinct().ToList();
 
             //alert.AlertTime = DateTime.Now;
             //TODO: fix dateTime which changes while moving as a parameter inside Alert (WEIRD!!!)

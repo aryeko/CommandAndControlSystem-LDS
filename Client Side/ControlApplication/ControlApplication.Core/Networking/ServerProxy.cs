@@ -46,26 +46,19 @@ namespace ControlApplication.Core.Networking
             else
                 return _realServerApi.GetMaterial();
 
-            foreach (dynamic obj in response)
-            {
-                materials.Add(ServerObjectConverter.ConvertMaterial(obj));
-            }
-
+            materials.Add(ServerObjectConverter.ConvertMaterial(response));
+           
             return materials;
         }
 
         public List<Area> GetArea(string areaId = "")
         {
-            dynamic response = !string.IsNullOrEmpty(areaId)
-                ? GetObject("area", "_id", areaId)
-                : _realServerApi.GetObject("area");
+            if (string.IsNullOrEmpty(areaId))
+                return _realServerApi.GetArea();
 
-            var areas = new List<Area>();
+            dynamic response = GetObject("area", "_id", areaId);
 
-            foreach (dynamic obj in response)
-            {
-                areas.Add(ServerObjectConverter.ConvertArea(obj));
-            }
+            var areas = new List<Area> {ServerObjectConverter.ConvertArea(response)};
 
             return areas;
         }
@@ -204,10 +197,10 @@ namespace ControlApplication.Core.Networking
             var ids = new Dictionary<string, string>();
 
             dynamic response = GetObject("material", "material_name", detection.Material.Name);
-            ids.Add("MaterialId", response[0]._id.ToString());
+            ids.Add("MaterialId", response._id.ToString());
 
             response = GetObject("area", "root_location", detection.Area.RootLocation.ToString());
-            ids.Add("AreaId", response[0]._id.ToString());
+            ids.Add("AreaId", response._id.ToString());
 
             if (string.IsNullOrEmpty(detection.GunId))
                 ids.Add("GscanId", "");
@@ -235,13 +228,13 @@ namespace ControlApplication.Core.Networking
             var response = CacheManager.GetObjectFromCache<dynamic>(value);
             if (response == null)
             {
+                Logger.Log($"{value} *NOT* in cache");
                 response = _realServerApi.GetObject(uriPath, key, value);
                 SetObject(value, response);
             }
-            //else
-            //{
-            //    Console.WriteLine("Got from cache " + response);
-            //}
+            else
+                Logger.Log($"{value} *IN* cache");
+
             return response;
         }
 
@@ -249,23 +242,5 @@ namespace ControlApplication.Core.Networking
         {
             CacheManager.SetObjectToCache(key, value);
         }
-
-        //private List<T> GetAllObjects<T>(string uriPath)
-        //{
-        //    var cachedObects = CacheManager.GetObjectFromCache<List<T>>($"all_objects_{typeof(T)}");
-        //    if (cachedObects == null)
-        //    {
-        //        cachedObects = new List<T>();
-        //        dynamic response = _realServerApi.GetObject(uriPath);
-        //        foreach (var obj in response)
-        //        {
-        //            cachedObects.Add(ServerObjectConverter.Convert<T>(obj));
-        //            CacheManager.SetObjectToCache(obj._id, obj);
-        //        }
-        //        CacheManager.SetObjectToCache($"all_objects_{typeof(T)}", cachedObects);
-        //    }           
-
-        //    return cachedObects;
-        //}
     }
 }
