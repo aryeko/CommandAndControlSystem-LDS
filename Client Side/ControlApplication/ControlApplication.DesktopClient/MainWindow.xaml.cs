@@ -36,16 +36,11 @@ namespace ControlApplication.DesktopClient
         internal const int MARKER_SIZE = 25;
 
         /// <summary>
-        /// 
+        /// Filter for the current displayed detections
         /// </summary>
         internal MaterialType DetectionsFilter { get; set; }
 
         internal int NumberOfMaterialsToShow { get; set; }
-
-        /// <summary>
-        /// HostedNetwork API
-        /// </summary>
-        private readonly HostedNetwork _hostedNetwork;
 
         private PollingManager PollingManager { get; set; }
 
@@ -71,14 +66,15 @@ namespace ControlApplication.DesktopClient
         {
             Login fLogin = new Login();
             fLogin.ShowDialog();
-            DetectionsFilter = ~MaterialType.None;
-            AlertsQueue = new Queue<CombinationAlertArgs>();
-            this._hostedNetwork = new HostedNetwork();
+            
             InitializeComponent();
             
             Loaded += MainWindow_Loaded;
             MouseWheel += MainWindow_MouseWheel;
             AlertsManager.CombinationFoundAlert += OnCombinationAlert;
+
+            DetectionsFilter = ~MaterialType.None;
+            AlertsQueue = new Queue<CombinationAlertArgs>();
             PollingManager = new PollingManager();
             WindowState = WindowState.Maximized;
         }
@@ -134,7 +130,7 @@ namespace ControlApplication.DesktopClient
                 Logger.Log("Load data ended", GetType().Name);
             });
         }
-        
+        /*
         internal void LoadDataFromClients()
         {
             Task.Run(() =>
@@ -153,7 +149,7 @@ namespace ControlApplication.DesktopClient
                 Application.Current.Dispatcher.Invoke(() => CircularProgressBar.Visibility = Visibility.Hidden);
             });
         }
-
+        */
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             // Initialize map:
@@ -166,9 +162,6 @@ namespace ControlApplication.DesktopClient
             LblWorkingArea.Foreground = Brushes.Red;
 			//CacheMaterials();
             LoadData(false);
-
-            //TODO: Start Hosted network with a button (handle the case when a client don't support Hosted network 
-            //  _hostedNetwork.StartHostedNetwork();
         }
 
         //private void CacheMaterials()
@@ -257,6 +250,8 @@ namespace ControlApplication.DesktopClient
 
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            NetworkClientsFactory.GetGscanClientsApi().TryStopHostedNetwork();
+
             Application.Current.Shutdown();
         }
 
@@ -367,6 +362,18 @@ namespace ControlApplication.DesktopClient
             {
                 Title = "Show alerts list",
                 Content = new ShowAlertsControl(alertList),
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                SizeToContent = SizeToContent.WidthAndHeight,
+                ResizeMode = ResizeMode.NoResize
+            }.ShowDialog();
+        }
+
+        private void WirelessBtn_Click(object sender, RoutedEventArgs e)
+        {
+            new Window
+            {
+                Title = "Wirless Management",
+                Content = new WirelessManagementControl(),
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 SizeToContent = SizeToContent.WidthAndHeight,
                 ResizeMode = ResizeMode.NoResize

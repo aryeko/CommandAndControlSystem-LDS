@@ -46,7 +46,7 @@
             <Button Grid.Row="7" Grid.Column="4" x:Name="AddAreaBtn" Content="Add Area" HorizontalAlignment="Right" VerticalContentAlignment="Center" VerticalAlignment="Bottom" Background="CornflowerBlue" Foreground="White" Width="90" Height="30" Margin="0,0,17,8" Click="AddAreaBtn_Click"/>
             <Button Grid.Row="11" Grid.Column="0" x:Name="DbBtn" Content="Database" HorizontalAlignment="Left" VerticalContentAlignment="Center" VerticalAlignment="Center" Background="CornflowerBlue" Foreground="White" Width="97" Height="30" Margin="17,7.6,0,8" Click="DbBtn_Click"/>
             <Button Grid.Row="12" Grid.Column="1" x:Name="TraffickingBtn" Content="Trafficking" HorizontalAlignment="Right" VerticalContentAlignment="Center" VerticalAlignment="Center" Background="CornflowerBlue" Foreground="White" Width="90" Height="30" Margin="17,5.667"/>
-            <Button Grid.Row="12" Grid.Column="2" x:Name="TrackingBtn" Content="Tracking" HorizontalAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" Background="CornflowerBlue" Foreground="White" Width="90" Height="30" Margin="17,5.667"/>
+            <Button Grid.Row="12" Grid.Column="2" x:Name="WirelessBtn" Content="Wirless" HorizontalAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" Background="CornflowerBlue" Foreground="White" Width="90" Height="30" Margin="17,5.667" Click="WirelessBtn_Click"/>
             <Viewbox HorizontalAlignment="Left" Height="99" Margin="10,10,0,0" VerticalAlignment="Top" Width="114">
                 <controls:CircularProgressBar x:Name="CircularProgressBar"/>
             </Viewbox>
