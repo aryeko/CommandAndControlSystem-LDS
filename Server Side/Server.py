@@ -124,7 +124,7 @@ def handle_gscan_request():
 		new_object_id = dbHandler.add_gscan(request.form.get('gscan_sn'), request.form.get('owned_unit_id'))
 		if new_object_id is None:
 			abort(500)
-		return str(new_object_id)
+		return dumps(new_object_id)
 
 	elif request.method == 'DELETE':
 		gscan_sn = request.form.get('gscan_sn')
