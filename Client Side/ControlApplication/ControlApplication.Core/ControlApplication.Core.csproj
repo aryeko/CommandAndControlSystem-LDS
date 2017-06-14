@@ -62,6 +62,7 @@
     <Compile Include="Contracts\AreaType.cs" />
     <Compile Include="Contracts\Combination.cs" />
     <Compile Include="Contracts\Detection.cs" />
+    <Compile Include="Contracts\Gscan.cs" />
     <Compile Include="Contracts\IMarkerable.cs" />
     <Compile Include="Contracts\IMarkerableVisitor.cs" />
     <Compile Include="Contracts\Material.cs" />
