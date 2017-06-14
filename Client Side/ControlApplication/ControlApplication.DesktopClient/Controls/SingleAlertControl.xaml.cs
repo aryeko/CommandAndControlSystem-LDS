@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ControlApplication.Core.Contracts;
+using ControlApplication.Core.Networking;
 
 namespace ControlApplication.DesktopClient.Controls
 {
@@ -29,14 +30,18 @@ namespace ControlApplication.DesktopClient.Controls
 
             LblAlertName.Text = alert.AlertName;
             Border.BorderBrush = !alert.IsDirty ? Brushes.Red : Brushes.White;
-            LblDateTime.Text = alert.AlertTime.ToString("D");
+            LblDateTime.Text = alert.AlertTime.ToString("G");
             _alert = alert;
         }
         
         private void LblAlertName_OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            _alert.IsDirty = true; //TODO: need to update the DB
-            Border.BorderBrush = Brushes.White;
+            if (!_alert.IsDirty)
+            {
+                _alert.IsDirty = true;
+                NetworkClientsFactory.GetNtServer().UpdateAlert(_alert);
+                Border.BorderBrush = Brushes.White;
+            }
             new Window
             {
                 Title = "Showing all alert's detections",

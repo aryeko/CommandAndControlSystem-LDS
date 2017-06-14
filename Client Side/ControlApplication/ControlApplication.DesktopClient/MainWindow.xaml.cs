@@ -160,21 +160,30 @@ namespace ControlApplication.DesktopClient
 
             LblWorkingArea.Content = "THE ACTIVE WORKING AREA IS NOT SET";
             LblWorkingArea.Foreground = Brushes.Red;
-			//CacheMaterials();
+            CacheCrucialObjects();
             LoadData(false);
         }
 
-        //private void CacheMaterials()
-        //{
-        //    dynamic materials = NetworkClientsFactory.GetNtServer(false).GetObject("material");
+        private void CacheCrucialObjects()
+        {
+            Logger.Log("Caching Materials and Areas", "MainWindow.CacheCrucialObjects");
 
-        //    foreach (dynamic material in materials)
-        //    {
-        //        Console.WriteLine("Name is: " + material.name.ToString() + " ID is: " + material._id.ToString());
-        //        NetworkClientsFactory.GetNtServer().SetObject(material.name.ToString(), material);
-        //        NetworkClientsFactory.GetNtServer().SetObject(material._id.ToString(), material);
-        //    }
-        //}
+            dynamic materials = NetworkClientsFactory.GetNtServer(false).GetObject("material");
+
+            foreach (dynamic material in materials)
+            {
+                NetworkClientsFactory.GetNtServer().SetObject(material.name.ToString(), material);
+                NetworkClientsFactory.GetNtServer().SetObject(material._id.ToString(), material);
+            }
+
+            dynamic areas = NetworkClientsFactory.GetNtServer(false).GetObject("area");
+            foreach (dynamic area in areas)
+            {
+                NetworkClientsFactory.GetNtServer().SetObject(area.root_location.ToString(), area);
+                NetworkClientsFactory.GetNtServer().SetObject(area._id.ToString(), area);
+            }
+            //TODO: add areas also (currently there is an issue with that, both get same response)
+        }
 
         private void MainWindow_MouseWheel(object sender, MouseWheelEventArgs e)
         {
@@ -357,7 +366,7 @@ namespace ControlApplication.DesktopClient
             if(AlertsQueue.Any())
                 AlertsQueue.Dequeue().Handled = true;
 
-            var alertList = NetworkClientsFactory.GetNtServer().GetAlerts().OrderBy(a => a.AlertTime.TimeOfDay).ToList();
+            var alertList = NetworkClientsFactory.GetNtServer().GetAlerts().OrderBy(a => a.AlertTime.TimeOfDay).Reverse().ToList();
             new Window
             {
                 Title = "Show alerts list",

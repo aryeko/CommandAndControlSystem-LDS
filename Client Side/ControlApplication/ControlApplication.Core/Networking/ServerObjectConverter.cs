@@ -54,7 +54,7 @@ namespace ControlApplication.Core.Networking
         {
             var isDirty = !obj.is_dirty.ToString().Equals("0");
             var dateTime = DateTime.ParseExact(obj.date_time.ToString(), "G", CultureInfo.InvariantCulture);
-            return new Alert(obj.alert_name.ToString(), area, detectionsList, dateTime, isDirty);
+            return new Alert(obj.alert_name.ToString(), area, detectionsList, dateTime, obj._id.ToString(), isDirty);
         }
 
         public static Combination ConvertCombination(object o)
