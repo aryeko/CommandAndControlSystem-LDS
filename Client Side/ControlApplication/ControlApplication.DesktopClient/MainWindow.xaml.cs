@@ -182,7 +182,12 @@ namespace ControlApplication.DesktopClient
                 NetworkClientsFactory.GetNtServer().SetObject(area.root_location.ToString(), area);
                 NetworkClientsFactory.GetNtServer().SetObject(area._id.ToString(), area);
             }
-            //TODO: add areas also (currently there is an issue with that, both get same response)
+
+            dynamic detections = NetworkClientsFactory.GetNtServer(false).GetObject("detection");
+            foreach (dynamic detection in detections)
+            {
+                NetworkClientsFactory.GetNtServer().SetObject(detection._id.ToString(), detection);
+            }
         }
 
         private void MainWindow_MouseWheel(object sender, MouseWheelEventArgs e)

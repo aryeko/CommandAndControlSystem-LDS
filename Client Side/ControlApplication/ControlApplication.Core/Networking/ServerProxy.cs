@@ -46,7 +46,14 @@ namespace ControlApplication.Core.Networking
             else
                 return _realServerApi.GetMaterial();
 
-            materials.Add(ServerObjectConverter.ConvertMaterial(response));
+            try
+            {
+                materials.Add(ServerObjectConverter.ConvertMaterial(response));
+            }
+            catch (Exception e)
+            {
+                materials.Add(ServerObjectConverter.ConvertMaterial(response[0]));
+            }
            
             return materials;
         }
@@ -57,8 +64,15 @@ namespace ControlApplication.Core.Networking
                 return _realServerApi.GetArea();
 
             dynamic response = GetObject("area", "_id", areaId);
-
-            var areas = new List<Area> {ServerObjectConverter.ConvertArea(response)};
+            var areas = new List<Area>();
+            try
+            {
+                areas.Add(ServerObjectConverter.ConvertArea(response));
+            }
+            catch (Exception)
+            {
+                areas.Add(ServerObjectConverter.ConvertArea(response[0]));
+            }
 
             return areas;
         }
@@ -119,6 +133,15 @@ namespace ControlApplication.Core.Networking
 			else if(!string.IsNullOrEmpty(detectionId))
             {
                 response = GetObject("detection", "_id", detectionId);
+                try
+                {
+                    detectionsList.Add(ConverToDetection(response));
+                }
+                catch (Exception)
+                {
+                    detectionsList.Add(ConverToDetection(response[0]));
+                }
+                return detectionsList;
             }
             else
             {
@@ -127,14 +150,19 @@ namespace ControlApplication.Core.Networking
             
             foreach (dynamic obj in response)
             {
-                var gscanSn = GetGscan(obj.gscan_id.ToString());
-                var ramanOutput = GetRaman(obj.raman_output_id.ToString());
-                var area = GetArea(obj.area_id.ToString());
-                var material = GetMaterial(materialId: obj.material_id.ToString());
-                detectionsList.Add(ServerObjectConverter.ConvertDetection(obj, material[0], area[0], gscanSn[0], ramanOutput));
+                detectionsList.Add(ConverToDetection(obj));
             }
 
             return detectionsList;
+        }
+
+        private Detection ConverToDetection(dynamic obj)
+        {
+            var gscanSn = GetGscan(obj.gscan_id.ToString());
+            var ramanOutput = GetRaman(obj.raman_output_id.ToString());
+            var area = GetArea(obj.area_id.ToString());
+            var material = GetMaterial(materialId: obj.material_id.ToString());
+            return ServerObjectConverter.ConvertDetection(obj, material[0], area[0], gscanSn[0], ramanOutput);
         }
 
         public string GetRaman(string ramanOutput)
@@ -202,10 +230,25 @@ namespace ControlApplication.Core.Networking
             var ids = new Dictionary<string, string>();
 
             dynamic response = GetObject("material", "material_name", detection.Material.Name);
-            ids.Add("MaterialId", response._id.ToString());
+            try
+            {
+                ids.Add("MaterialId", response._id.ToString());
+            }
+            catch (Exception e)
+            {
+                ids.Add("MaterialId", response[0]._id.ToString());
+            }
 
             response = GetObject("area", "root_location", detection.Area.RootLocation.ToString());
-            ids.Add("AreaId", response._id.ToString());
+            try
+            {
+                ids.Add("AreaId", response._id.ToString());
+            }
+            catch (Exception)
+            {
+                ids.Add("AreaId", response[0]._id.ToString());
+            }
+            
 
             if (string.IsNullOrEmpty(detection.GunId))
                 ids.Add("GscanId", "");
@@ -242,7 +285,11 @@ namespace ControlApplication.Core.Networking
 
         public void SetObject(string key, dynamic value)
         {
-            CacheManager.SetObjectToCache(key, value);
+            var response = CacheManager.GetObjectFromCache<dynamic>(key);
+            if (response == null)
+            {
+                CacheManager.SetObjectToCache(key, value);
+            }
         }
     }
 }
