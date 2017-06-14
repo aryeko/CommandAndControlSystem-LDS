@@ -136,11 +136,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\SingleDeviceControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\SingleMaterial.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\SingleMaterialCombination.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\WirelessManagementControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -209,11 +217,17 @@
     <Compile Include="Controls\SingleDetectionControl.xaml.cs">
       <DependentUpon>SingleDetectionControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SingleDeviceControl.xaml.cs">
+      <DependentUpon>SingleDeviceControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\SingleMaterial.xaml.cs">
       <DependentUpon>SingleMaterial.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\SingleMaterialCombination.xaml.cs">
       <DependentUpon>SingleMaterialCombination.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\WirelessManagementControl.xaml.cs">
+      <DependentUpon>WirelessManagementControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ZoomControl.xaml.cs">
       <DependentUpon>ZoomControl.xaml</DependentUpon>
@@ -295,6 +309,13 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="logo.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Drawable\device_status_green.png" />
+    <Resource Include="Drawable\device_status_red.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Drawable\icon_refresh.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
