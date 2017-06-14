@@ -51,8 +51,9 @@ namespace ControlApplication.Core
                 {
                     var alertedDetections =
                         affectedAreaDetections.GroupBy(d => d.Material)
-                            .Select(
-                                group => combination.CombinationMaterialsList.Contains(group.Key) ? group.Last() : null).ToList();
+                            .Select(group => combination.CombinationMaterialsList.Contains(group.Key) ? group.Last() : null)
+                                .Where(d => d != null)
+                                .ToList();
                     AlertSystem(sender, combination.AlertName, e.Detection.Area, alertedDetections);
                 }
             }
