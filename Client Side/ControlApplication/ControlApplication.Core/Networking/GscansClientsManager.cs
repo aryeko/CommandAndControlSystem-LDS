@@ -11,19 +11,56 @@ using Newtonsoft.Json;
 
 namespace ControlApplication.Core.Networking
 {
-    public class GscansClientsManager : IGscanClientsApi
+    public class GscansClientsManager : IGscanClientsApi, IDisposable
     {
-        private WebClient _webClient;
+        private readonly WebClient webClient;
+
+        /// <summary>
+        /// HostedNetwork API
+        /// </summary>
+        private readonly HostedNetwork hostedNetwork;
 
         public GscansClientsManager()
         {
-            _webClient = new WebClient();
+            hostedNetwork = new HostedNetwork();
+            webClient = new WebClient();
+        }
+
+        public bool TryStartHostedNetwork()
+        {
+            try
+            {
+                hostedNetwork.StartHostedNetwork();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public bool TryStopHostedNetwork()
+        {
+            try
+            {
+                hostedNetwork.StopHostedNetwork();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public string GetHostedNetwordSsid()
+        {
+            return hostedNetwork.HostedNetworkSsid;
         }
 
         public List<Detection> GetDeviceDetections(Tuple<PhysicalAddress, IPAddress> devices, Area activeArea)
         {
             var uri = new Uri($"http://{devices.Item2}:8080/getall");
-            var result = _webClient.DownloadString(uri);
+            var result = webClient.DownloadString(uri);
 
             var detectionKey = "detectionData";
             var ramanPathKey = "ramanPath";
@@ -49,12 +86,12 @@ namespace ControlApplication.Core.Networking
             return detectionsList;
         }
 
-        public List<Tuple<PhysicalAddress, IPAddress>> GetConnectedDevices()
+        public List<Gscan> GetConnectedDevices()
         {
             var devicesMacs = GetHostedNetworkConnectedDevices();
             var devicesIps = GetIpsFromPhisicalAdresses(devicesMacs);
 
-            return devicesMacs.Select((t, i) => new Tuple<PhysicalAddress, IPAddress>(t, devicesIps[i])).ToList();
+            return devicesMacs.Select((t, i) => new Gscan(t, devicesIps[i])).ToList();
         }
 
         private List<IPAddress> GetIpsFromPhisicalAdresses(List<PhysicalAddress> physicalAddresses)
@@ -108,6 +145,7 @@ namespace ControlApplication.Core.Networking
                 FileName = command,
                 Arguments = args,
                 UseShellExecute = false,
+                CreateNoWindow = true,
                 RedirectStandardOutput = true
             });
 
@@ -115,6 +153,11 @@ namespace ControlApplication.Core.Networking
 
             var output = proc.StandardOutput.ReadToEnd();
             return output;
+        }
+
+        public void Dispose()
+        {
+            hostedNetwork.Dispose();
         }
     }
 }

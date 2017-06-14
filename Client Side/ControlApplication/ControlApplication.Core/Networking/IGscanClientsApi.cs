@@ -11,7 +11,13 @@ namespace ControlApplication.Core.Networking
 {
     public interface IGscanClientsApi
     {
-        List<Tuple<PhysicalAddress, IPAddress>> GetConnectedDevices();
+        bool TryStartHostedNetwork();
+
+        bool TryStopHostedNetwork();
+
+        string GetHostedNetwordSsid();
+
+        List<Gscan> GetConnectedDevices();
 
         List<Detection> GetDeviceDetections(Tuple<PhysicalAddress, IPAddress> devices, Area activeArea);
     }

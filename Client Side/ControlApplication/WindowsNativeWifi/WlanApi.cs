@@ -323,12 +323,12 @@ namespace WindowsNativeWifi
                 }
             }
 
-            public void EnableHostedNetwork()
+            public void SetHostedNetworkInterfaceState(bool enable)
             {
                 Wlan.WlanHostedNetworkReason reason = 0;
 
                 IntPtr pBool = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(int)));
-                Marshal.WriteInt32(pBool, 0, 1);  // last parameter 0 (FALSE), 1 (TRUE)
+                Marshal.WriteInt32(pBool, 0, enable ? 1 : 0);  // last parameter 0 (FALSE), 1 (TRUE)
                 try
                 {
                     Wlan.ThrowIfError(

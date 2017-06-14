@@ -11,12 +11,13 @@ namespace ControlApplication.Core.Networking
     {
         private readonly WlanClient _wlanClient;
 
-        private readonly string _hostedNetworkSsid;
+        public string HostedNetworkSsid { get; private set; }
+
         public HostedNetwork()
         {
             _wlanClient = new WlanClient();
             //TODO: Set HostedNetwork SSID dynamicly by unit
-            _hostedNetworkSsid = "FIELD_UNIT";
+            HostedNetworkSsid = "FIELD_UNIT";
         }
 
         private WlanClient.WlanInterface DefaultInterface => _wlanClient.Interfaces[0];
@@ -47,15 +48,21 @@ namespace ControlApplication.Core.Networking
 
         public void StartHostedNetwork()
         {
-            Wlan.Dot11Ssid ssid = GetSSIDForString(_hostedNetworkSsid);
+            Wlan.Dot11Ssid ssid = GetSSIDForString(HostedNetworkSsid);
             DefaultInterface.ConfigureHostedNetwork(ssid);
-            DefaultInterface.EnableHostedNetwork();
+            DefaultInterface.SetHostedNetworkInterfaceState(true);
             DefaultInterface.StartHostedNetwork();
+        }
+
+        public void StopHostedNetwork()
+        {
+            DefaultInterface.StopHostedNetwork();
+            DefaultInterface.SetHostedNetworkInterfaceState(false);
         }
 
         public void Dispose()
         {
-            DefaultInterface.StopHostedNetwork();
+            StopHostedNetwork();
         }
     }
 }
