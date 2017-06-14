@@ -233,13 +233,10 @@ namespace ControlApplication.Core.Networking
             var response = CacheManager.GetObjectFromCache<dynamic>(value);
             if (response == null)
             {
-                Logger.Log($"{value} *NOT* in cache");
                 response = _realServerApi.GetObject(uriPath, key, value);
                 SetObject(value, response);
             }
-            else
-                Logger.Log($"{value} *IN* cache");
-
+            
             return response;
         }
 
