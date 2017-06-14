@@ -2,6 +2,7 @@ from pymongo import ReturnDocument
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 
+
 class DbHandler:
 	"""
 		A class that represent a data base, including methods of DB manipulations
@@ -110,14 +111,17 @@ class DbHandler:
 		return self.db.MaterialsCombination.delete_many(json_filter)
 
 	def add_alert(self, alert_name, detections_list, area_id, is_dirty, date_time):
-		doc = {"alert_name": alert_name,
-			   "detection_list": detections_list,
-			   "area_id": area_id,
-			   "is_dirty": is_dirty,
-			   "date_time": date_time}
+		doc = self.build_doc(alert_name, detections_list, area_id, is_dirty, date_time)
 
 		affected_doc_id = self.db.Alerts.insert_one(doc)
 		return affected_doc_id.inserted_id
+
+	def update_alert(self, alert_id, alert_name, detections_list, area_id, is_dirty, date_time):
+		doc = self.build_doc(alert_name, detections_list, area_id, is_dirty, date_time)
+
+		affected_doc_id = self.db.Alerts.find_one_and_update({'_id': alert_id}, {'$set': doc}, projection={'_id': True},
+																upsert=True, return_document=ReturnDocument.AFTER)
+		return affected_doc_id
 
 	def get_alert(self, json_filter=None):
 		if json_filter is None:
@@ -126,6 +130,13 @@ class DbHandler:
 
 	def delete_alert(self, json_filter):
 		return self.db.Alerts.delete_many(json_filter)
+
+	def build_doc(self, alert_name, detections_list, area_id, is_dirty, date_time):
+		return {"alert_name": alert_name,
+			   "detection_list": detections_list,
+			   "area_id": area_id,
+			   "is_dirty": is_dirty,
+			   "date_time": date_time}
 
 	def add_detection(self, user_id, material_id, area_id, gscan_id, raman_output_id, suspect_id, plate_number, location, date_time):
 		doc = {"user_id": user_id,

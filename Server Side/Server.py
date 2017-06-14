@@ -268,6 +268,7 @@ def handle_alerts_request():
 		return dumps(alerts)
 
 	elif request.method == 'POST':
+		alert_id = request.form.get('_id')
 		alert_name = request.form.get('alert_name')
 		detections_list_str = request.form.get('detections_list')
 		detections_list = [loads(detection_id) for detection_id in detections_list_str.split(',')]
@@ -275,8 +276,13 @@ def handle_alerts_request():
 		is_dirty = request.form.get('is_dirty')
 		date_time = request.form.get('date_time')
 
-		print("adding alert, alert name: ", alert_name)
-		new_object_id = dbHandler.add_alert(alert_name, detections_list, area_id, is_dirty, date_time)
+		if(alert_id is not None):
+			print("updating alert, alert name: ", alert_name)
+			new_object_id = dbHandler.update_alert(loads(alert_id), alert_name, detections_list, area_id, is_dirty, date_time)
+		else:
+			print("adding alert, alert name: ", alert_name)
+			new_object_id = dbHandler.add_alert(alert_name, detections_list, area_id, is_dirty, date_time)
+
 		if new_object_id is None:
 			abort(500)
 		return str(new_object_id)
