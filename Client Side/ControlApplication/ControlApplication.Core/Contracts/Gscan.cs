@@ -24,14 +24,21 @@ namespace ControlApplication.Core.Contracts
         public IPAddress IpAddress { get; }
 
         /// <summary>
+        /// Gets the owned unit database ID
+        /// </summary>
+        public string OwnedUnitDatabaseId { get; }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="physicalAddress"></param>
         /// <param name="ipAddress"></param>
-        public Gscan(PhysicalAddress physicalAddress, IPAddress ipAddress)
+        /// <param name="ownedUnitDatabaseId"></param>
+        public Gscan(PhysicalAddress physicalAddress, IPAddress ipAddress, string ownedUnitDatabaseId = "")
         {
             PhysicalAddress = physicalAddress;
             IpAddress = ipAddress;
+            OwnedUnitDatabaseId = ownedUnitDatabaseId;
         }
 
         public override int GetHashCode()
