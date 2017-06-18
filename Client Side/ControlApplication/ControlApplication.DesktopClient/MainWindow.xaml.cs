@@ -115,10 +115,20 @@ namespace ControlApplication.DesktopClient
                     AddMarker(area.RootLocation, area);
                 }
                 Logger.Log("Adding areas ended", GetType().Name);
+
+                var exsistingDetections =
+                    GMapControl.Markers
+                    .Where(m => m.Shape is DetectionMarker)
+                        .SelectMany(m => (m.Shape as DetectionMarker).GetAreaDetections()).ToList();
+                Logger.Log($"Currently map has {exsistingDetections.Count()} detections", GetType().Name);
+
                 var detections = await Task.Run(() => NetworkClientsFactory.GetNtServer().GetDetections()
+                                                        .Except(exsistingDetections)
                                                         .Where(d => DetectionsFilter.HasFlag(d.Material.MaterialType))
                                                         .GroupBy(d => d.Position));
-                Logger.Log("Adding detections started", GetType().Name);
+                
+
+                Logger.Log($"Adding detections started with {detections.Count()} new detections", GetType().Name);
                 foreach (var detection in detections)
                 {
                     AddMarker(detection.Key, detection.ToList());
@@ -347,9 +357,6 @@ namespace ControlApplication.DesktopClient
 
         private void AlertsBtn_Click(object sender, RoutedEventArgs e)
         {
-            if(AlertsQueue.Any())
-                AlertsQueue.Dequeue().Handled = true;
-
             var alertList = NetworkClientsFactory.GetNtServer().GetAlerts().OrderBy(a => a.AlertTime.Millisecond).Reverse().ToList();
             new Window
             {

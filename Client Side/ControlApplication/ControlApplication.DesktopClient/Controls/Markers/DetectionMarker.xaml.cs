@@ -54,6 +54,11 @@ namespace ControlApplication.DesktopClient.Controls.Markers
             mPopup.Child = mLabel;
         }
 
+        public IEnumerable<Detection> GetAreaDetections()
+        {
+            return mDetections;
+        }
+
         public void AddDetection(Detection detection)
         {
             AddDetections(new [] {detection});
