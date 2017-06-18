@@ -96,40 +96,46 @@ namespace ControlApplication.DesktopClient
                     dummyFlag = !dummyFlag;
                     Thread.Sleep(500);
                 }
-                Logger.Log($"[{DateTime.Now.TimeOfDay.ToString("g")}] Alert button is stopping the alarm", GetType().Name);
+                Logger.Log("Alert button is stopping the alarm", GetType().Name);
                 Application.Current.Dispatcher.Invoke(
                     () => this.AlertsBtn.Background = Brushes.CornflowerBlue);
             });
         }
 
-        internal void LoadData(bool checkAlerts = true)
+        internal async void LoadData(bool checkAlerts = true)
         {
-            Task.Run(() =>
-            {
-                Logger.Log("Starting load data", GetType().Name);
-                if (checkAlerts && AlertsQueue.Any())
-                {
-                    Logger.Log("Skipping load data", GetType().Name);
-                    return;
-                }
+            CircularProgressBar.Visibility = Visibility.Visible;
 
-                Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Render, new Action(() => CircularProgressBar.Visibility = Visibility.Visible));
-                var detections = NetworkClientsFactory.GetNtServer().GetDetections()
-                .Where(d => DetectionsFilter.HasFlag(d.Material.MaterialType))
-                .GroupBy(d => d.Position);
-                var areas = NetworkClientsFactory.GetNtServer().GetArea();
-                foreach (var detection in detections)
-                {
-                    Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => AddMarker(detection.Key, detection.ToList())));
-                }
+            Logger.Log("Starting load data", GetType().Name);
+            if (!(checkAlerts && AlertsQueue.Any()))
+            {
+                var areas = await Task.Run(() => NetworkClientsFactory.GetNtServer().GetArea());
+                Logger.Log("Adding areas started", GetType().Name);
                 foreach (var area in areas)
                 {
-                    Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => AddMarker(area.RootLocation, area)));
+                    AddMarker(area.RootLocation, area);
                 }
-                Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Render, new Action(() => CircularProgressBar.Visibility = Visibility.Hidden));
+                Logger.Log("Adding areas ended", GetType().Name);
+                var detections = await Task.Run(() => NetworkClientsFactory.GetNtServer().GetDetections()
+                                                        .Where(d => DetectionsFilter.HasFlag(d.Material.MaterialType))
+                                                        .GroupBy(d => d.Position));
+                Logger.Log("Adding detections started", GetType().Name);
+                foreach (var detection in detections)
+                {
+                    AddMarker(detection.Key, detection.ToList());
+                }
+                Logger.Log("Adding detections ended", GetType().Name);
+
                 Logger.Log("Load data ended", GetType().Name);
-            });
+            }
+            else
+            {
+                Logger.Log("Skipping load data", GetType().Name);
+            }
+
+            CircularProgressBar.Visibility = Visibility.Hidden;
         }
+
         /*
         internal void LoadDataFromClients()
         {
