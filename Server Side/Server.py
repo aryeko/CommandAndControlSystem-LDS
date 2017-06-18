@@ -107,8 +107,13 @@ def handle_gscan_request():
 		# here we want to get the value of user (i.e. ?user=some-value)
 		unit_id = request.args.get('owned_unit_id')
 		gscan_sn = request.args.get('gscan_sn')
+		gscan_id = request.args.get('_id')
 
-		if unit_id is not None:
+		if gscan_id is not None:
+			gscan_id = loads(gscan_id)
+			print("retrieving gscans by gscan_id: ", gscan_id)
+			gscans = dbHandler.get_gscans({'_id': gscan_id})
+		elif unit_id is not None:
 			print("retrieving gscans by unit: ", unit_id)
 			gscans = dbHandler.get_gscans({'owned_unit_id': unit_id})
 		elif gscan_sn is not None:
