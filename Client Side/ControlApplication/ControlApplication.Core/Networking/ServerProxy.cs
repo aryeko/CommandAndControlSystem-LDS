@@ -231,6 +231,32 @@ namespace ControlApplication.Core.Networking
             return combinationsList;
         }
 
+        public void CacheCrucialObjects()
+        {
+            Logger.Log("Caching Materials, Areas and Detections", "MainWindow.CacheCrucialObjects");
+
+            dynamic materials = NetworkClientsFactory.GetNtServer(false).GetObject("material");
+
+            foreach (dynamic material in materials)
+            {
+                NetworkClientsFactory.GetNtServer().SetObject(material.name.ToString(), material);
+                NetworkClientsFactory.GetNtServer().SetObject(material._id.ToString(), material);
+            }
+
+            dynamic areas = NetworkClientsFactory.GetNtServer(false).GetObject("area");
+            foreach (dynamic area in areas)
+            {
+                NetworkClientsFactory.GetNtServer().SetObject(area.root_location.ToString(), area);
+                NetworkClientsFactory.GetNtServer().SetObject(area._id.ToString(), area);
+            }
+
+            dynamic detections = NetworkClientsFactory.GetNtServer(false).GetObject("detection");
+            foreach (dynamic detection in detections)
+            {
+                NetworkClientsFactory.GetNtServer().SetObject(detection._id.ToString(), detection);
+            }
+        }
+
         /// <summary>
         /// Gets all the IDs from a detection in order to add a detection to DB using forein keys
         /// </summary>

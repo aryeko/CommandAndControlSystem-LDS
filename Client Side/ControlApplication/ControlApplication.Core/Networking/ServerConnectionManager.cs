@@ -9,6 +9,7 @@ using System.Threading;
 using System.Windows.Forms;
 using ControlApplication.Core.Contracts;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace ControlApplication.Core.Networking
 {
@@ -228,6 +229,8 @@ namespace ControlApplication.Core.Networking
             return null;
         }
 
+        public void CacheCrucialObjects(){}
+
         public List<Alert> GetAlerts()
         {
             return null;
@@ -355,9 +358,6 @@ namespace ControlApplication.Core.Networking
             WebClient.Dispose();
         }
 
-        public void SetObject(string key, dynamic value)
-        {
-            throw new NotImplementedException();
-        }
+        public void SetObject(string key, dynamic value){}
     }
 }
