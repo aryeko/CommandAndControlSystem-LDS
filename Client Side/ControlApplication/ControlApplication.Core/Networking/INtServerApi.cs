@@ -47,9 +47,10 @@ namespace ControlApplication.Core.Networking
         /// <summary>
         /// gets a G-Scan from the database using server's RESTful API
         /// </summary>
+        /// <param name="gscanSn"></param>
         /// <param name="gscanId">Filter the search by G-Scan uniqe ID</param>
         /// <returns></returns>
-        List<Gscan> GetGscan(string gscanSn = "");
+        List<Gscan> GetGscan(string gscanSn = "", string gscanId = "");
 
         /// <summary>
         /// Adds a new Gscan to the database usint server's RESTfull API

@@ -107,8 +107,9 @@ namespace ControlApplication.Core.Networking
         /// gets a G-Scan from the database using server's RESTful API
         /// </summary>
         /// <param name="gscanSn">Filter the search by G-Scan uniqe ID</param>
+        /// <param name="gscanId"></param>
         /// <returns></returns>
-        public List<Gscan> GetGscan(string gscanSn = "")
+        public List<Gscan> GetGscan(string gscanSn = "", string gscanId = "")
         {
             var gscans = new List<Gscan>();
             var response = GetObject("gscan");
@@ -269,10 +270,10 @@ namespace ControlApplication.Core.Networking
         /// <returns>Response from DB</returns>
         public dynamic GetObject(string uriPath, string key = "", string value = "")
         {
-            Logger.Log($"Thread [{Thread.CurrentThread.ManagedThreadId}] is trying to achieve GET REST lock", GetType().Name);
+            Logger.Log($"Thread [{Thread.CurrentThread.ManagedThreadId}] is trying to achieve GET REST lock for {uriPath}", GetType().Name);
             lock (RestOperationLock)
             {
-                Logger.Log($"Thread [{Thread.CurrentThread.ManagedThreadId}] has achieved GET REST lock", GetType().Name);
+                Logger.Log($"Thread [{Thread.CurrentThread.ManagedThreadId}] has achieved GET REST lock for {uriPath}", GetType().Name);
                 if (!string.IsNullOrEmpty(key) && !string.IsNullOrEmpty(value))
                 {
                     WebClient.QueryString = new NameValueCollection
@@ -288,7 +289,7 @@ namespace ControlApplication.Core.Networking
                 try
                 {
                     var response = WebClient.DownloadString(new Uri(RemoteServerPath, uriPath));
-                    Logger.Log($"Thread [{Thread.CurrentThread.ManagedThreadId}] is releasing GET REST lock", GetType().Name);
+                    Logger.Log($"Thread [{Thread.CurrentThread.ManagedThreadId}] is releasing GET REST lock for {uriPath}", GetType().Name);
                     return JsonConvert.DeserializeObject(response);
                 }
                 catch (WebException)

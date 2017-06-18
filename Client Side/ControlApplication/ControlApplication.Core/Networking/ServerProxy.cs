@@ -79,22 +79,29 @@ namespace ControlApplication.Core.Networking
             return areas;
         }
 
-        public List<Gscan> GetGscan(string gscanSn)
+        public List<Gscan> GetGscan(string gscanSn = "", string gscanId = "")
         {
+            dynamic response = "";
             List<Gscan> list = new List<Gscan>();
 
-            if (gscanSn.Equals("no gscan"))
-                return new List<Gscan> {new Gscan(PhysicalAddress.None, IPAddress.None)};
+            if (gscanId.Equals("no gscan"))
+                return new List<Gscan> { new Gscan(PhysicalAddress.None, IPAddress.None) };
 
-            if (string.IsNullOrEmpty(gscanSn))
+            if (!string.IsNullOrEmpty(gscanId))
+            {
+                response = GetObject("gscan", "_id", gscanId);
+            }
+            else if (!string.IsNullOrEmpty(gscanSn))
+            {
+                response = GetObject("gscan", "gscan_sn", gscanSn);
+            }
+            else
                 return _realServerApi.GetGscan();
-                
-            dynamic response = GetObject("gscan", "gscan_sn", gscanSn);
-
+            
             foreach (dynamic obj in response)
             {
                 list.Add(ServerObjectConverter.ConvertGscan(obj));
-            }
+            }                   
 
             return list;
         }
@@ -169,7 +176,7 @@ namespace ControlApplication.Core.Networking
 
         private Detection ConverToDetection(dynamic obj)
         {
-    		List<Gscan> gscan = GetGscan(obj.gscan_id.ToString());
+    		List<Gscan> gscan = GetGscan(gscanId:obj.gscan_id.ToString());
             var ramanOutput = GetRaman(obj.raman_output_id.ToString());
             var area = GetArea(obj.area_id.ToString());
             var material = GetMaterial(materialId: obj.material_id.ToString());
