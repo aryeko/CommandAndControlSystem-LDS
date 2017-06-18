@@ -344,7 +344,7 @@ namespace ControlApplication.DesktopClient
             if(AlertsQueue.Any())
                 AlertsQueue.Dequeue().Handled = true;
 
-            var alertList = NetworkClientsFactory.GetNtServer().GetAlerts().OrderBy(a => a.AlertTime.TimeOfDay).Reverse().ToList();
+            var alertList = NetworkClientsFactory.GetNtServer().GetAlerts().OrderBy(a => a.AlertTime.Millisecond).Reverse().ToList();
             new Window
             {
                 Title = "Show alerts list",
