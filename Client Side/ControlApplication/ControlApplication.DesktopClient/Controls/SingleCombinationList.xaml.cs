@@ -12,36 +12,38 @@ namespace ControlApplication.DesktopClient.Controls
     {
         public List<Material> CombinationMaterialsList { get; set; }
 
+        private bool Status { get; set; }
+
         public SingleCombinationList(string alertName, List<Material> combinationMaterialsList)
         {
             InitializeComponent();
 
             CombinationMaterialsList = combinationMaterialsList;
             LblAlertName.Text = alertName;
+            Status = false;
         }
 
         private void LblAlertName_OnMouseUp(object sender, MouseButtonEventArgs e)
         {
-            //var materialsCombination = NetworkClientsFactory.GetNtServer().GetCombination();
+            if (Status)
+            {
+                CombinationDataXmal.Children.Clear();
+            }
+            else
+            {
 
-            if (CombinationDataXmal.Children.Count > 0)
-                return;
+                if (CombinationDataXmal.Children.Count > 0)
+                    return;
 
-            var newRowIndex = CombinationDataXmal.RowDefinitions.Count;
-            CombinationDataXmal.RowDefinitions.Insert(newRowIndex, new RowDefinition());
+                var newRowIndex = CombinationDataXmal.RowDefinitions.Count;
+                CombinationDataXmal.RowDefinitions.Insert(newRowIndex, new RowDefinition());
 
-            var newControl = new MaterialsList(CombinationMaterialsList);
+                var newControl = new MaterialsList(CombinationMaterialsList);
 
-            Grid.SetRow(newControl, newRowIndex);
-            CombinationDataXmal.Children.Add(newControl);
-
-        }
-
-        private void LblAlertName_OnMouseRightButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            CombinationDataXmal.Children.Clear();
-        }
-        
-       
+                Grid.SetRow(newControl, newRowIndex);
+                CombinationDataXmal.Children.Add(newControl);
+            }
+            Status = !Status;
+        }    
     }
 }

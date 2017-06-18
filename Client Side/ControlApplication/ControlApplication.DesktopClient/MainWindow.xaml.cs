@@ -25,7 +25,6 @@ using GMap.NET;
 using GMap.NET.WindowsForms;
 using GMapMarker = GMap.NET.WindowsPresentation.GMapMarker;
 
-
 namespace ControlApplication.DesktopClient
 {
     /// <summary>
@@ -166,34 +165,8 @@ namespace ControlApplication.DesktopClient
 
             LblWorkingArea.Content = "THE ACTIVE WORKING AREA IS NOT SET";
             LblWorkingArea.Foreground = Brushes.Red;
-            CacheCrucialObjects();
+            NetworkClientsFactory.GetNtServer().CacheCrucialObjects();
             LoadData(false);
-        }
-
-        private void CacheCrucialObjects()
-        {
-            Logger.Log("Caching Materials and Areas", "MainWindow.CacheCrucialObjects");
-
-            dynamic materials = NetworkClientsFactory.GetNtServer(false).GetObject("material");
-
-            foreach (dynamic material in materials)
-            {
-                NetworkClientsFactory.GetNtServer().SetObject(material.name.ToString(), material);
-                NetworkClientsFactory.GetNtServer().SetObject(material._id.ToString(), material);
-            }
-
-            dynamic areas = NetworkClientsFactory.GetNtServer(false).GetObject("area");
-            foreach (dynamic area in areas)
-            {
-                NetworkClientsFactory.GetNtServer().SetObject(area.root_location.ToString(), area);
-                NetworkClientsFactory.GetNtServer().SetObject(area._id.ToString(), area);
-            }
-
-            dynamic detections = NetworkClientsFactory.GetNtServer(false).GetObject("detection");
-            foreach (dynamic detection in detections)
-            {
-                NetworkClientsFactory.GetNtServer().SetObject(detection._id.ToString(), detection);
-            }
         }
 
         private void MainWindow_MouseWheel(object sender, MouseWheelEventArgs e)
@@ -377,7 +350,7 @@ namespace ControlApplication.DesktopClient
             if(AlertsQueue.Any())
                 AlertsQueue.Dequeue().Handled = true;
 
-            var alertList = NetworkClientsFactory.GetNtServer().GetAlerts().OrderBy(a => a.AlertTime.TimeOfDay).Reverse().ToList();
+            var alertList = NetworkClientsFactory.GetNtServer().GetAlerts().OrderBy(a => a.AlertTime.Millisecond).Reverse().ToList();
             new Window
             {
                 Title = "Show alerts list",

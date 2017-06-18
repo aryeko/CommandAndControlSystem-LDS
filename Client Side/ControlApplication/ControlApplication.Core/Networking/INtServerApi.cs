@@ -116,6 +116,11 @@ namespace ControlApplication.Core.Networking
         List<Combination> GetMaterialsCombinationsAlerts(string combinationId = "");
 
         /// <summary>
+        /// Caching all crucial objects
+        /// </summary>
+        void CacheCrucialObjects();
+
+        /// <summary>
         /// A generic method for getting and setting objects to the memory cache.
         /// </summary>
         /// <param name="uriPath">URI Path</param>
@@ -124,6 +129,11 @@ namespace ControlApplication.Core.Networking
         /// <returns>An object of type dynamic</returns>
         dynamic GetObject(string uriPath, string key = "", string value = "");
 
+        /// <summary>
+        /// Setting objects to the memory cache
+        /// </summary>
+        /// <param name="key">The key to set value to</param>
+        /// <param name="value">The key value</param>
         void SetObject(string key, dynamic value);
     }
 }
