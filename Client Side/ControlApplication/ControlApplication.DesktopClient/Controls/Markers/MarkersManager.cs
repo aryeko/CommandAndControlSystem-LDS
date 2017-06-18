@@ -36,6 +36,8 @@ namespace ControlApplication.DesktopClient.Controls.Markers
 
         public void AddMarker(Area area)
         {
+            if (mMapControl.Markers.Any(m => m.Position.Equals(area.RootLocation)))
+                return;//area already exists
             var marker = new GMapMarker(area.RootLocation);
             {
                 var s = new AreaMarker(marker, area);
