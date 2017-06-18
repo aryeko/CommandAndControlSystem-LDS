@@ -51,17 +51,19 @@ namespace ControlApplication.DesktopClient.Controls
             var activeArea = (Application.Current.MainWindow as MainWindow).ActiveWorkingArea;
             if (activeArea == null)
             {
-                MessageBox.Show(Application.Current.MainWindow, "Please set the active working area", "Please set the active working area",
+                MessageBox.Show(Window.GetWindow(this), "Please set the active working area", "Please set the active working area",
                     MessageBoxButton.OK);
+                Window.GetWindow(this).Close();
                 return;
             }
 
             var deviceDetections = NetworkClientsFactory.GetGscanClientsApi().GetDeviceDetections(Gscan, activeArea);
-            foreach (var deviceDetection in deviceDetections)
+            var areaDetections = NetworkClientsFactory.GetNtServer().GetDetections(areaId: activeArea.DatabaseId);
+            var detectionsToAdd = deviceDetections.Except(areaDetections);
+            foreach (var deviceDetection in detectionsToAdd)
             {
                 NetworkClientsFactory.GetNtServer().AddDetection(deviceDetection);
-            }
-            
+            }           
         }
 
         private void OnDoubleClick(object sender, MouseButtonEventArgs e)

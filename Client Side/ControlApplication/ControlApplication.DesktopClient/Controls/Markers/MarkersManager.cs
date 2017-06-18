@@ -20,7 +20,8 @@ namespace ControlApplication.DesktopClient.Controls.Markers
             var exsistingMarker = mMapControl.Markers.SingleOrDefault(m => m.Position.Equals(detection.Position));
             if (exsistingMarker != null)
             {
-                ((DetectionMarker)exsistingMarker.Shape).AddDetection(detection);
+                DetectionMarker marker = exsistingMarker.Shape as DetectionMarker;
+                marker?.AddDetection(detection);
             }
             else
             {
