@@ -72,26 +72,32 @@ namespace ControlApplication.DesktopClient.Controls
         {
             if (!CheckBoxWifiStatus.IsChecked.Value)
                 return;
-
-            var connectedDevices = NetworkClientsFactory.GetGscanClientsApi().GetConnectedDevices();
-
-            foreach (SingleDeviceControl control in DevicesListScroll.Children)
+            try
             {
-                control.IsAvilable = connectedDevices.Contains(control.Gscan);
+                var connectedDevices = NetworkClientsFactory.GetGscanClientsApi().GetConnectedDevices();
+
+                foreach (SingleDeviceControl control in DevicesListScroll.Children)
+                {
+                    control.IsAvilable = connectedDevices.Contains(control.Gscan);
+                }
+
+                foreach (var device in connectedDevices)
+                {
+                    if (DevicesListScroll.Children.Cast<SingleDeviceControl>().Any(child => child.Gscan.Equals(device)))
+                        continue;
+
+                    var newRowIndex = DevicesListScroll.RowDefinitions.Count;
+                    DevicesListScroll.RowDefinitions.Insert(newRowIndex, new RowDefinition());
+
+                    var newControl = new SingleDeviceControl(device);
+
+                    Grid.SetRow(newControl, newRowIndex);
+                    DevicesListScroll.Children.Add(newControl);
+                }
             }
-
-            foreach (var device in connectedDevices)
+            catch (Exception)
             {
-                if (DevicesListScroll.Children.Cast<SingleDeviceControl>().Any(child => child.Gscan.Equals(device)))
-                    continue;
-                
-                var newRowIndex = DevicesListScroll.RowDefinitions.Count;
-                DevicesListScroll.RowDefinitions.Insert(newRowIndex, new RowDefinition());
-
-                var newControl = new SingleDeviceControl(device);
-
-                Grid.SetRow(newControl, newRowIndex);
-                DevicesListScroll.Children.Add(newControl);
+                // ignored
             }
         }
 
