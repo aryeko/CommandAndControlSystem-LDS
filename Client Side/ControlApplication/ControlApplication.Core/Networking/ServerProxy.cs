@@ -52,7 +52,7 @@ namespace ControlApplication.Core.Networking
             {
                 materials.Add(ServerObjectConverter.ConvertMaterial(response));
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 materials.Add(ServerObjectConverter.ConvertMaterial(response[0]));
             }
@@ -81,7 +81,7 @@ namespace ControlApplication.Core.Networking
 
         public List<Gscan> GetGscan(string gscanSn = "", string gscanId = "")
         {
-            dynamic response = "";
+            dynamic response;
             List<Gscan> list = new List<Gscan>();
 
             if (gscanId.Equals("no gscan"))
@@ -278,7 +278,7 @@ namespace ControlApplication.Core.Networking
             {
                 ids.Add("MaterialId", response._id.ToString());
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 ids.Add("MaterialId", response[0]._id.ToString());
             }

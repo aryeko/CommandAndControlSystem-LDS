@@ -79,15 +79,14 @@ namespace ControlApplication.Core.Networking
             foreach (Match match in matches)
             {
                 var str = ExtractGscanDetectionValue(ScanTimeKey, match.Groups[detectionKey].Value);
-                var doub = double.Parse(str);
-                DateTime dateTime = new DateTime(1970, 1, 1).AddMilliseconds(doub);
-                string ramanOutput = "SHOULD HAVE RAMAN";//GetRaman(obj.raman_output_id.ToString()); //TODO: Get actual link
+                DateTime dateTime = new DateTime(1970, 1, 1).AddMilliseconds(double.Parse(str));
+                string ramanOutput = "SHOULD HAVE RAMAN";//GetRaman(match.Groups[detectionKey].Value); //TODO: Get actual link
                 var material = NetworkClientsFactory.GetNtServer().GetMaterial(name: ExtractGscanDetectionValue(MaterialNameKey, match.Groups[detectionKey].Value));
                 var detection = new Detection(dateTime, material[0], activeArea.RootLocation, activeArea, ExtractGscanDetectionValue(SuspectIdKey, match.Groups[detectionKey].Value), ExtractGscanDetectionValue(PlateIdKey, match.Groups[detectionKey].Value), device.PhysicalAddress.ToString());
 
                 detectionsList.Add(detection);
             }
-            
+
             return detectionsList;
         }
 
@@ -151,7 +150,7 @@ namespace ControlApplication.Core.Networking
 
             return physicalAdresses;
         }
-        
+
         private string RunShellCommand(string command, string args)
         {
             var proc = Process.Start(new ProcessStartInfo
