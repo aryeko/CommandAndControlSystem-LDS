@@ -11,7 +11,7 @@ namespace ControlApplication.DesktopClient
         /// Timer interval for getting all detections
         /// </summary>
         private Timer Timer { get; set; }
-        internal const double TimeIntervalMinutes = 0.2;
+        internal const double TimeIntervalMinutes = 0.5;
 
         public PollingManager()
         {

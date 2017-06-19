@@ -35,7 +35,7 @@ namespace ControlApplication.DesktopClient.Controls
             InitializeComponent();
             Loaded += OnLoad;
             TxtWifiSsid.Visibility = Visibility.Hidden;
-            ButtonRefresh.Visibility = Visibility.Hidden;  
+            ButtonRefresh.Visibility = Visibility.Hidden;
         }
 
         private void OnLoad(object sender, RoutedEventArgs e)
@@ -60,7 +60,7 @@ namespace ControlApplication.DesktopClient.Controls
                 MessageBox.Show(Window.GetWindow(this), "Hosted Network Error" ,"Hosted network is not supported in your computer", MessageBoxButton.OK);
                 Window.GetWindow(this).Close();
                 return;
-            }
+            } 
 
             TxtWifiSsid.Text = NetworkClientsFactory.GetGscanClientsApi().GetHostedNetwordSsid();
             TxtWifiSsid.Visibility = Visibility.Visible;
