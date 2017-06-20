@@ -39,7 +39,7 @@ namespace ControlApplication.DesktopClient.Controls
             if (!_alert.IsDirty)
             {
                 _alert.IsDirty = true;
-                NetworkClientsFactory.GetNtServer().UpdateAlert(_alert);
+                Networking.GetNtServer().UpdateAlert(_alert);
                 Border.BorderBrush = Brushes.White;
                 if ((Application.Current.MainWindow as MainWindow).AlertsQueue.Any())
                     (Application.Current.MainWindow as MainWindow).AlertsQueue.Dequeue().Handled = true;

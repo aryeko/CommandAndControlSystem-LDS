@@ -55,14 +55,14 @@ namespace ControlApplication.DesktopClient.Controls
 
         private void CheckBoxWifiStatus_Checked(object sender, RoutedEventArgs e)
         {
-            if (!NetworkClientsFactory.GetGscanClientsApi().TryStartHostedNetwork())
+            if (!Networking.GetGscanClientsApi().TryStartHostedNetwork())
             {
                 MessageBox.Show(Window.GetWindow(this), "Hosted Network Error" ,"Hosted network is not supported in your computer", MessageBoxButton.OK);
                 Window.GetWindow(this).Close();
                 return;
             } 
 
-            TxtWifiSsid.Text = NetworkClientsFactory.GetGscanClientsApi().GetHostedNetwordSsid();
+            TxtWifiSsid.Text = Networking.GetGscanClientsApi().GetHostedNetwordSsid();
             TxtWifiSsid.Visibility = Visibility.Visible;
             ButtonRefresh.Visibility = Visibility.Visible;
             UpdateConnectedDevices();
@@ -74,7 +74,7 @@ namespace ControlApplication.DesktopClient.Controls
                 return;
             try
             {
-                var connectedDevices = NetworkClientsFactory.GetGscanClientsApi().GetConnectedDevices();
+                var connectedDevices = Networking.GetGscanClientsApi().GetConnectedDevices();
 
                 foreach (SingleDeviceControl control in DevicesListScroll.Children)
                 {
@@ -103,7 +103,7 @@ namespace ControlApplication.DesktopClient.Controls
 
         private void CheckBoxWifiStatus_UnChecked(object sender, RoutedEventArgs e)
         {
-            NetworkClientsFactory.GetGscanClientsApi().TryStopHostedNetwork();
+            Networking.GetGscanClientsApi().TryStopHostedNetwork();
             TxtWifiSsid.Visibility = Visibility.Hidden;
 
             DevicesListScroll.Children.Clear();

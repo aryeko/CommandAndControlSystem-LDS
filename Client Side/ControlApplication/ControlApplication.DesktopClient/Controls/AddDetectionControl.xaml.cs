@@ -50,11 +50,11 @@ namespace ControlApplication.DesktopClient.Controls
             if (ValidateFields())
             {
                 Window.GetWindow(this)?.Close();
-                var material = NetworkClientsFactory.GetNtServer().GetMaterial(name:MaterialComboBox.Text).First();
+                var material = Networking.GetNtServer().GetMaterial(name:MaterialComboBox.Text).First();
                 Logger.Log($"Adding Detection using {GetMainWindow().ActiveMWorkingArea.AreaType} area at {GetMainWindow().ActiveMWorkingArea.RootLocation}", GetType().Name);
                 var area = GetMainWindow().ActiveMWorkingArea;
                 var detection = new Detection(mCurrentDateTime, material, mClickPoint, area, TxtSuspectId.Text, TxtSuspectPlateNo.Text);
-                NetworkClientsFactory.GetNtServer().AddDetection(detection);
+                Networking.GetNtServer().AddDetection(detection);
                 GetMainWindow().AddMarker(mClickPoint, new []{detection});
             }
         }
@@ -109,7 +109,7 @@ namespace ControlApplication.DesktopClient.Controls
         /// <param name="e"></param>
         private void MaterialComboBox_OnLoaded(object sender, RoutedEventArgs e)
         {
-            var materialsToLoad = NetworkClientsFactory.GetNtServer().GetMaterial();
+            var materialsToLoad = Networking.GetNtServer().GetMaterial();
             var data = materialsToLoad.Select(material => material.Name).ToList();
             data.Sort();
 

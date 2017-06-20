@@ -40,7 +40,7 @@ namespace ControlApplication.DesktopClient.Controls
         {
             Window.GetWindow(this)?.Close();
 
-            var combinationsList = NetworkClientsFactory.GetNtServer().GetMaterialsCombinationsAlerts();
+            var combinationsList = Networking.GetNtServer().GetMaterialsCombinationsAlerts();
 
             new Window
             {

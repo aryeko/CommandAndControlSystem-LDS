@@ -56,7 +56,7 @@ namespace ControlApplication.DesktopClient.Controls
             {
                 Window.GetWindow(this)?.Close();
                 var newArea = new Area(mClickPoint, (AreaType)Enum.Parse(typeof(AreaType), ComboAreaType.Text), mRadius);
-                NetworkClientsFactory.GetNtServer().AddArea(newArea);
+                Networking.GetNtServer().AddArea(newArea);
 
                 (Application.Current.MainWindow as MainWindow).AddMarker(mClickPoint, new[] { newArea });
 
