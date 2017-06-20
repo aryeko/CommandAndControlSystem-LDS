@@ -48,7 +48,7 @@ namespace ControlApplication.DesktopClient.Controls
 
         private void OnRightMouseUp(object sender, MouseButtonEventArgs e)
         {
-            var activeArea = (Application.Current.MainWindow as MainWindow).ActiveWorkingArea;
+            var activeArea = (Application.Current.MainWindow as MainWindow).ActiveMWorkingArea;
             if (activeArea == null)
             {
                 MessageBox.Show(Window.GetWindow(this), "Please set the active working area", "Please set the active working area",

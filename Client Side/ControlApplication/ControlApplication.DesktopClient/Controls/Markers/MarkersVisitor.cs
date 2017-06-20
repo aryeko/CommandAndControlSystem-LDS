@@ -6,11 +6,11 @@ using GMap.NET.WindowsPresentation;
 
 namespace ControlApplication.DesktopClient.Controls.Markers
 {
-    public class MarkersManager : IMarkerableVisitor
+    public class MarkersVisitor : IMarkerableVisitor
     {
         private GMapControl mMapControl;
 
-        public MarkersManager(GMapControl gMapControl)
+        public MarkersVisitor(GMapControl gMapControl)
         {
             mMapControl = gMapControl;
         }

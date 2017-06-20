@@ -43,19 +43,21 @@ namespace ControlApplication.DesktopClient
 
         private PollingManager PollingManager { get; set; }
 
-        private Area _workingArea;
+        private Area mWorkingArea;
+
+        private readonly IMarkerableVisitor mMarkersVisitor;
 
         public Queue<CombinationAlertArgs> AlertsQueue { get; set; }
 
-        internal Area ActiveWorkingArea
+        internal Area ActiveMWorkingArea
         {
             get
             {
-                return _workingArea;
+                return mWorkingArea;
             }
             set
             {
-                _workingArea = value;
+                mWorkingArea = value;
                 LblWorkingArea.Content = $"Active area: {value.AreaType}";
                 LblWorkingArea.Foreground = Brushes.Green;
             }
@@ -76,6 +78,7 @@ namespace ControlApplication.DesktopClient
             AlertsQueue = new Queue<CombinationAlertArgs>();
             PollingManager = new PollingManager();
             WindowState = WindowState.Maximized;
+            mMarkersVisitor = new MarkersVisitor(GMapControl);
         }
 
         private void OnCombinationAlert(object source, CombinationAlertArgs args)
@@ -155,7 +158,7 @@ namespace ControlApplication.DesktopClient
                 var clients = gscansManager.GetConnectedDevices();
                 foreach (var client in clients)
                 {
-                    var cliendDetections = gscansManager.GetDeviceDetections(client, ActiveWorkingArea).GroupBy(d => d.Position);
+                    var cliendDetections = gscansManager.GetDeviceDetections(client, ActiveMWorkingArea).GroupBy(d => d.Position);
                     foreach (var cliendDetection in cliendDetections)
                     {
                         Application.Current.Dispatcher.Invoke(() => AddMarker(cliendDetection.Key, cliendDetection));
@@ -186,7 +189,7 @@ namespace ControlApplication.DesktopClient
 
         private void PopAddDetectionWindow(object sender, MouseButtonEventArgs e)
         {
-            if (ActiveWorkingArea == null)
+            if (ActiveMWorkingArea == null)
             {
                 MessageBox.Show(this, "Please set the active working area", "Please set the active working area",
                     MessageBoxButton.OK);
@@ -216,7 +219,7 @@ namespace ControlApplication.DesktopClient
         {
             foreach (var markerable in markerables)
             {
-                markerable.Accept(new MarkersManager(GMapControl));
+                markerable.Accept(mMarkersVisitor);
             }
         }
 

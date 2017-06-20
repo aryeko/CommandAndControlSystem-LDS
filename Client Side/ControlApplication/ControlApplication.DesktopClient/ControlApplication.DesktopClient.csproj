@@ -193,7 +193,7 @@
     <Compile Include="Controls\Markers\DetectionMarker.xaml.cs">
       <DependentUpon>DetectionMarker.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Markers\MarkersManager.cs" />
+    <Compile Include="Controls\Markers\MarkersVisitor.cs" />
     <Compile Include="Controls\MaterialsList.xaml.cs">
       <DependentUpon>MaterialsList.xaml</DependentUpon>
     </Compile>

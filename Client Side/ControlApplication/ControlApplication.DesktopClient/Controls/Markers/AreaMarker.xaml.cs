@@ -92,7 +92,7 @@ namespace ControlApplication.DesktopClient.Controls.Markers
             {
                 case MessageBoxResult.Yes:
                     Logger.Log($"Set {mArea.AreaType} at {mArea.RootLocation} as the active working area", GetType().Name);
-                    (Application.Current.MainWindow as MainWindow).ActiveWorkingArea = mArea;
+                    (Application.Current.MainWindow as MainWindow).ActiveMWorkingArea = mArea;
                     break;
 
                 case MessageBoxResult.No:

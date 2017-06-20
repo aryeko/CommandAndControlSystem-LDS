@@ -51,8 +51,8 @@ namespace ControlApplication.DesktopClient.Controls
             {
                 Window.GetWindow(this)?.Close();
                 var material = NetworkClientsFactory.GetNtServer().GetMaterial(name:MaterialComboBox.Text).First();
-                Logger.Log($"Adding Detection using {GetMainWindow().ActiveWorkingArea.AreaType} area at {GetMainWindow().ActiveWorkingArea.RootLocation}", GetType().Name);
-                var area = GetMainWindow().ActiveWorkingArea;
+                Logger.Log($"Adding Detection using {GetMainWindow().ActiveMWorkingArea.AreaType} area at {GetMainWindow().ActiveMWorkingArea.RootLocation}", GetType().Name);
+                var area = GetMainWindow().ActiveMWorkingArea;
                 var detection = new Detection(mCurrentDateTime, material, mClickPoint, area, TxtSuspectId.Text, TxtSuspectPlateNo.Text);
                 NetworkClientsFactory.GetNtServer().AddDetection(detection);
                 GetMainWindow().AddMarker(mClickPoint, new []{detection});

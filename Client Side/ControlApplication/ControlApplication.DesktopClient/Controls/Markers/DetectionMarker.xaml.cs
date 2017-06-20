@@ -84,7 +84,7 @@ namespace ControlApplication.DesktopClient.Controls.Markers
         private void MarkerDoubleClicked(object sender, MouseButtonEventArgs e)
         {
             if (!Equals((Application.Current.MainWindow as MainWindow).AddPointBtn.Background, Brushes.DarkBlue)) return;
-            if ((Application.Current.MainWindow as MainWindow).ActiveWorkingArea == null)
+            if ((Application.Current.MainWindow as MainWindow).ActiveMWorkingArea == null)
             {
                 MessageBox.Show(Application.Current.MainWindow, "Please set the active working area", "Please set the active working area",
                     MessageBoxButton.OK);
