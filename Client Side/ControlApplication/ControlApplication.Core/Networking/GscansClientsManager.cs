@@ -81,7 +81,7 @@ namespace ControlApplication.Core.Networking
                 var str = ExtractGscanDetectionValue(ScanTimeKey, match.Groups[detectionKey].Value);
                 DateTime dateTime = new DateTime(1970, 1, 1).AddMilliseconds(double.Parse(str));
                 string ramanOutput = "SHOULD HAVE RAMAN";//GetRaman(match.Groups[detectionKey].Value); //TODO: Get actual link
-                var material = NetworkClientsFactory.GetNtServer().GetMaterial(name: ExtractGscanDetectionValue(MaterialNameKey, match.Groups[detectionKey].Value));
+                var material = Networking.GetNtServer().GetMaterial(name: ExtractGscanDetectionValue(MaterialNameKey, match.Groups[detectionKey].Value));
                 var detection = new Detection(dateTime, material[0], activeArea.RootLocation, activeArea, ExtractGscanDetectionValue(SuspectIdKey, match.Groups[detectionKey].Value), ExtractGscanDetectionValue(PlateIdKey, match.Groups[detectionKey].Value), device.PhysicalAddress.ToString());
 
                 detectionsList.Add(detection);

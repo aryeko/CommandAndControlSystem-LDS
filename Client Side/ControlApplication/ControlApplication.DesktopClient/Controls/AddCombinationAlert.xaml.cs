@@ -17,7 +17,7 @@ namespace ControlApplication.DesktopClient.Controls
         {
             InitializeComponent();
 
-            var materialsToLoad = NetworkClientsFactory.GetNtServer().GetMaterial().Select(material => material.Name).ToList();
+            var materialsToLoad = Networking.GetNtServer().GetMaterial().Select(material => material.Name).ToList();
             materialsToLoad.Sort();
 
             for (var i=0; i< numberOfRows; i++)
@@ -43,7 +43,7 @@ namespace ControlApplication.DesktopClient.Controls
 
             var materialsList = GetMaterialsList(chosenCombination);
             var combination = new Combination(TxtAlert.Text, materialsList);
-            NetworkClientsFactory.GetNtServer().AddMaterialsCombinationAlert(combination);
+            Networking.GetNtServer().AddMaterialsCombinationAlert(combination);
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace ControlApplication.DesktopClient.Controls
             var materialsList = new List<Material>();
 
             foreach (var material in chosenMaterialNamesCombination)
-                materialsList.Add(NetworkClientsFactory.GetNtServer().GetMaterial(name: material).First());
+                materialsList.Add(Networking.GetNtServer().GetMaterial(name: material).First());
 
             return materialsList;
         }

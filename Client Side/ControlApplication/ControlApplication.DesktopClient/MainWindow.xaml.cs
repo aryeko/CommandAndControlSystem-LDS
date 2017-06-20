@@ -84,7 +84,7 @@ namespace ControlApplication.DesktopClient
         private void OnCombinationAlert(object source, CombinationAlertArgs args)
         {
             Logger.Log("Alert was caught: " + args.AlertName, "MainWindow.AlertHandler");
-            NetworkClientsFactory.GetNtServer().AddAlert(new Alert(args.AlertName, args.Area, args.Detections, DateTime.Now));
+            Networking.GetNtServer().AddAlert(new Alert(args.AlertName, args.Area, args.Detections, DateTime.Now));
             AlertsQueue.Enqueue(args);
             AlertsBtn.Background = Brushes.Red;
             Task.Run(() =>
@@ -111,7 +111,7 @@ namespace ControlApplication.DesktopClient
             Logger.Log("Starting load data", GetType().Name);
             if (!(checkAlerts && AlertsQueue.Any()))
             {
-                var areas = await Task.Run(() => NetworkClientsFactory.GetNtServer().GetArea());
+                var areas = await Task.Run(() => Networking.GetNtServer().GetArea());
                 Logger.Log("Adding areas started", GetType().Name);
                 foreach (var area in areas)
                 {
@@ -125,7 +125,7 @@ namespace ControlApplication.DesktopClient
                         .SelectMany(m => (m.Shape as DetectionMarker).GetAreaDetections()).ToList();
                 Logger.Log($"Currently map has {exsistingDetections.Count()} detections", GetType().Name);
 
-                var detections = await Task.Run(() => NetworkClientsFactory.GetNtServer().GetDetections()
+                var detections = await Task.Run(() => Networking.GetNtServer().GetDetections()
                                                         .Except(exsistingDetections)
                                                         .Where(d => DetectionsFilter.HasFlag(d.Material.MaterialType))
                                                         .GroupBy(d => d.Position));
@@ -178,7 +178,7 @@ namespace ControlApplication.DesktopClient
 
             LblWorkingArea.Content = "THE ACTIVE WORKING AREA IS NOT SET";
             LblWorkingArea.Foreground = Brushes.Red;
-            NetworkClientsFactory.GetNtServer().CacheCrucialObjects();
+            Networking.GetNtServer().CacheCrucialObjects();
             LoadData(false);
         }
 
@@ -256,7 +256,7 @@ namespace ControlApplication.DesktopClient
 
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            NetworkClientsFactory.GetGscanClientsApi().TryStopHostedNetwork();
+            Networking.GetGscanClientsApi().TryStopHostedNetwork();
 
             Application.Current.Shutdown();
         }
@@ -298,7 +298,7 @@ namespace ControlApplication.DesktopClient
 
         private void DbBtn_Click(object sender, RoutedEventArgs e)
         {
-            var materials = NetworkClientsFactory.GetNtServer().GetMaterial().OrderBy(m => m.Name).ToList();
+            var materials = Networking.GetNtServer().GetMaterial().OrderBy(m => m.Name).ToList();
             
             new Window
             {
@@ -360,7 +360,7 @@ namespace ControlApplication.DesktopClient
 
         private void AlertsBtn_Click(object sender, RoutedEventArgs e)
         {
-            var alertList = NetworkClientsFactory.GetNtServer().GetAlerts().OrderBy(a => a.AlertTime.Millisecond).Reverse().ToList();
+            var alertList = Networking.GetNtServer().GetAlerts().OrderBy(a => a.AlertTime.Millisecond).Reverse().ToList();
             new Window
             {
                 Title = "Show alerts list",

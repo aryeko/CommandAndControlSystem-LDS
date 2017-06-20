@@ -34,15 +34,15 @@ namespace ControlApplication.Core
 
         static AlertsManager()
         {
-            NetworkClientsFactory.GetNtServer().DetectionAdded += OnDetectionAdded;
+            Networking.Networking.GetNtServer().DetectionAdded += OnDetectionAdded;
         }
 
         private static void OnDetectionAdded(object sender, DetectionAddedEventArgs e)
         {
-            var affectedAreaDetections = NetworkClientsFactory.GetNtServer().GetDetections(areaId: e.Detection.Area.DatabaseId);
+            var affectedAreaDetections = Networking.Networking.GetNtServer().GetDetections(areaId: e.Detection.Area.DatabaseId);
             var affectedAreaMaterials = affectedAreaDetections.Select(d => d.Material).ToList();
 
-            var combinations = NetworkClientsFactory.GetNtServer().GetMaterialsCombinationsAlerts();
+            var combinations = Networking.Networking.GetNtServer().GetMaterialsCombinationsAlerts();
 
             foreach (var combination in combinations)
             {

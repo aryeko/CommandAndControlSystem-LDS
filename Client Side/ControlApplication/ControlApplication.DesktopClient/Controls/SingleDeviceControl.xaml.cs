@@ -57,12 +57,12 @@ namespace ControlApplication.DesktopClient.Controls
                 return;
             }
 
-            var deviceDetections = NetworkClientsFactory.GetGscanClientsApi().GetDeviceDetections(Gscan, activeArea);
-            var areaDetections = NetworkClientsFactory.GetNtServer().GetDetections(areaId: activeArea.DatabaseId);
+            var deviceDetections = Networking.GetGscanClientsApi().GetDeviceDetections(Gscan, activeArea);
+            var areaDetections = Networking.GetNtServer().GetDetections(areaId: activeArea.DatabaseId);
             var detectionsToAdd = deviceDetections.Except(areaDetections);
             foreach (var deviceDetection in detectionsToAdd)
             {
-                NetworkClientsFactory.GetNtServer().AddDetection(deviceDetection);
+                Networking.GetNtServer().AddDetection(deviceDetection);
             }           
         }
 
@@ -74,7 +74,7 @@ namespace ControlApplication.DesktopClient.Controls
 
             if (result == MessageBoxResult.OK)
             {
-                NetworkClientsFactory.GetNtServer().AddGscan(Gscan);
+                Networking.GetNtServer().AddGscan(Gscan);
             }
         }
     }
