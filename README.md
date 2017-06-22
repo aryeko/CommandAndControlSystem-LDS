@@ -2,7 +2,7 @@
 ### Command And Control System - Cooperation with LDS (Laser Detect Systems)
 JCE - Software Engineering - Final project
 
-![Project Logo](https://github.com/aryeko/CommandAndControlSystem-LDS/blob/master/Documents/Pictures/LDS/LDS%20logo.jpg)
+<img src="https://github.com/aryeko/CommandAndControlSystem-LDS/blob/master/Client%20Side/ControlApplication/ControlApplication.DesktopClient/Drawable/LDS_LOGO.png" width="900" height="250" />.
 
 LDS (Laser Detect Systems) is an Israeli company that was founded in 2004. The main duty of the company was developing explosives detectors to the military market.
 From 2010 the company brought to private hands.
