@@ -162,7 +162,7 @@ namespace ControlApplication.Core.Networking
                 { "area_id", idsDictionary["AreaId"] },
                 { "gscan_id", idsDictionary["GscanId"] },
                 { "suspect_id", detection.SuspectId },
-                { "raman_id", detection.RamanId },
+                { "raman_id", detection.RamanGraph },
                 { "plate_number", detection.SuspectPlateId },
                 { "location", detection.Position.ToString() },
                 { "date_time", detection.DateTimeOfDetection.ToString("G", CultureInfo.InvariantCulture) }

@@ -22,17 +22,19 @@ namespace ControlApplication.DesktopClient.Controls
     /// </summary>
     public partial class SingleDetectionControl : UserControl
     {
+        private readonly Detection _detection;
         public SingleDetectionControl(Detection detection)
         {
             InitializeComponent();
 
+            _detection = detection;
             dataDate.Content = detection.DateTimeOfDetection.ToString("d");
             dataTime.Content = detection.DateTimeOfDetection.ToString("T");
             dataSuspectedID.Content = detection.SuspectId;
             dataPlateID.Content = detection.SuspectPlateId;
             dataMaterial.Content = detection.Material.Name;
             dataGunID.Content = string.IsNullOrEmpty(detection.GunId) ? "No G-Scan" : detection.GunId;
-            if (!string.IsNullOrEmpty(detection.RamanId))
+            if (!string.IsNullOrEmpty(detection.RamanGraph))
             {
                 dataLinkRaman.Text = "LINK";
                 dataLinkRaman.TextDecorations = TextDecorations.Underline;
@@ -43,7 +45,7 @@ namespace ControlApplication.DesktopClient.Controls
 
         private void OpenRaman_OnMouseClick(object sender, MouseButtonEventArgs e)
         {
-            throw new NotImplementedException();
+            System.Diagnostics.Process.Start(_detection.RamanGraph);           
         }
     }
 }

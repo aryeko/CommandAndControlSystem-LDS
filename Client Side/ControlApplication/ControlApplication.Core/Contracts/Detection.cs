@@ -47,7 +47,7 @@ namespace ControlApplication.Core.Contracts
         /// <summary>
         /// Raman graph ID
         /// </summary>
-        public string RamanId { get; }
+        public string RamanGraph { get; }
 
         /// <summary>
         /// The Database ID
@@ -64,10 +64,10 @@ namespace ControlApplication.Core.Contracts
         /// <param name="suspectId">Suspect's ID number</param>
         /// <param name="suspectPlateId">Suspect's plate ID number</param>
         /// <param name="gunId">G-Scan ID number</param>
-        /// <param name="ramanId">Raman graph ID</param>
+        /// <param name="ramanGraph">Raman graph ID</param>
         /// <param name="databaseId">DB ID</param>
         public Detection(DateTime dateTime, Material material, PointLatLng position, Area area, string suspectId,
-            string suspectPlateId, string gunId = "", string ramanId = "", string databaseId = "")
+            string suspectPlateId, string gunId = "", string ramanGraph = "", string databaseId = "")
         {
             DateTimeOfDetection = dateTime;
             Material = material;
@@ -76,7 +76,7 @@ namespace ControlApplication.Core.Contracts
             SuspectId = suspectId;
             SuspectPlateId = suspectPlateId;
             GunId = gunId;
-            RamanId = ramanId;
+            RamanGraph = ramanGraph;
             DatabaseId = databaseId;
         }
 

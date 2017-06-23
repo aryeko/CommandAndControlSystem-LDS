@@ -80,14 +80,28 @@ namespace ControlApplication.Core.Networking
             {
                 var str = ExtractGscanDetectionValue(ScanTimeKey, match.Groups[detectionKey].Value);
                 DateTime dateTime = new DateTime(1970, 1, 1).AddMilliseconds(double.Parse(str));
-                string ramanOutput = "SHOULD HAVE RAMAN";//GetRaman(match.Groups[detectionKey].Value); //TODO: Get actual link
+                //string ramanOutput = GetRaman(device, match.Groups[detectionKey].Value); //TODO: Get actual link
                 var material = Networking.GetNtServer().GetMaterial(name: ExtractGscanDetectionValue(MaterialNameKey, match.Groups[detectionKey].Value));
-                var detection = new Detection(dateTime, material[0], activeArea.RootLocation, activeArea, ExtractGscanDetectionValue(SuspectIdKey, match.Groups[detectionKey].Value), ExtractGscanDetectionValue(PlateIdKey, match.Groups[detectionKey].Value), device.PhysicalAddress.ToString());
+                var detection = new Detection(dateTime, material[0], activeArea.RootLocation, activeArea, ExtractGscanDetectionValue(SuspectIdKey, match.Groups[detectionKey].Value), ExtractGscanDetectionValue(PlateIdKey, match.Groups[detectionKey].Value), device.PhysicalAddress.ToString(), ramanOutput);
 
                 detectionsList.Add(detection);
             }
 
             return detectionsList;
+        }
+
+        //TODO: consider how to save raman in DB
+        private string GetRaman(Gscan device, string value)
+        {
+            string path = $@"C:\temp\LDS\Raman\{device.PhysicalAddress}\{value}.esp";
+            if (!System.IO.File.Exists(path))
+            {
+                var uri = new Uri($"http://{device.IpAddress}:8080/file{value}");
+                var result = webClient.DownloadString(uri);
+                System.IO.File.WriteAllText(path, result);
+            }
+
+            return path;
         }
 
         private string ExtractGscanDetectionValue(string key, string input)
