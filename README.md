@@ -31,7 +31,6 @@ This project is developed as part of the requirements for our [Final SE Project]
 - [Company Presentation](https://github.com/aryeko/CommandAndControlSystem-LDS/blob/master/Documents/Presentations/g-scan%20opening.pptx)
 - [Project Presentation](https://github.com/aryeko/CommandAndControlSystem-LDS/blob/613db2ebb254666b714ccff45ba8dc922abb3771/Documents/Presentations/MVP.pptx)
 - [Project Proposal](https://github.com/aryeko/CommandAndControlSystem-LDS/wiki/Proposal)
-- [Software Requirements Specification](https://github.com/aryeko/CommandAndControlSystem-LDS/wiki/srs)
 - [Software Design Specification](https://github.com/aryeko/CommandAndControlSystem-LDS/wiki/sds)
 - [Organization official website](http://laser-detect.com/)
 
@@ -40,11 +39,11 @@ This project is developed as part of the requirements for our [Final SE Project]
 - [Sprint 2 - Server Side Establishment](https://github.com/aryeko/CommandAndControlSystem-LDS/wiki/Sprint-2)
 - [Sprint 3 - Establish Wireless Infrastracture](https://github.com/aryeko/CommandAndControlSystem-LDS/wiki/Sprint-3)
 - [Sprint 4 - Map Feature](https://github.com/aryeko/CommandAndControlSystem-LDS/wiki/Sprint-4)
-- [Sprint 5 - Substances Combination Algorithm Research](https://github.com/aryeko/CommandAndControlSystem-LDS/wiki/Sprint-5)
-- [Sprint 6 - Prohibited Combination Feature](https://github.com/aryeko/CommandAndControlSystem-LDS/wiki/Sprint-6)
-- [Sprint 7 - Location Receivers Integration](https://github.com/aryeko/CommandAndControlSystem-LDS/wiki/Sprint-7)
-- [Sprint 8 - Trail & Track Source Substance](https://github.com/aryeko/CommandAndControlSystem-LDS/wiki/Sprint-8)
-- [Sprint 9 - Source Substance Feature](https://github.com/aryeko/CommandAndControlSystem-LDS/wiki/Sprint-9)
+- [Sprint 5 - Location: Working Area Integration](https://github.com/aryeko/CommandAndControlSystem-LDS/wiki/Sprint-5)
+- [Sprint 6 - Information security](https://github.com/aryeko/CommandAndControlSystem-LDS/wiki/Sprint-6)
+- [Sprint 7 - Substances Combination Algorithm Research](https://github.com/aryeko/CommandAndControlSystem-LDS/wiki/Sprint-7)
+- [Sprint 8 - Prohibited Combination Feature](https://github.com/aryeko/CommandAndControlSystem-LDS/wiki/Sprint-8)
+- [Sprint 9 - Taggant Algorithm Feature](https://github.com/aryeko/CommandAndControlSystem-LDS/wiki/Sprint-9)
 
 
 ## Please visit our [Wiki](https://github.com/aryeko/CommandAndControlSystem-LDS/wiki) for further info
