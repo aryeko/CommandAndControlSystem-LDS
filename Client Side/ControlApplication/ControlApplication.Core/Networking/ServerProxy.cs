@@ -187,7 +187,7 @@ namespace ControlApplication.Core.Networking
         {
             if (ramanOutput.Equals("no raman"))
                 return "";
-            return "";
+            return @"C:\Users\tachdut\Desktop\debug.log"; //TODO: return actual path from DB
         }
 
         public void AddDetection(Detection detection, Dictionary<string, string> idsDictionary = null)
