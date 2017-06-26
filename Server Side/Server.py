@@ -335,11 +335,11 @@ def handle_detection_request():
 		param3 = loads(request.form.get('area_id'))
 		gscan_id = "no gscan"
 		if request.form.get('gscan_id') != "":
-			gscan_id = loads(request.form.get('gscan_id'))
+			gscan_id = request.form.get('gscan_id')
 
-		raman_id = "no raman"
+		raman_graph = "no raman"
 		if request.form.get('raman_id') != "":
-			raman_id = loads(request.form.get('raman_id'))
+			raman_graph = request.form.get('raman_graph')
 		param6 = request.form.get('suspect_id')
 		param7 = request.form.get('plate_number')
 		param8 = request.form.get('location')
@@ -349,7 +349,7 @@ def handle_detection_request():
 			loads(request.form.get('material_id')),
 			loads(request.form.get('area_id')),
 			gscan_id,
-			raman_id,
+			raman_graph,
 			request.form.get('suspect_id'),
 			request.form.get('plate_number'),
 			request.form.get('location'),
