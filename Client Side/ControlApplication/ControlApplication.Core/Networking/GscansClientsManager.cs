@@ -66,42 +66,52 @@ namespace ControlApplication.Core.Networking
 
         public List<Detection> GetDeviceDetections(Gscan device, Area activeArea)
         {
-            var uri = new Uri($"http://{device.IpAddress}:8080/getall");
-            var result = webClient.DownloadString(uri);
-
-            var detectionKey = "detectionData";
-            var ramanPathKey = "ramanPath";
-
-            var pattern = $"(?<{detectionKey}>{{.*?}})\n<a href=\"(?<{ramanPathKey}>/\\w+)\">.+?</a>";
-            var matches = Regex.Matches(result, pattern);
-
             var detectionsList = new List<Detection>();
-            foreach (Match match in matches)
+            try
             {
-                var str = ExtractGscanDetectionValue(ScanTimeKey, match.Groups[detectionKey].Value);
-                DateTime dateTime = new DateTime(1970, 1, 1).AddMilliseconds(double.Parse(str));
-                string ramanOutput = GetRaman(device, match.Groups[ramanPathKey].Value); //TODO: Get actual link
-                var material = Networking.GetNtServer().GetMaterial(name: ExtractGscanDetectionValue(MaterialNameKey, match.Groups[detectionKey].Value));
-                var detection = new Detection(dateTime, material[0], activeArea.RootLocation, activeArea, ExtractGscanDetectionValue(SuspectIdKey, match.Groups[detectionKey].Value), ExtractGscanDetectionValue(PlateIdKey, match.Groups[detectionKey].Value), device.PhysicalAddress.ToString(), ramanOutput);
+                var uri = new Uri($"http://{device.IpAddress}:8080/getall");
+                var result = webClient.DownloadString(uri);
 
-                detectionsList.Add(detection);
+                var detectionKey = "detectionData";
+                var ramanPathKey = "ramanPath";
+
+                var pattern = $"(?<{detectionKey}>{{.*?}})\n<a href=\"(?<{ramanPathKey}>/\\w+)\">.+?</a>";
+                var matches = Regex.Matches(result, pattern);
+
+                foreach (Match match in matches)
+                {
+                    var detectionTimeStr = ExtractGscanDetectionValue(ScanTimeKey, match.Groups[detectionKey].Value);
+                    if (double.Parse(detectionTimeStr) <= double.Parse(device.LastQueryTime))
+                        continue; //improve performance
+
+                    device.LastQueryTime = detectionTimeStr;
+                    DateTime dateTime = new DateTime(1970, 1, 1).AddMilliseconds(double.Parse(detectionTimeStr));
+                    string ramanOutput = GetRaman(device, match.Groups[ramanPathKey].Value);
+                    var material =
+                        Networking.GetNtServer()
+                            .GetMaterial(name:
+                                ExtractGscanDetectionValue(MaterialNameKey, match.Groups[detectionKey].Value));
+                    var detection = new Detection(dateTime, material[0], activeArea.RootLocation, activeArea,
+                        ExtractGscanDetectionValue(SuspectIdKey, match.Groups[detectionKey].Value),
+                        ExtractGscanDetectionValue(PlateIdKey, match.Groups[detectionKey].Value),
+                        device.PhysicalAddress.ToString(), ramanOutput);
+
+                    detectionsList.Add(detection);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Log($"Exception thrown while trying to get detections from Gscan with ip: {device.IpAddress}, Exception message: {ex.Message}", this.GetType().Name);
             }
 
             return detectionsList;
         }
 
-        //TODO: consider how to save raman in DB
         private string GetRaman(Gscan device, string value)
         {
-            string path = $@"C:\temp\LDS\Raman\{device.PhysicalAddress}\{value}.esp";
-            if (!System.IO.File.Exists(path))
-            {
-                var uri = new Uri($"http://{device.IpAddress}:8080{value}");
-                var result = webClient.DownloadString(uri);
-                return result;
-            }
-
-            return path;
+            var uri = new Uri($"http://{device.IpAddress}:8080{value}");
+            var result = webClient.DownloadString(uri);
+            return result;
         }
 
         private string ExtractGscanDetectionValue(string key, string input)

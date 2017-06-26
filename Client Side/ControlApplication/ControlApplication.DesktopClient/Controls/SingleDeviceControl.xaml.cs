@@ -63,7 +63,7 @@ namespace ControlApplication.DesktopClient.Controls
             foreach (var deviceDetection in detectionsToAdd)
             {
                 Networking.GetNtServer().AddDetection(deviceDetection);
-            }           
+            }
         }
 
         private void OnDoubleClick(object sender, MouseButtonEventArgs e)

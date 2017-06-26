@@ -62,8 +62,12 @@ namespace ControlApplication.DesktopClient.Controls.Markers
                 return;
             Logger.Log($"Area {mArea.AreaType} at {mArea.RootLocation} is responding to combination alert", GetType().Name);
 
-            (Application.Current.MainWindow as MainWindow).GMapControl.Position = mArea.RootLocation;
-            (Application.Current.MainWindow as MainWindow).GMapControl.Zoom = 15;
+            Application.Current.Dispatcher.Invoke(() =>
+                {
+                    (Application.Current.MainWindow as MainWindow).GMapControl.Position = mArea.RootLocation;
+                    (Application.Current.MainWindow as MainWindow).GMapControl.Zoom = 15;
+                });
+            
             Task.Run(() =>
             {
                 Logger.Log($"Area {mArea.AreaType} is starting alarm", GetType().Name);

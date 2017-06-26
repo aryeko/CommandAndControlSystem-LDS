@@ -29,6 +29,11 @@ namespace ControlApplication.Core.Contracts
         public string OwnedUnitDatabaseId { get; }
 
         /// <summary>
+        /// Gets/sets the last time that this Gscan device has been queried for data
+        /// </summary>
+        public string LastQueryTime { get; set; }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="physicalAddress"></param>
@@ -39,6 +44,7 @@ namespace ControlApplication.Core.Contracts
             PhysicalAddress = physicalAddress;
             IpAddress = ipAddress;
             OwnedUnitDatabaseId = ownedUnitDatabaseId;
+            LastQueryTime = "0";
         }
 
         public override int GetHashCode()

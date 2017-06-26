@@ -86,7 +86,7 @@ namespace ControlApplication.DesktopClient
             Logger.Log("Alert was caught: " + args.AlertName, "MainWindow.AlertHandler");
             Networking.GetNtServer().AddAlert(new Alert(args.AlertName, args.Area, args.Detections, DateTime.Now));
             AlertsQueue.Enqueue(args);
-            AlertsBtn.Background = Brushes.Red;
+
             Task.Run(() =>
             {
                 Logger.Log("Alert button is starting alarm", GetType().Name);
@@ -148,26 +148,46 @@ namespace ControlApplication.DesktopClient
             CircularProgressBar.Visibility = Visibility.Hidden;
         }
 
-        /*
+        
         internal void LoadDataFromClients()
         {
+            if (!WirelessManagementControl.IsWifiEnabled)
+            {
+                Logger.Log("SKIPPING pull data from gscans - Wifi is not enabled", this.GetType().Name);
+                return;
+            }
+            if (ActiveMWorkingArea == null)
+            {
+                Logger.Log("SKIPPING pull data from gscans - the active working area is not set", this.GetType().Name);
+                return;
+            }
+
+            Logger.Log("Starting to pull data from gscans", this.GetType().Name);
             Task.Run(() =>
             {
                 Application.Current.Dispatcher.Invoke(() => CircularProgressBar.Visibility = Visibility.Visible);
-                var gscansManager = new GscansClientsManager();
-                var clients = gscansManager.GetConnectedDevices();
+
+                var clients = Networking.GetGscanClientsApi().GetConnectedDevices();
+                Logger.Log($"found {clients.Count} connected gscans", this.GetType().Name);
+
                 foreach (var client in clients)
                 {
-                    var cliendDetections = gscansManager.GetDeviceDetections(client, ActiveMWorkingArea).GroupBy(d => d.Position);
-                    foreach (var cliendDetection in cliendDetections)
+                    var deviceDetections = Networking.GetGscanClientsApi().GetDeviceDetections(client, ActiveMWorkingArea);
+                    var areaDetections = Networking.GetNtServer().GetDetections(areaId: ActiveMWorkingArea.DatabaseId);
+                    var detectionsToAdd = deviceDetections.Except(areaDetections);
+                    Logger.Log($"found {deviceDetections.Count} detections in gscan with ip {client.IpAddress}", this.GetType().Name);
+                    Logger.Log($"area {ActiveMWorkingArea.AreaType} containes {areaDetections.Count} detections", this.GetType().Name);
+                    Logger.Log($"adding {detectionsToAdd.Count()} new detections", this.GetType().Name);
+
+                    foreach (var deviceDetection in detectionsToAdd)
                     {
-                        Application.Current.Dispatcher.Invoke(() => AddMarker(cliendDetection.Key, cliendDetection));
+                        Networking.GetNtServer().AddDetection(deviceDetection);
                     }
                 }
                 Application.Current.Dispatcher.Invoke(() => CircularProgressBar.Visibility = Visibility.Hidden);
             });
         }
-        */
+
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             // Initialize map:

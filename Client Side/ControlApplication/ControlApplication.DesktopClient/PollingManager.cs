@@ -29,7 +29,11 @@ namespace ControlApplication.DesktopClient
 
         private void ToDoFunc(object obj)
         {
-            Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(()=> GetMainWindow().LoadData()));
+            Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() =>
+            {
+                GetMainWindow().LoadData();
+                GetMainWindow().LoadDataFromClients();
+            }));
         }
 
         public void Dispose()

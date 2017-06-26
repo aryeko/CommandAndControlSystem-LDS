@@ -88,14 +88,13 @@ namespace ControlApplication.Core.Contracts
         public bool Equals(Detection other)
         {
             if (other == null) return false;
-            return Position == other.Position
-                && DateTimeOfDetection.Equals(other.DateTimeOfDetection)
-                && Material.Equals(other.Material);
+            return DateTimeOfDetection.ToString("G").Equals(other.DateTimeOfDetection.ToString("G"))
+                    && Material.Equals(other.Material);
         }
 
         public override int GetHashCode()
         { 
-            return Position.GetHashCode() ^ Material.GetHashCode() ^ DateTimeOfDetection.GetHashCode();
+            return Material.GetHashCode() ^ DateTimeOfDetection.ToString("G").GetHashCode();
         }
     }
 }

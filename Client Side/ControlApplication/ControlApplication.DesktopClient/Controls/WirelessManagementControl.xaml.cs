@@ -28,7 +28,7 @@ namespace ControlApplication.DesktopClient.Controls
     /// </summary>
     public partial class WirelessManagementControl : UserControl
     {
-        private static bool IsWifiEnabled { get; set; } = false;
+        public static bool IsWifiEnabled { get; set; } = false;
 
         public WirelessManagementControl()
         {
