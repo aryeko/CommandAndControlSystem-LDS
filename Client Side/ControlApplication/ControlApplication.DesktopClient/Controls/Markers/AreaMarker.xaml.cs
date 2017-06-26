@@ -120,7 +120,7 @@ namespace ControlApplication.DesktopClient.Controls.Markers
                 Title = "Show Area Details",
                 Icon = new BitmapImage(new Uri(@"../../Drawable/logo.png", UriKind.Relative)),
                 //Icon = new BitmapImage(new Uri(@"/ControlApplication.DesktopClient;/Drawable/logo.png", UriKind.Absolute)),
-                Content = new ShowAreaDetails(mArea, Networking.GetNtServer().GetDetections().Where(d => d.Area.Equals(mArea))),
+                Content = new ShowAreaDetails(mArea, Networking.GetNtServer().GetDetections(areaId: mArea.DatabaseId)),
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 SizeToContent = SizeToContent.WidthAndHeight,
                 ResizeMode = ResizeMode.NoResize
