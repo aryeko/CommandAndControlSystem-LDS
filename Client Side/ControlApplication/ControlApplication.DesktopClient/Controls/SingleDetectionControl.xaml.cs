@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -45,7 +48,20 @@ namespace ControlApplication.DesktopClient.Controls
 
         private void OpenRaman_OnMouseClick(object sender, MouseButtonEventArgs e)
         {
-            System.Diagnostics.Process.Start(_detection.RamanGraph);           
+            try
+            {
+                var ramanFilePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "raman.esp");
+                File.WriteAllText(ramanFilePath, _detection.RamanGraph);
+
+                var p = Process.Start(ramanFilePath);
+                p.WaitForExit();
+                if(p.ExitCode != 0)
+                    MessageBox.Show(Window.GetWindow(this), "Please run NT as an administrator", "Raman Graph Error", MessageBoxButton.OK);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show(Window.GetWindow(this), "ESP files are not supported in your computer, please install enspecter", "Raman Graph Error", MessageBoxButton.OK);
+            }    
         }
     }
 }

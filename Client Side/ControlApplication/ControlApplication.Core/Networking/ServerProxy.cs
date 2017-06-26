@@ -177,7 +177,7 @@ namespace ControlApplication.Core.Networking
         private Detection ConverToDetection(dynamic obj)
         {
     		List<Gscan> gscan = GetGscan(gscanId:obj.gscan_id.ToString());
-            var ramanOutput = GetRaman(obj.raman_output_id.ToString());
+            var ramanOutput = obj.raman_output_id.ToString();
             var area = GetArea(obj.area_id.ToString());
             var material = GetMaterial(materialId: obj.material_id.ToString());
             return ServerObjectConverter.ConvertDetection(obj, material[0], area[0], gscan[0].PhysicalAddress.ToString(), ramanOutput);
